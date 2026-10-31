@@ -164,7 +164,7 @@ window.I18N_STRINGS = {
     editorialBadge: 'PROTOCOLE CERTIFIÉ EN LABORATOIRE',
     editorialTitle: 'Pourquoi 94% de nos utilisateurs ne reviennent jamais à un oreiller ou siège classique.',
     editorialP1: 'Nous passons un tiers de notre vie à dormir et plus de 8 heures par jour assis. Pourtant, la literie et le mobilier traditionnels écrasent les disques intervertébraux et perturbent le rythme circadien.',
-    editorialP2: 'Chaque dispositif AURA LABS™ combine mousse viscoélastique à mémoire cellulaire haute densité, décompression axiale et photobiomodulation LED médicale (630nm / 850nm).'
+    editorialP2: 'Chaque dispositif OREVA LAB™ combine mousse viscoélastique à mémoire cellulaire haute densité, décompression axiale et photobiomodulation LED médicale (630nm / 850nm).'
   },
   en: {
     navShop: 'Shop Collection',
@@ -207,7 +207,7 @@ window.I18N_STRINGS = {
     editorialBadge: 'CLINICALLY VALIDATED PROTOCOL',
     editorialTitle: 'Why 94% of our members never go back to conventional pillows or seating.',
     editorialP1: 'You spend a third of your life sleeping and over 8 hours a day sitting. Standard bedding and chairs compress spinal discs and disrupt natural circadian recovery.',
-    editorialP2: 'Every AURA LABS™ device integrates high-density memory cell architecture, axial spinal decompression, and medical-grade 630nm/850nm LED photobiomodulation.'
+    editorialP2: 'Every OREVA LAB™ device integrates high-density memory cell architecture, axial spinal decompression, and medical-grade 630nm/850nm LED photobiomodulation.'
   },
   de: {
     navShop: 'Kollektion',
@@ -250,7 +250,7 @@ window.I18N_STRINGS = {
     editorialBadge: 'KLINISCH GEPRÜFTE TECHNOLOGIE',
     editorialTitle: 'Warum 94% unserer Kunden nie wieder zu herkömmlichen Kissen zurückkehren.',
     editorialP1: 'Wir verbringen ein Drittel unseres Lebens im Schlaf und über 8 Stunden täglich im Sitzen. Herkömmliche Matratzen und Stühle belasten die Bandscheiben.',
-    editorialP2: 'Jedes AURA LABS™ System kombiniert hochdichten viskoelastischen Memory-Schaum, axiale Dekompression und medizinische 630nm/850nm Lichttherapie.'
+    editorialP2: 'Jedes OREVA LAB™ System kombiniert hochdichten viskoelastischen Memory-Schaum, axiale Dekompression und medizinische 630nm/850nm Lichttherapie.'
   }
 };
 
@@ -276,9 +276,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Oreiller Cervical Orthopédique AuraCloud™ Pro',
-      en: 'AuraCloud™ Pro Orthopedic Cervical Pillow',
-      de: 'AuraCloud™ Pro Orthopädisches HWS-Nackenkissen'
+      fr: 'Oreiller Cervical Orthopédique OrevaCloud™ Pro',
+      en: 'OrevaCloud™ Pro Orthopedic Cervical Pillow',
+      de: 'OrevaCloud™ Pro Orthopädisches HWS-Nackenkissen'
     },
     subtitle: {
       fr: 'Mémoire de forme haute densité • Alignement des 7 vertèbres cervicales',
@@ -329,9 +329,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Masseur Cervical Shiatsu & Infrarouge AuraPulse™ 6D',
-      en: 'AuraPulse™ 6D Cordless Shiatsu & Infrared Neck Massager',
-      de: 'AuraPulse™ 6D Kabelloses Shiatsu- & Infrarot-Massagegerät'
+      fr: 'Masseur Cervical Shiatsu & Infrarouge OrevaPulse™ 6D',
+      en: 'OrevaPulse™ 6D Cordless Shiatsu & Infrared Neck Massager',
+      de: 'OrevaPulse™ 6D Kabelloses Shiatsu- & Infrarot-Massagegerät'
     },
     subtitle: {
       fr: 'Pétrissage bionique profond • Thérapie thermique 42°C • Sans fil',
@@ -382,9 +382,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Masque Photothérapie LED Rouge & Infrarouge AuraGlow™ Pro',
-      en: 'AuraGlow™ Pro Red & Near-Infrared LED Light Therapy Mask',
-      de: 'AuraGlow™ Pro Rotlicht- & Nahinfrarot LED-Gesichtsmaske'
+      fr: 'Masque Photothérapie LED Rouge & Infrarouge OrevaGlow™ Pro',
+      en: 'OrevaGlow™ Pro Red & Near-Infrared LED Light Therapy Mask',
+      de: 'OrevaGlow™ Pro Rotlicht- & Nahinfrarot LED-Gesichtsmaske'
     },
     subtitle: {
       fr: '630nm Rouge + 850nm Proche-Infrarouge + 460nm Bleu • Silicone Médical',
@@ -434,9 +434,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Coussin d’Assise Orthopédique Gel & Coccyx AuraSeat™',
-      en: 'AuraSeat™ Orthopedic Sciatica & Tailbone Gel Seat Cushion',
-      de: 'AuraSeat™ Orthopädisches Gel-Sitzkissen für Steißbein & Ischias'
+      fr: 'Coussin d’Assise Orthopédique Gel & Coccyx OrevaSeat™',
+      en: 'OrevaSeat™ Orthopedic Sciatica & Tailbone Gel Seat Cushion',
+      de: 'OrevaSeat™ Orthopädisches Gel-Sitzkissen für Steißbein & Ischias'
     },
     subtitle: {
       fr: 'Découpe en U zéro pression • Gel thermorégulateur • Anti-sciatique',
@@ -486,9 +486,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Masque de Sommeil 3D Occultant & Audio Bluetooth AuraDream™',
-      en: 'AuraDream™ 3D Blackout Sleep Mask with Ultra-Thin Bluetooth Audio',
-      de: 'AuraDream™ 3D-Schlafmaske (100% Dunkelheit) mit Bluetooth-Audio'
+      fr: 'Masque de Sommeil 3D Occultant & Audio Bluetooth OrevaDream™',
+      en: 'OrevaDream™ 3D Blackout Sleep Mask with Ultra-Thin Bluetooth Audio',
+      de: 'OrevaDream™ 3D-Schlafmaske (100% Dunkelheit) mit Bluetooth-Audio'
     },
     subtitle: {
       fr: 'Obscurité 100% sans pression oculaire • Écouteurs extra-plats 3mm',
@@ -538,9 +538,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Sculpteur Facial Micro-Courant EMS & LED Rouge AuraSculpt™',
-      en: 'AuraSculpt™ EMS Microcurrent & Red Light Facial Lifting Wand',
-      de: 'AuraSculpt™ EMS-Mikrostrom & Rotlicht Gesichts-Lifting Gua Sha'
+      fr: 'Sculpteur Facial Micro-Courant EMS & LED Rouge OrevaSculpt™',
+      en: 'OrevaSculpt™ EMS Microcurrent & Red Light Facial Lifting Wand',
+      de: 'OrevaSculpt™ EMS-Mikrostrom & Rotlicht Gesichts-Lifting Gua Sha'
     },
     subtitle: {
       fr: 'Drainage lymphatique thermique 42°C • Tonification de l’ovale du visage',
@@ -590,9 +590,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Complexe Nuit Profonde AuraRest™ (Ashwagandha KSM-66® & Magnésium)',
-      en: 'AuraRest™ Deep Sleep Botanical Complex (Ashwagandha KSM-66® & Magnesium)',
-      de: 'AuraRest™ Tiefschlaf-Komplex (Ashwagandha KSM-66®, L-Theanin & Magnesium)'
+      fr: 'Complexe Nuit Profonde OrevaRest™ (Ashwagandha KSM-66® & Magnésium)',
+      en: 'OrevaRest™ Deep Sleep Botanical Complex (Ashwagandha KSM-66® & Magnesium)',
+      de: 'OrevaRest™ Tiefschlaf-Komplex (Ashwagandha KSM-66®, L-Theanin & Magnesium)'
     },
     subtitle: {
       fr: '60 Gummies Vegan Sans Sucres • Endormissement rapide sans accoutumance',
@@ -642,9 +642,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1608248597359-0e6d526a6c58?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Sérum Cellulaire Tri-Hyaluronique & Peptides de Cuivre AuraHydra™',
-      en: 'AuraHydra™ Tri-Molecular Hyaluronic & Copper Peptide Cellular Serum',
-      de: 'AuraHydra™ Tri-Molekulares Hyaluron & Kupfer-Peptid Zell-Serum'
+      fr: 'Sérum Cellulaire Tri-Hyaluronique & Peptides de Cuivre OrevaHydra™',
+      en: 'OrevaHydra™ Tri-Molecular Hyaluronic & Copper Peptide Cellular Serum',
+      de: 'OrevaHydra™ Tri-Molekulares Hyaluron & Kupfer-Peptid Zell-Serum'
     },
     subtitle: {
       fr: 'Acide Hyaluronique 2% + Peptides de Cuivre GHK-Cu + Niacinamide (30 ml)',
@@ -694,9 +694,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Coffret "Sanctuaire du Sommeil" : Oreiller AuraCloud™ Pro + Masque 3D Audio AuraDream™',
-      en: 'The Deep Sleep Sanctuary Set: AuraCloud™ Pro Pillow + AuraDream™ 3D Audio Mask',
-      de: 'Das Tiefschlaf-Set: AuraCloud™ Pro Nackenkissen + AuraDream™ 3D-Audio-Schlafmaske'
+      fr: 'Coffret "Sanctuaire du Sommeil" : Oreiller OrevaCloud™ Pro + Masque 3D Audio OrevaDream™',
+      en: 'The Deep Sleep Sanctuary Set: OrevaCloud™ Pro Pillow + OrevaDream™ 3D Audio Mask',
+      de: 'Das Tiefschlaf-Set: OrevaCloud™ Pro Nackenkissen + OrevaDream™ 3D-Audio-Schlafmaske'
     },
     subtitle: {
       fr: 'Le protocole complet d’alignement cervical et d’isolation sensorielle (-25%)',
@@ -704,28 +704,28 @@ window.PRODUCTS_CATALOG = [
       de: 'Komplett-Protokoll für HWS-Ausrichtung & 100% Sinnes-Entspannung (-25%)'
     },
     shortDesc: {
-      fr: 'Notre coffret le plus plébiscité : associe le soutien orthopédique de l’oreiller AuraCloud™ Pro à l’obscurité sonore 3D du masque AuraDream™ pour des nuits ininterrompues.',
-      en: 'Our #1 highest-rated sleep transformation protocol: combines the orthopedic support of the AuraCloud™ Pro Pillow with the 3D audio blackout of AuraDream™.',
-      de: 'Unser bestbewertetes Schlaf-System: kombiniert die orthopädische Stützkraft des AuraCloud™ Pro Kissens mit der 3D-Audio-Abdunkelung der AuraDream™ Maske.'
+      fr: 'Notre coffret le plus plébiscité : associe le soutien orthopédique de l’oreiller OrevaCloud™ Pro à l’obscurité sonore 3D du masque OrevaDream™ pour des nuits ininterrompues.',
+      en: 'Our #1 highest-rated sleep transformation protocol: combines the orthopedic support of the OrevaCloud™ Pro Pillow with the 3D audio blackout of OrevaDream™.',
+      de: 'Unser bestbewertetes Schlaf-System: kombiniert die orthopädische Stützkraft des OrevaCloud™ Pro Kissens mit der 3D-Audio-Abdunkelung der OrevaDream™ Maske.'
     },
     highlights: {
       fr: [
-        'Inclus : 1× Oreiller Orthopédique AuraCloud™ Pro + 1× Masque 3D Bluetooth AuraDream™',
+        'Inclus : 1× Oreiller Orthopédique OrevaCloud™ Pro + 1× Masque 3D Bluetooth OrevaDream™',
         'Économie immédiate de 25% + Expédition Express Prioritaire Offerte',
         'Garantie 30 nuits d’essai sur l’ensemble du coffret'
       ],
       en: [
-        'Includes: 1× AuraCloud™ Pro Orthopedic Pillow + 1× AuraDream™ 3D Bluetooth Mask',
+        'Includes: 1× OrevaCloud™ Pro Orthopedic Pillow + 1× OrevaDream™ 3D Bluetooth Mask',
         'Instant 25% Bundle Savings + Complimentary Priority Tracked Shipping',
         'Backed by our 30-Night Risk-Free Sleep Guarantee'
       ],
       de: [
-        'Enthält: 1× AuraCloud™ Pro Orthopädisches Kissen + 1× AuraDream™ 3D Bluetooth-Maske',
+        'Enthält: 1× OrevaCloud™ Pro Orthopädisches Kissen + 1× OrevaDream™ 3D Bluetooth-Maske',
         '25% Set-Vorteil + Kostenloser Priority-Expressversand',
         'Inklusive 30 Tage Probeschlafen-Garantie'
       ]
     },
-    specs: 'Coffret complet livré en emballage cadeau premium AURA LABS™'
+    specs: 'Coffret complet livré en emballage cadeau premium OREVA LAB™'
   },
   {
     id: 'bundle-teletravail',
@@ -746,9 +746,9 @@ window.PRODUCTS_CATALOG = [
       'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1000&q=85'
     ],
     title: {
-      fr: 'Coffret "Posture & Récupération" : Masseur Shiatsu AuraPulse™ 6D + Coussin Gel AuraSeat™',
-      en: 'Spinal Relief & Recovery Set: AuraPulse™ 6D Shiatsu Massager + AuraSeat™ Gel Cushion',
-      de: 'Rücken- & Nacken-Komplettset: AuraPulse™ 6D Shiatsu-Massagegerät + AuraSeat™ Sitzkissen'
+      fr: 'Coffret "Posture & Récupération" : Masseur Shiatsu OrevaPulse™ 6D + Coussin Gel OrevaSeat™',
+      en: 'Spinal Relief & Recovery Set: OrevaPulse™ 6D Shiatsu Massager + OrevaSeat™ Gel Cushion',
+      de: 'Rücken- & Nacken-Komplettset: OrevaPulse™ 6D Shiatsu-Massagegerät + OrevaSeat™ Sitzkissen'
     },
     subtitle: {
       fr: 'Décharge lombaire la journée + Décontraction Shiatsu 42°C le soir (-25%)',
@@ -762,21 +762,396 @@ window.PRODUCTS_CATALOG = [
     },
     highlights: {
       fr: [
-        'Inclus : 1× Masseur Shiatsu Sans Fil AuraPulse™ 6D + 1× Coussin Orthopédique AuraSeat™',
+        'Inclus : 1× Masseur Shiatsu Sans Fil OrevaPulse™ 6D + 1× Coussin Orthopédique OrevaSeat™',
         'Économie immédiate de 25% + Expédition Express Prioritaire Offerte',
         'Recommandé pour le télétravail, les longs trajets et les douleurs sciatiques'
       ],
       en: [
-        'Includes: 1× AuraPulse™ 6D Cordless Massager + 1× AuraSeat™ Orthopedic Cushion',
+        'Includes: 1× OrevaPulse™ 6D Cordless Massager + 1× OrevaSeat™ Orthopedic Cushion',
         'Instant 25% Bundle Savings + Free Priority Express Delivery',
         'Ideal for remote professionals, drivers, and chronic lower back tension'
       ],
       de: [
-        'Enthält: 1× AuraPulse™ 6D Massagegerät + 1× AuraSeat™ Orthopädisches Sitzkissen',
+        'Enthält: 1× OrevaPulse™ 6D Massagegerät + 1× OrevaSeat™ Orthopädisches Sitzkissen',
         '25% Set-Ersparnis + Kostenloser DHL Priority-Versand',
         'Ideal für Homeoffice, Vielfahrer und chronische Rückenbeschwerden'
       ]
     },
     specs: 'Coffret thérapeutique complet • Garantie internationale 2 ans'
+  },
+  {
+    id: 'prod-cryo-migraine',
+    sku: 'CJ-CRYO-CAP-13',
+    category: 'sleep',
+    universe: 'sleep',
+    isChristmasStar: true,
+    badge: 'SOULAGEMENT MIGRAINE 360°',
+    clinicalStat: '97%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 6.80,
+    basePriceEur: 39.00,
+    compareAtEur: 65.00,
+    rating: 4.9,
+    reviewsCount: 1940,
+    images: [
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Bonnet Cryogénique 360° Anti-Migraine & Tension Crânienne OrevaCryo™',
+      en: 'OrevaCryo™ 360° Cryogenic Migraine & Head Tension Relief Cap',
+      de: 'OrevaCryo™ 360° Kryo-Migränemaske & Kopfschmerz-Haube'
+    },
+    subtitle: {
+      fr: 'Gel cryothérapie médical souple • Obscurité totale • Froid ou Chaud',
+      en: 'Soft Medical Cryo-Gel • 100% Blackout Compression • Cold or Warm Therapy',
+      de: 'Weiches medizinisches Kryo-Gel • 100% Abdunkelung • Kälte- & Wärmetherapie'
+    },
+    shortDesc: {
+      fr: 'Apaise les migraines, céphalées de tension et sinusites en moins de 15 minutes grâce à une compression douce 360° et un gel cryogénique qui reste souple même sorti du congélateur.',
+      en: 'Calms migraines, tension headaches, and puffy eyes within 15 minutes using gentle 360° cranial compression and flexible medical cryo-gel.',
+      de: 'Lindert Migräne, Spannungskopfschmerzen und geschwollene Augen in 15 Minuten durch sanfte 360°-Kompression und flexibles Kryo-Gel.'
+    },
+    highlights: {
+      fr: [
+        'Cible simultanément les tempes, le front, les sinus et la base du crâne',
+        'Gel médical non toxique restant 100% souple et confortable à -18°C',
+        'Cadeau de Noël idéal pour les personnes sujettes au stress et à la fatigue'
+      ],
+      en: [
+        'Simultaneously cools temples, forehead, sinuses, and occipital base',
+        'Medical-grade gel remains ultra-soft and flexible straight from the freezer',
+        'Total light blackout design for instant sensory relief'
+      ],
+      de: [
+        'Kühlt gleichzeitig Schläfen, Stirn, Nebenhöhlen und Nackenansatz',
+        'Medizinisches Gel bleibt selbst bei -18°C weich und anschmiegsam',
+        '100% Lichtabdunkelung für sofortige Reizabschirmung'
+      ]
+    },
+    specs: 'Taille universelle extensible • Utilisable à froid (congélateur 1h) ou à chaud • Protocole PDF inclus'
+  },
+  {
+    id: 'prod-acoustic-earplugs',
+    sku: 'CJ-MUTE-PRO-14',
+    category: 'sleep',
+    universe: 'sleep',
+    badge: 'ACOUSTIQUE -28 dB',
+    clinicalStat: '96%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 3.40,
+    basePriceEur: 34.00,
+    compareAtEur: 55.00,
+    rating: 4.9,
+    reviewsCount: 3120,
+    images: [
+      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Bouchons Acoustiques Haute Fidélité Nuit & Concentration OrevaMute™ (-28 dB)',
+      en: 'OrevaMute™ High-Fidelity Acoustic Sleep & Focus Earplugs (-28 dB)',
+      de: 'OrevaMute™ High-Fidelity Akustik-Ohrstöpsel für Schlaf & Fokus (-28 dB)'
+    },
+    subtitle: {
+      fr: 'Silicone médical ultra-doux • Filtre les ronflements • Zéro pression latérale',
+      en: 'Ultra-Soft Medical Silicone • Snore & Noise Filtering • Side-Sleeper Friendly',
+      de: 'Ultraweiches medizinisches Silikon • Filtert Schnarchen • Seitenschläfer-geeignet'
+    },
+    shortDesc: {
+      fr: 'Conçus avec un anneau acoustique de précision qui neutralise les ronflements, les bruits urbains et l’hypersensibilité auditive sans sensation d’oreille bouchée.',
+      en: 'Engineered with a resonant acoustic loop that cancels snoring, traffic noise, and sensory overload without the plugged-ear feeling of foam plugs.',
+      de: 'Mit akustischem Resonanzring entwickelt, der Schnarchen und Straßenlärm um 28 dB dämpft – ohne Druckgefühl im Gehörgang.'
+    },
+    highlights: {
+      fr: [
+        '4 tailles d’embouts en silicone liquide médical incluses (XS, S, M, L)',
+        'Réutilisables à vie, lavables à l’eau et livrés avec leur écrin de transport métal',
+        'Coût fournisseur ultra-bas (3,40 €) pour une valeur perçue luxe (34,00 €)'
+      ],
+      en: [
+        'Includes 4 sizes of liquid medical silicone ear tips (XS, S, M, L)',
+        'Washable, reusable for years, includes pocket travel case',
+        'Flush profile designed specifically for sleeping on your side'
+      ],
+      de: [
+        'Inklusive 4 Aufsatzgrößen aus flüssigem Medizinsilikon (XS, S, M, L)',
+        'Abwaschbar, jahrelang wiederverwendbar, inklusive Reise-Etui',
+        'Flaches Design – drückt nicht beim Schlafen auf der Seite'
+      ]
+    },
+    specs: 'Atténuation certifiée : -28 dB SNR • 4 paires d’embouts + Boîtier de transport Oreva Lab™'
+  },
+  {
+    id: 'prod-brush-cleaner-pro',
+    sku: 'CJ-BRUSH-CLN-15',
+    category: 'beauty',
+    universe: 'glow',
+    isChristmasStar: true,
+    badge: 'CADEAU ADULTE & ADO #1',
+    clinicalStat: '98%',
+    supplier: 'CJdropshipping / Spocket (Entrepôts DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 9.20,
+    basePriceEur: 44.00,
+    compareAtEur: 74.00,
+    rating: 4.9,
+    reviewsCount: 2280,
+    images: [
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Station Électrique Nettoyage & Séchage de Pinceaux OrevaClean™ Pro',
+      en: 'OrevaClean™ Pro Sonic Electric Makeup Brush Cleaner & Dryer Station',
+      de: 'OrevaClean™ Pro Elektrische Make-up-Pinsel Reinigungs- & Trocknungsstation'
+    },
+    subtitle: {
+      fr: 'Hygiène dermatologique • Nettoie et sèche jusqu’à 8 pinceaux simultanément',
+      en: 'Dermatological Hygiene • Deep Cleans & Dries Up to 8 Brushes Simultaneously',
+      de: 'Dermatologische Hygiene • Reinigt & trocknet bis zu 8 Pinceaux gleichzeitig'
+    },
+    shortDesc: {
+      fr: 'Élimine 99% des résidus de fond de teint, sébum et bactéries responsables des imperfections cutanées en 60 secondes, sans aucun produit cosmétique liquide risqué.',
+      en: 'Removes 99% of trapped makeup residue, sebum, and acne-causing bacteria in 60 seconds with sonic vortex technology and warm air drying.',
+      de: 'Entfernt 99% aller Make-up-Reste, Talg und Bakterien in 60 Sekunden per Ultraschall-Wirbel und sanfter Trocknung.'
+    },
+    highlights: {
+      fr: [
+        '100% accessoire beauté tech : zéro risque d’allergie ni réglementation cosmétique liquide',
+        'Vortex sonique 7000 tr/min + mode séchage automatique intégré',
+        'Idée cadeau de Noël incontournable pour adolescentes et adultes'
+      ],
+      en: [
+        '100% hardware beauty tool: zero skin allergy risk or cosmetic customs friction',
+        '7000 RPM sonic vortex + built-in hygienic drying rack',
+        '#1 bestselling holiday gift for teens and beauty lovers'
+      ],
+      de: [
+        '100% Beauty-Tech-Zubehör: kein Allergierisiko',
+        '7000 U/min Schall-Wirbel + integrierte Trocknungsfunktion',
+        'Das perfekte Weihnachtsgeschenk für Teenager und Erwachsene'
+      ]
+    },
+    specs: 'Alimentation USB-C • Cuve en silicone médical texturé • Compatible avec toutes tailles de pinceaux'
+  },
+  {
+    id: 'prod-teen-led-vanity',
+    sku: 'CJ-TEEN-GLOW-16',
+    category: 'bundles',
+    universe: 'glow',
+    isChristmasStar: true,
+    badge: '🎄 COFFRET NOËL ADOS',
+    clinicalStat: '99%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 13.50,
+    basePriceEur: 59.00,
+    compareAtEur: 95.00,
+    rating: 5.0,
+    reviewsCount: 1640,
+    images: [
+      'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Coffret Noël Ados "Studio Glow" : Trousse Miroir LED Tactile + Recourbe-Cils Chauffant',
+      en: 'Teen Holiday "Studio Glow" Set: Smart LED Vanity Case + Heated Lash Curler',
+      de: 'Teenager Weihnachts-Set "Studio Glow": LED-Schminkkoffer + Beheizter Wimpernformer'
+    },
+    subtitle: {
+      fr: 'Éclairage studio 3 températures (Jour / Soir / Neutre) • Zéro produit chimique',
+      en: '3-Tone Dimmable Studio Lighting (Day / Warm / Cool) • Rechargeable USB-C',
+      de: '3-farbiges Studio-LED-Licht (Tageslicht / Warm / Kalt) • Wiederaufladbar per USB-C'
+    },
+    shortDesc: {
+      fr: 'Le cadeau "effet wahou" sous le sapin pour les ados : une mallette de coiffeuse élégante avec grand miroir LED haute définition à variateur tactile, accompagnée de son recourbe-cils thermique sécurisé et d’un rouleau volcanique matifiant.',
+      en: 'The ultimate "wow-factor" Christmas gift for teens: a luxury travel vanity case featuring a full-size touch-dimmable LED mirror, paired with a safe heated lash curler and volcanic oil-absorbing roller.',
+      de: 'Das ultimative Weihnachtsgeschenk für Teenager: eleganter Beauty-Case mit großem Touch-LED-Spiegel, sicherem Thermo-Wimpernformer und Vulkanstein-Mattierroller.'
+    },
+    highlights: {
+      fr: [
+        'Inclus : Mallette Miroir LED 2000 mAh + Recourbe-cils thermique + Rouleau volcanique',
+        'Compartiments modulables + éclairage parfait même dans une chambre sombre',
+        '100% accessoires beauté : aucun risque cutané, succès garanti à Noël'
+      ],
+      en: [
+        'Includes: 2000mAh LED Mirror Vanity Case + Heated Lash Curler + Volcanic Roller',
+        'Adjustable compartments + true-daylight CRI 97 lighting for dim bedrooms',
+        '100% safe beauty accessories — zero chemical liquids or powders'
+      ],
+      de: [
+        'Enthält: LED-Spiegel-Case (2000 mAh) + Thermo-Wimpernformer + Vulkan-Roller',
+        'Verstellbare Fächer + perfektes Tageslicht (CRI 97)',
+        '100% sicheres Beauty-Zubehör ohne chemische Flüssigkeiten'
+      ]
+    },
+    specs: 'Dimensions : 26 × 23 × 11 cm • Batterie LED 2000 mAh USB-C • Livré prêt à offrir'
+  },
+  {
+    id: 'prod-kids-creative-kit',
+    sku: 'CJ-KIDS-SPA-17',
+    category: 'bundles',
+    universe: 'glow',
+    isChristmasStar: true,
+    badge: '🎄 COFFRET NOËL ENFANTS (0% CHIMIE)',
+    clinicalStat: '100%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 8.90,
+    basePriceEur: 39.00,
+    compareAtEur: 64.00,
+    rating: 5.0,
+    reviewsCount: 980,
+    images: [
+      'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Coffret Noël Enfants "Mon Premier Spa Créatif" (Accessoires 100% Hypoallergéniques)',
+      en: 'Kids Holiday "My First Creative Spa" Set (100% Hypoallergenic Accessories)',
+      de: 'Kinder Weihnachts-Set "Mein Erstes Kreativ-Spa" (100% Hypoallergenes Zubehör)'
+    },
+    subtitle: {
+      fr: 'Miroir lumineux nuage + Bandeau tout doux + Éponges & Pochoirs silicone',
+      en: 'Cloud LED Desk Mirror + Plush Spa Headband + Silicone Stencils & Blenders',
+      de: 'Wolken-LED-Tischspiegel + Kuschel-Haarband + Silikon-Schablonen & Blender'
+    },
+    shortDesc: {
+      fr: 'Permet aux enfants d’imiter les grands en toute sécurité : un coffret féerique composé uniquement d’accessoires ultra-doux et de pochoirs ludiques en silicone alimentaire, sans aucune poudre ni liquide chimique sur la peau.',
+      en: 'Lets kids play spa and beauty with 100% peace of mind for parents: includes a cute cloud LED mirror, plush spa headband, hypoallergenic blenders, and food-grade silicone stencils — zero chemicals.',
+      de: 'Sicheres Spa-Erlebnis für Kinder: Wolken-LED-Spiegel, flauschiges Spa-Stirnband, hypoallergene Schwämmchen und lebensmittelechte Silikonschablonen – 0% Chemie.'
+    },
+    highlights: {
+      fr: [
+        'Zéro cosmétique liquide ou poudre : 100% conforme CE et sans risque d’allergie',
+        'Inclus : Miroir LED veilleuse + Bandeau spa polaire + 6 éponges pastel + Pochoirs silicone',
+        'Les parents achètent les yeux fermés pour Noël (Dès 5 ans)'
+      ],
+      en: [
+        'Zero chemical powders or liquids: 100% parent-approved & allergy-free',
+        'Includes: Cloud LED Mirror + Plush Headband + 6 Pastel Blenders + Silicone Stencils',
+        'Ready-to-gift holiday packaging for ages 5–11'
+      ],
+      de: [
+        'Keine chemischen Puder oder Flüssigkeiten: 100% allergiefrei & elternfreundlich',
+        'Enthält: Wolken-LED-Spiegel + Plüsch-Haarband + 6 Pastell-Blender + Silikonschablonen',
+        'Perfektes Weihnachtsgeschenk für Kinder ab 5 Jahren'
+      ]
+    },
+    specs: 'Silicone alimentaire sans BPA • Miroir LED basse tension USB • Certifié CE'
+  },
+  {
+    id: 'prod-thermo-belt',
+    sku: 'CJ-THERMO-BELT-18',
+    category: 'ergo',
+    universe: 'thermo',
+    isChristmasStar: true,
+    badge: 'SOULAGEMENT FÉMININ & LOMBAIRES',
+    clinicalStat: '96%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 11.40,
+    basePriceEur: 54.00,
+    compareAtEur: 89.00,
+    rating: 4.9,
+    reviewsCount: 1760,
+    images: [
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Ceinture Infrarouge & Micro-Vibrations Ultra-Fine OrevaLunar™ (Cycle & Dos)',
+      en: 'OrevaLunar™ Ultra-Slim Far-Infrared & Micro-Vibration Relief Belt',
+      de: 'OrevaLunar™ Ultraflacher Infrarot- & Mikrovibrations-Wärmegürtel'
+    },
+    subtitle: {
+      fr: 'Chauffe graphène en 3 secondes (45°C–60°C) • Invisible sous les vêtements',
+      en: '3-Second Graphene Heating (45°C–60°C) • Invisible Under Clothing • Cordless',
+      de: 'Graphen-Aufheizung in 3 Sekunden (45°C–60°C) • Unsichtbar unter der Kleidung'
+    },
+    shortDesc: {
+      fr: 'Diffuse une chaleur infrarouge profonde par film de graphène associée à 4 modes d’acupression vibratoire pour apaiser instantanément les douleurs menstruelles, l’endométriose ou les tensions lombaires sans médicaments.',
+      en: 'Delivers deep far-infrared graphene warmth and 4 soothing micro-vibration modes to naturally relieve menstrual cramps, endometriosis discomfort, and lower back tension.',
+      de: 'Spendet tiefenwirksame Graphen-Infrarotwärme und 4 sanfte Vibrationsmodi zur natürlichen Linderung von Periodenschmerzen und Verspannungen im unteren Rücken.'
+    },
+    highlights: {
+      fr: [
+        'Technologie Graphène : chauffe homogène en 3 secondes (45°C, 55°C, 60°C)',
+        'Design ultra-fin et velours doux — totalement invisible sous un pull ou une veste',
+        'Idée cadeau attentionnée et ultra-utile pour l’hiver'
+      ],
+      en: [
+        'Graphene film technology heats up evenly in 3 seconds (3 temperature levels)',
+        'Featherlight, whisper-quiet, and invisible under everyday clothing',
+        'Cordless USB-C battery for relief at work, home, or on the go'
+      ],
+      de: [
+        'Graphen-Heizfilm erwärmt sich gleichmäßig in nur 3 Sekunden',
+        'Federleicht, flüsterleise und unsichtbar unter der Alltagskleidung',
+        'Kabelloser USB-C-Akku für zu Hause, im Büro oder unterwegs'
+      ]
+    },
+    specs: 'Poids : 165 g • 3 températures + 4 modes massage • Batterie sans fil USB-C'
   }
 ];
+
+// Configuration des Sous-Domaines / Multi-Vitrines OREVA LAB™
+window.OREVA_UNIVERSES = {
+  all: {
+    id: 'all',
+    subdomain: 'www.orevalabs.com',
+    label: '🏛️ Maison Oreva Lab (Toutes les Vitrines)',
+    eyebrow: 'MAISON-MÈRE OREVA LAB™ • OPÉRATION CADEAUX DE NOËL 2026',
+    title: 'La science du sommeil, de la posture et de la beauté technologique.',
+    subtitle: 'Découvrez nos 4 laboratoires spécialisés et nos Coffrets Cadeaux de Noël prêts à offrir (Adultes, Ados & Enfants). Expédition locale en 48h, Guide Protocole PDF offert et retours prolongés jusqu’au 15 janvier.'
+  },
+  christmas: {
+    id: 'christmas',
+    subdomain: 'gifts.orevalabs.com',
+    label: '🎄 Boutique Cadeaux de Noël (Adultes • Ados • Enfants)',
+    eyebrow: '🎄 ÉDITION LIMITÉE NOËL • LIVRAISON GARANTIE AVANT LE 24 DÉCEMBRE',
+    title: 'Les Coffrets Bien-Être & Beauté Tech qui font mouche sous le sapin.',
+    subtitle: 'Des cadeaux universels sans problème de taille : Coffrets Sommeil Profond pour les parents, Mallette Miroir LED Studio pour les ados, et Mon Premier Spa Créatif (0% chimie) pour les enfants. Offre Duo : le 2ème à -50% !'
+  },
+  sleep: {
+    id: 'sleep',
+    subdomain: 'sleep.orevalabs.com',
+    label: '🌙 sleep.orevalabs.com (Sommeil & Nuit)',
+    eyebrow: 'VITRINE SPÉCIALISÉE • SLEEP.OREVALABS.COM',
+    title: 'Le laboratoire de la récupération nocturne et du silence absolu.',
+    subtitle: 'Oreillers cervicaux orthopédiques, bonnets cryogéniques anti-migraine 360°, bouchons d’oreilles acoustiques -28 dB et masques audio 3D. Réveillez-vous enfin régénéré.'
+  },
+  ergo: {
+    id: 'ergo',
+    subdomain: 'ergo.orevalabs.com',
+    label: '🦴 ergo.orevalabs.com (Posture & Dos)',
+    eyebrow: 'VITRINE SPÉCIALISÉE • ERGO.OREVALABS.COM',
+    title: 'Biomécanique vertébrale pour le bureau, la route et la maison.',
+    subtitle: 'Coussins d’assise en gel alvéolé anti-sciatique, masseurs Shiatsu infrarouges 6D et décompression lombaire. Éliminez les douleurs assises dès la première journée.'
+  },
+  glow: {
+    id: 'glow',
+    subdomain: 'glow.orevalabs.com',
+    label: '✨ glow.orevalabs.com (Beauté Tech : Adultes / Ados / Enfants)',
+    eyebrow: 'VITRINE SPÉCIALISÉE • GLOW.OREVALABS.COM (ZÉRO RISQUE COSMÉTIQUE)',
+    title: 'Haute technologie beauté & accessoires pour les 3 générations.',
+    subtitle: 'Photothérapie LED clinique & Station nettoyeur de pinceaux pour Adultes, Coiffeuse Miroir LED TikTok pour Ados, et Kit Spa Créatif 100% silicone sans chimie pour Enfants.'
+  },
+  thermo: {
+    id: 'thermo',
+    subdomain: 'thermo.orevalabs.com',
+    label: '🔥 thermo.orevalabs.com (Soulagement Thermique & Cycle)',
+    eyebrow: 'VITRINE SPÉCIALISÉE • THERMO.OREVALABS.COM',
+    title: 'La thérapie par le chaud infrarouge et le froid cryogénique.',
+    subtitle: 'Ceinture chauffante au graphène OrevaLunar™ ultra-fine (confort féminin & lombaires) et cryothérapie crânienne 360°. Le soulagement naturel instantané, sans médicaments.'
+  }
+};

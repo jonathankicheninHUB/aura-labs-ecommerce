@@ -40,33 +40,63 @@ function onLanguageChange(lang) {
   applyLocalization();
 }
 
+let currentUniverse = 'all';
+
+function switchUniverse(universeId) {
+  currentUniverse = universeId || 'all';
+  const uniConfig = window.OREVA_UNIVERSES?.[currentUniverse] || window.OREVA_UNIVERSES?.all;
+
+  ['all', 'christmas', 'sleep', 'ergo', 'glow', 'thermo'].forEach(u => {
+    const btn = document.getElementById(`uniBtn-${u}`);
+    if (!btn) return;
+    if (u === currentUniverse) {
+      btn.style.background = u === 'christmas' ? 'rgba(220,38,38,0.35)' : 'rgba(212,185,140,0.28)';
+      btn.style.color = '#fff';
+      btn.style.borderColor = u === 'christmas' ? '#EF4444' : '#D4B98C';
+      btn.style.fontWeight = '700';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = u === 'christmas' ? '#FCA5A5' : '#CBD5E1';
+      btn.style.borderColor = u === 'christmas' ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.16)';
+      btn.style.fontWeight = '500';
+    }
+  });
+
+  if (uniConfig) {
+    const subLabel = document.getElementById('activeSubdomainLabel');
+    if (subLabel) subLabel.textContent = uniConfig.subdomain;
+    const eyeEl = document.getElementById('heroEyebrow');
+    if (eyeEl) eyeEl.textContent = uniConfig.eyebrow;
+    const titleEl = document.getElementById('heroTitle');
+    if (titleEl) titleEl.textContent = uniConfig.title;
+    const subEl = document.getElementById('heroSubtitle');
+    if (subEl) subEl.textContent = uniConfig.subtitle;
+  }
+
+  const mapToCat = {
+    all: 'all',
+    christmas: 'christmas',
+    sleep: 'sleep',
+    ergo: 'ergo',
+    glow: 'beauty',
+    thermo: 'thermo'
+  };
+  filterCategory(mapToCat[currentUniverse] || 'all');
+}
+
 function applyLocalization() {
   const market = window.MARKETS_CONFIG[currentMarketCode];
   const t = window.I18N_STRINGS[currentLang] || window.I18N_STRINGS.fr;
 
-  document.getElementById('announcementBar').textContent = market.warehouseLabel[currentLang];
-  document.getElementById('navShop').textContent = t.navShop;
-  document.getElementById('navBundles').textContent = t.navBundles;
-  document.getElementById('navScience').textContent = t.navScience;
+  document.getElementById('announcementBar').textContent = `🎄 OPÉRATION NOËL OREVA LAB™ (2ÈME À -50% • RETOURS JUSQU'AU 15 JANVIER) • ${market.warehouseLabel[currentLang]}`;
+  const navShop = document.getElementById('navShop');
+  if (navShop) navShop.textContent = t.navShop;
+  const navBundles = document.getElementById('navBundles');
+  if (navBundles) navBundles.textContent = t.navBundles;
+  const navScience = document.getElementById('navScience');
+  if (navScience) navScience.textContent = t.navScience;
 
-  document.getElementById('heroEyebrow').textContent = t.heroEyebrow;
-  document.getElementById('heroTitle').textContent = t.heroTitle;
-  document.getElementById('heroSubtitle').textContent = t.heroSubtitle;
-  document.getElementById('heroCtaPrimary').textContent = t.heroCtaPrimary;
-  document.getElementById('heroCtaSecondary').textContent = t.heroCtaSecondary;
-  document.getElementById('heroMetric1').textContent = t.heroMetric1;
-  document.getElementById('heroMetric2').textContent = t.heroMetric2;
-  document.getElementById('heroMetric3').textContent = t.heroMetric3;
   document.getElementById('heroCardHub').textContent = `HUB LOGISTIQUE : ${market.warehouseCity.toUpperCase()} (${market.deliveryDays.toUpperCase()})`;
-
-  document.getElementById('sectionTag').textContent = t.sectionTag;
-  document.getElementById('sectionTitle').textContent = t.sectionTitle;
-
-  document.getElementById('catTab-all').textContent = t.filterAll;
-  document.getElementById('catTab-sleep').textContent = t.filterSleep;
-  document.getElementById('catTab-ergo').textContent = t.filterErgo;
-  document.getElementById('catTab-beauty').textContent = t.filterBeauty;
-  document.getElementById('catTab-bundles').textContent = t.filterBundles;
 
   document.getElementById('editorialBadge').textContent = t.editorialBadge;
   document.getElementById('editorialTitle').textContent = t.editorialTitle;
@@ -96,11 +126,14 @@ function renderCatalog() {
   const grid = document.getElementById('productsGrid');
   const market = window.MARKETS_CONFIG[currentMarketCode];
   const t = window.I18N_STRINGS[currentLang] || window.I18N_STRINGS.fr;
-  const showMarginOverlay = document.getElementById('toggleMarginOverlay')?.checked;
+  const showMarginOverlay = isAdminAuthenticated && document.getElementById('toggleMarginOverlay')?.checked;
 
-  const products = window.PRODUCTS_CATALOG.filter(p =>
-    currentCategory === 'all' ? true : p.category === currentCategory
-  );
+  const products = window.PRODUCTS_CATALOG.filter(p => {
+    if (currentCategory === 'all') return true;
+    if (currentCategory === 'christmas') return Boolean(p.isChristmasStar || p.category === 'bundles');
+    if (currentCategory === 'thermo') return p.universe === 'thermo' || p.id === 'prod-cryo-migraine' || p.id === 'prod-neck-massager';
+    return p.category === currentCategory;
+  });
 
   grid.innerHTML = products.map(prod => {
     const title = prod.title[currentLang] || prod.title.fr;
@@ -143,7 +176,7 @@ function renderCatalog() {
               <span class="price-was">${formatLocalPrice(prod.compareAtEur)}</span>
             </div>
             <div class="card-cta-group">
-              <button class="btn-card-detail" onclick="openProductDetail('${prod.id}')">Détails</button>
+              <button class="btn-card-detail" onclick="openProductDetail('${prod.id}')">Détails & Duo -50%</button>
               <button class="btn-card-add" onclick="addToCart('${prod.id}', 1)">+ ${t.addToBag}</button>
             </div>
           </div>
@@ -179,9 +212,14 @@ function openProductDetail(productId) {
       <span style="color:var(--emerald); font-weight:800;">✓</span>
       <span>${h}</span>
     </li>
-  `).join('');
+  `).join('') + `
+    <li style="display:flex; align-items:flex-start; gap:8px; color:#B91C1C; font-weight:700; margin-top:4px;">
+      <span>🎄</span>
+      <span>Bonus Noël : Guide Protocole PDF (15 pages) OFFERT + Retours prolongés jusqu'au 15 Janvier</span>
+    </li>
+  `;
 
-  document.getElementById('pdpShippingNote').textContent = `🚚 ${t.shippingFrom} ${market.warehouseCity} (${market.deliveryDays} via ${market.carrier}) • ${t.guaranteeText}`;
+  document.getElementById('pdpShippingNote').textContent = `🚚 ${t.shippingFrom} ${market.warehouseCity} (${market.deliveryDays} via ${market.carrier}) • Livraison Garantie avant Noël`;
   document.getElementById('pdpSpecs').textContent = prod.specs || '';
 
   renderPdpTiers();
@@ -202,12 +240,11 @@ function selectPdpTier(tierQty) {
 function renderPdpTiers() {
   if (!activePdpProduct) return;
   const prod = activePdpProduct;
-  const t = window.I18N_STRINGS[currentLang] || window.I18N_STRINGS.fr;
 
   const tiers = [
-    { qty: 1, discount: 1.0, label: t.qty1Title, tag: '' },
-    { qty: 2, discount: 0.85, label: t.qty2Title, tag: t.mostPopular },
-    { qty: 3, discount: 0.75, label: t.qty3Title, tag: t.bestValue }
+    { qty: 1, discount: 1.0, label: '1 Unité + Guide PDF Protocole Offert (0€)', tag: '' },
+    { qty: 2, discount: 0.75, label: '🎁 DUO NOËL (2 Unités) : 1 Acheté = Le 2ème à -50%', tag: 'OFFRE NOËL LA PLUS CHOISIE' },
+    { qty: 3, discount: 0.70, label: '🎄 PACK FAMILLE (3 Unités) : -30% + Pochette Cadeau Offerte', tag: 'MEILLEURE VALEUR' }
   ];
 
   const activeTierObj = tiers.find(tr => tr.qty === selectedPdpTier) || tiers[0];
@@ -216,15 +253,23 @@ function renderPdpTiers() {
   document.getElementById('pdpPriceNow').textContent = formatLocalPrice(totalUnitPriceEur);
   document.getElementById('pdpPriceWas').textContent = formatLocalPrice(prod.compareAtEur * activeTierObj.qty);
 
-  const netComm = calculateNetCommissionEur(prod, activeTierObj.qty, activeTierObj.discount);
-  const currentSku = cachedSettings?.skuMappings?.[prod.id] || prod.sku;
-  document.getElementById('pdpOwnerBox').innerHTML = `
-    <div style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:#6EE7B7; margin-bottom:4px;">DONNÉES PARTENAIRE FOURNISSEUR (SKU : ${currentSku})</div>
-    <div style="display:flex; justify-content:space-between;">
-      <span>Fournisseur : <strong>${prod.supplier}</strong></span>
-      <span>Votre Commission : <strong style="color:#fff; font-size:0.92rem;">+${netComm.toFixed(2)} € net</strong></span>
-    </div>
-  `;
+  const ownerBox = document.getElementById('pdpOwnerBox');
+  if (ownerBox) {
+    if (isAdminAuthenticated) {
+      ownerBox.style.display = 'block';
+      const netComm = calculateNetCommissionEur(prod, activeTierObj.qty, activeTierObj.discount);
+      const currentSku = cachedSettings?.skuMappings?.[prod.id] || prod.sku;
+      ownerBox.innerHTML = `
+        <div style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:#6EE7B7; margin-bottom:4px;">🔒 DONNÉES PROPRIÉTAIRE (SKU : ${currentSku})</div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>Fournisseur : <strong>${prod.supplier}</strong></span>
+          <span>Votre Commission : <strong style="color:#fff; font-size:0.92rem;">+${netComm.toFixed(2)} € net</strong></span>
+        </div>
+      `;
+    } else {
+      ownerBox.style.display = 'none';
+    }
+  }
 
   document.getElementById('pdpTiers').innerHTML = tiers.map(tr => {
     const tierPriceEur = prod.basePriceEur * tr.discount * tr.qty;
@@ -459,12 +504,30 @@ function openCheckoutModal() {
     document.getElementById('custCity').value = savedProf.city || '';
   }
 
+  recalculateCheckoutTotals();
+
+  document.getElementById('checkoutFormWrap').classList.remove('hidden');
+  document.getElementById('checkoutSuccessWrap').classList.add('hidden');
+  document.getElementById('checkoutModal').classList.add('open');
+}
+
+function recalculateCheckoutTotals() {
   let totalBaseEur = 0;
   let totalSupplierEur = 0;
   cart.forEach(i => {
     totalBaseEur += i.product.basePriceEur * i.discountFactor * i.qty;
     totalSupplierEur += i.product.supplierCostEur * i.qty;
   });
+
+  const giftWrapChecked = document.getElementById('chkGiftWrapOption')?.checked;
+  const giftLabel = document.getElementById('chkGiftPriceLabel');
+  if (giftLabel) {
+    giftLabel.textContent = totalBaseEur >= 50 ? 'OFFERTE (0,00 €)' : '+2,90 €';
+  }
+  if (giftWrapChecked && totalBaseEur < 50) {
+    totalBaseEur += 2.90;
+    totalSupplierEur += 0.40;
+  }
 
   const paidEur = getAdjustedEurPrice(totalBaseEur);
   const stripeFee = Number((paidEur * 0.02).toFixed(2));
@@ -473,10 +536,6 @@ function openCheckoutModal() {
   document.getElementById('chkPaidDisplay').textContent = `${formatLocalPrice(totalBaseEur)} (≈ ${paidEur.toFixed(2)} €)`;
   document.getElementById('chkCostDisplay').textContent = `-${totalSupplierEur.toFixed(2)} €`;
   document.getElementById('chkCommissionDisplay').textContent = `+${netCommission.toFixed(2)} € net`;
-
-  document.getElementById('checkoutFormWrap').classList.remove('hidden');
-  document.getElementById('checkoutSuccessWrap').classList.add('hidden');
-  document.getElementById('checkoutModal').classList.add('open');
 }
 
 function closeCheckoutModal() {
@@ -503,6 +562,21 @@ async function submitOrder(e) {
       supplier: i.product.supplier
     };
   });
+
+  if (document.getElementById('chkGiftWrapOption')?.checked) {
+    const giftPriceEur = totalBaseEur >= 50 ? 0 : 2.90;
+    totalBaseEur += giftPriceEur;
+    totalSupplierEur += 0.40;
+    itemsPayload.push({
+      id: 'gift-wrap-noel',
+      sku: 'ORV-GIFT-BOX-NOEL',
+      title: '🎁 Pochette Cadeau Satin OREVA LAB™ + Guide PDF 15p Offert',
+      qty: 1,
+      retailEur: giftPriceEur,
+      supplierCostEur: 0.40,
+      supplier: 'OREVA LAB Packaging'
+    });
+  }
 
   const totalPaidEur = getAdjustedEurPrice(totalBaseEur);
 
@@ -624,20 +698,20 @@ async function lookupOrderTracking(e) {
 // ==================== PAGES LÉGALES CONFORMES STRIPE ====================
 const LEGAL_DOCUMENTS = {
   trial: `
-    <span class="section-eyebrow">GARANTIE AURA LABS™</span>
+    <span class="section-eyebrow">GARANTIE OREVA LAB™</span>
     <h2 style="font-family:var(--font-serif); font-size:2.1rem; color:var(--obsidian); margin-bottom:16px;">Politique d’Essai 30 Nuits & Remboursement Intégral</h2>
-    <p style="margin-bottom:12px;">Chez <strong>AURA LABS™</strong>, nous sommes convaincus que l'adaptation biomécanique cervicale et lombaire nécessite quelques nuits d'utilisation réelle dans votre propre lit.</p>
+    <p style="margin-bottom:12px;">Chez <strong>OREVA LAB™</strong>, nous sommes convaincus que l'adaptation biomécanique cervicale et lombaire nécessite quelques nuits d'utilisation réelle dans votre propre lit.</p>
     <h4 style="color:var(--obsidian); margin:16px 0 6px;">1. Vos 30 Nuits d'Essai à Domicile</h4>
     <p style="margin-bottom:12px;">Vous disposez de <strong>30 jours calendaires</strong> à compter de la réception de votre commande pour tester votre oreiller orthopédique, votre masseur Shiatsu ou votre masque LED.</p>
     <h4 style="color:var(--obsidian); margin:16px 0 6px;">2. Procédure de Retour Simple & Remboursement sous 48h</h4>
-    <p style="margin-bottom:12px;">Si vous n'observez pas d'amélioration sur votre sommeil ou votre confort postural, écrivez simplement à <strong>concierge@auralabs.ch</strong> avec votre numéro de commande. Notre équipe vous édite un bon de retour prépayé et procède au remboursement intégral (100%) sur votre moyen de paiement initial sous 48h.</p>
+    <p style="margin-bottom:12px;">Si vous n'observez pas d'amélioration sur votre sommeil ou votre confort postural, écrivez simplement à <strong>concierge@orevalabs.com</strong> avec votre numéro de commande. Notre équipe vous édite un bon de retour prépayé et procède au remboursement intégral (100%) sur votre moyen de paiement initial sous 48h.</p>
     <h4 style="color:var(--obsidian); margin:16px 0 6px;">3. Garantie Constructeur 2 Ans</h4>
-    <p>Tous nos dispositifs électroniques (AuraPulse™ 6D, AuraGlow™ LED, AuraDream™ Audio, AuraSculpt™ EMS) bénéficient d'une garantie de remplacement à neuf de 24 mois.</p>
+    <p>Tous nos dispositifs électroniques (OrevaPulse™ 6D, OrevaGlow™ LED, OrevaDream™ Audio, OrevaSculpt™ EMS) bénéficient d'une garantie de remplacement à neuf de 24 mois.</p>
   `,
   cgv: `
     <span class="section-eyebrow">CONDITIONS OFFICIELLES</span>
     <h2 style="font-family:var(--font-serif); font-size:2.1rem; color:var(--obsidian); margin-bottom:16px;">Conditions Générales de Vente (CGV)</h2>
-    <p style="margin-bottom:12px;"><strong>Article 1 — Objet :</strong> Les présentes Conditions Générales de Vente régissent l'ensemble des ventes conclues sur la boutique officielle <strong>AURA LABS™</strong> (<code>auralabs.ch</code> / <code>auralabsclinic.com</code>).</p>
+    <p style="margin-bottom:12px;"><strong>Article 1 — Objet :</strong> Les présentes Conditions Générales de Vente régissent l'ensemble des ventes conclues sur la boutique officielle <strong>OREVA LAB™</strong> (<code>orevalabs.com</code> / <code>orevalab.fr</code>).</p>
     <p style="margin-bottom:12px;"><strong>Article 2 — Prix et Devises :</strong> Les prix sont indiqués toutes taxes comprises (TTC) dans la devise locale sélectionnée par l'acheteur (EUR €, CHF, USD $, GBP £, AUD $). Aucuns frais de douane supplémentaires ne sont facturés à la livraison grâce à notre réseau d'entrepôts locaux.</p>
     <p style="margin-bottom:12px;"><strong>Article 3 — Paiement Sécurisé :</strong> Les règlements sont traités via notre partenaire certifié PCI-DSS Niveau 1 <strong>Stripe</strong> (Carte Bancaire, Apple Pay, TWINT, Klarna 3x sans frais, PayPal).</p>
     <p style="margin-bottom:12px;"><strong>Article 4 — Expédition & Livraison :</strong> Toute commande validée est transmise automatiquement à notre centre logistique le plus proche (Francfort/Paris pour l'UE et la Suisse, Newark NJ pour les USA, Londres pour le UK, Sydney pour l'Australie) pour une livraison suivie en 2 à 5 jours ouvrés.</p>
@@ -646,19 +720,19 @@ const LEGAL_DOCUMENTS = {
   privacy: `
     <span class="section-eyebrow">PROTECTION DES DONNÉES</span>
     <h2 style="font-family:var(--font-serif); font-size:2.1rem; color:var(--obsidian); margin-bottom:16px;">Politique de Confidentialité, RGPD & LPD Suisse</h2>
-    <p style="margin-bottom:12px;"><strong>1. Collecte strictement nécessaire :</strong> AURA LABS™ ne collecte que les informations indispensables au traitement et à la livraison de votre commande (Nom, Adresse de livraison, Email de suivi).</p>
-    <p style="margin-bottom:12px;"><strong>2. Sécurité Bancaire :</strong> Vos coordonnées bancaires sont chiffrées en SSL 256-bit et traitées directement par Stripe. AURA LABS™ n'a jamais accès à votre numéro complet de carte bancaire.</p>
+    <p style="margin-bottom:12px;"><strong>1. Collecte strictement nécessaire :</strong> OREVA LAB™ ne collecte que les informations indispensables au traitement et à la livraison de votre commande (Nom, Adresse de livraison, Email de suivi).</p>
+    <p style="margin-bottom:12px;"><strong>2. Sécurité Bancaire :</strong> Vos coordonnées bancaires sont chiffrées en SSL 256-bit et traitées directement par Stripe. OREVA LAB™ n'a jamais accès à votre numéro complet de carte bancaire.</p>
     <p style="margin-bottom:12px;"><strong>3. Transmission Logistique :</strong> Vos coordonnées de livraison sont transmises de manière automatisée et sécurisée uniquement à nos centres d'expédition et transporteurs (Swiss Post, DHL, Colissimo, USPS, Royal Mail) aux seules fins d'acheminement de votre colis.</p>
-    <p><strong>4. Vos Droits :</strong> Vous pouvez à tout moment demander la consultation ou la suppression de vos données sur simple email à <strong>concierge@auralabs.ch</strong>.</p>
+    <p><strong>4. Vos Droits :</strong> Vous pouvez à tout moment demander la consultation ou la suppression de vos données sur simple email à <strong>concierge@orevalabs.com</strong>.</p>
   `,
   mentions: `
     <span class="section-eyebrow">INFORMATIONS ÉDITEUR</span>
     <h2 style="font-family:var(--font-serif); font-size:2.1rem; color:var(--obsidian); margin-bottom:16px;">Mentions Légales & Contact Conciergerie</h2>
-    <p style="margin-bottom:12px;"><strong>Enseigne commerciale :</strong> AURA LABS CLINIC™ — Swiss Biomechanics, Sleep & Photobiomodulation</p>
-    <p style="margin-bottom:12px;"><strong>Domaines officiels :</strong> <code>www.auralabs.ch</code> / <code>www.auralabsclinic.com</code></p>
-    <p style="margin-bottom:12px;"><strong>Service Client & Conciergerie 7j/7 :</strong> concierge@auralabs.ch (Temps de réponse moyen : &lt; 4 heures)</p>
+    <p style="margin-bottom:12px;"><strong>Enseigne commerciale :</strong> OREVA LAB™ — Swiss Biomechanics, Sleep & Photobiomodulation</p>
+    <p style="margin-bottom:12px;"><strong>Domaines officiels :</strong> <code>www.orevalabs.com</code> / <code>www.orevalab.fr</code></p>
+    <p style="margin-bottom:12px;"><strong>Service Client & Conciergerie 7j/7 :</strong> concierge@orevalabs.com (Temps de réponse moyen : &lt; 4 heures)</p>
     <p style="margin-bottom:12px;"><strong>Centres Logistiques Partenaires :</strong> Francfort-sur-le-Main (DE), Paris (FR), Newark New Jersey (US), Londres (UK), Sydney (AU).</p>
-    <p><strong>Avertissement Médical :</strong> Les dispositifs AURA LABS™ sont des équipements de confort ergonomique, de bien-être postural et d'esthétique cosmétique. Ils ne remplacent pas un avis médical personnalisé en cas de pathologie rachidienne sévère.</p>
+    <p><strong>Avertissement Médical :</strong> Les dispositifs OREVA LAB™ sont des équipements de confort ergonomique, de bien-être postural et d'esthétique cosmétique. Ils ne remplacent pas un avis médical personnalisé en cas de pathologie rachidienne sévère.</p>
   `
 };
 
@@ -941,8 +1015,8 @@ async function loadSettingsForm() {
     document.getElementById('setStripePublic').value = cachedSettings.stripe?.publicKey || '';
     document.getElementById('setStripeSecret').value = cachedSettings.stripe?.secretKey || '';
     document.getElementById('setPayoutIban').value = cachedSettings.payout?.iban || '';
-    document.getElementById('setDomainName').value = cachedSettings.domainName || 'auralabs.ch';
-    document.getElementById('setSupportEmail').value = cachedSettings.supportEmail || 'concierge@auralabs.ch';
+    document.getElementById('setDomainName').value = cachedSettings.domainName || 'orevalabs.com';
+    document.getElementById('setSupportEmail').value = cachedSettings.supportEmail || 'concierge@orevalabs.com';
     const adminPwdEl = document.getElementById('setAdminPassword');
     if (adminPwdEl) adminPwdEl.value = cachedSettings.adminPassword || 'AURA2026';
 
@@ -1071,11 +1145,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateHeaderAccountBadge();
   await loadSettingsForm();
   applyLocalization();
+
+  // Détection automatique de la sous-boutique (sous-domaine ou paramètre ?vitrine=...)
+  const host = (window.location.hostname || '').toLowerCase();
+  const urlParams = new URLSearchParams(window.location.search);
+  const vitrineParam = (urlParams.get('vitrine') || urlParams.get('store') || '').toLowerCase();
+
+  if (vitrineParam && window.OREVA_UNIVERSES?.[vitrineParam]) {
+    switchUniverse(vitrineParam);
+  } else if (host.startsWith('sleep.') || host.startsWith('night.')) {
+    switchUniverse('sleep');
+  } else if (host.startsWith('ergo.') || host.startsWith('posture.')) {
+    switchUniverse('ergo');
+  } else if (host.startsWith('glow.') || host.startsWith('derma.') || host.startsWith('beauty.')) {
+    switchUniverse('glow');
+  } else if (host.startsWith('thermo.') || host.startsWith('relief.')) {
+    switchUniverse('thermo');
+  } else if (host.startsWith('gifts.') || host.startsWith('noel.')) {
+    switchUniverse('christmas');
+  }
+
   if (isAdminAuthenticated) {
     loadBackofficeData();
     loadBackofficeCustomers();
   }
-  const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('admin') === '1') {
     openAdminLoginModal();
   }
