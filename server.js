@@ -184,6 +184,7 @@ const INITIAL_SETTINGS = {
   supportEmail: 'concierge@auralabs.ch',
   companyAddress: 'AURA LABS International • Bahnhofstrasse 42, 8001 Zürich / 75008 Paris',
   autoFulfillmentEnabled: true,
+  adminPassword: 'AURA2026',
   databaseUrl: '',
   stripe: {
     publicKey: 'pk_test_51AuraLabsReadyForLiveKey',
@@ -502,12 +503,23 @@ function readRequestBody(req) {
   });
 }
 
+function isAdminAuthorized(req, settings) {
+  const provided = (req.headers['x-admin-password'] || '').trim();
+  const expected = (process.env.ADMIN_PASSWORD || settings?.adminPassword || 'AURA2026').trim();
+  return Boolean(provided && provided === expected);
+}
+
 const requestHandler = async (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = parsedUrl.pathname.replace(/\/+$/, '') || '/';
 
-  // API 1: Récupérer toutes les commandes + KPIs financiers
+  // API 1: Récupérer toutes les commandes + KPIs financiers (RÉSERVÉ PROPRIÉTAIRE ADMIN)
   if (pathname === '/api/orders' && req.method === 'GET') {
+    const settings = await storageGetSettings();
+    if (!isAdminAuthorized(req, settings)) {
+      res.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ error: 'Accès réservé au propriétaire (Mot de passe requis)' }));
+    }
     const orders = await storageGetOrders();
     const stats = orders.reduce(
       (acc, o) => {
@@ -641,12 +653,25 @@ const requestHandler = async (req, res) => {
     const storageMode = getSql() ? 'NEON_POSTGRES_PERMANENT' : 'LOCAL_FALLBACK';
 
     if (!email) {
+      const settings = await storageGetSettings();
+      if (!isAdminAuthorized(req, settings)) {
+        res.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ error: 'Accès réservé au propriétaire (Mot de passe requis)' }));
+      }
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       return res.end(JSON.stringify({ customers, totalCustomers: customers.length, storageMode }));
     }
 
     const customer = customers.find(c => (c.email || '').toLowerCase() === email) || null;
-    const customerOrders = orders.filter(o => (o.customer?.email || '').toLowerCase() === email);
+    const customerOrders = orders
+      .filter(o => (o.customer?.email || '').toLowerCase() === email)
+      .map(o => ({
+        id: o.id,
+        createdAt: o.createdAt,
+        displayTotal: o.displayTotal,
+        customer: { address: o.customer?.address, city: o.customer?.city },
+        fulfillment: o.fulfillment
+      }));
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     return res.end(JSON.stringify({ customer, orders: customerOrders, storageMode }));
   }
@@ -687,17 +712,35 @@ const requestHandler = async (req, res) => {
     }
   }
 
-  // API 4: Lire & Enregistrer vos Clés API + URL Neon Postgres
+  // API 4: Lire & Enregistrer vos Clés API + URL Neon Postgres (PROTÉGÉ PAR MOT DE PASSE ADMIN)
   if (pathname === '/api/settings' && req.method === 'GET') {
     const settings = await storageGetSettings();
+    const isAdmin = isAdminAuthorized(req, settings);
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    return res.end(JSON.stringify({ ...settings, storageMode: getSql() ? 'NEON_POSTGRES_PERMANENT' : 'LOCAL_FALLBACK' }));
+    if (!isAdmin) {
+      return res.end(JSON.stringify({
+        isAdmin: false,
+        brandName: settings.brandName,
+        domainName: settings.domainName,
+        supportEmail: settings.supportEmail,
+        skuMappings: settings.skuMappings
+      }));
+    }
+    return res.end(JSON.stringify({
+      ...settings,
+      isAdmin: true,
+      storageMode: getSql() ? 'NEON_POSTGRES_PERMANENT' : 'LOCAL_FALLBACK'
+    }));
   }
 
   if (pathname === '/api/settings' && req.method === 'POST') {
     try {
-      const incoming = await readRequestBody(req);
       const current = await storageGetSettings();
+      if (!isAdminAuthorized(req, current)) {
+        res.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ error: 'Accès refusé : Mot de passe Propriétaire invalide.' }));
+      }
+      const incoming = await readRequestBody(req);
       const merged = {
         ...current,
         ...incoming,

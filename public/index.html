@@ -261,18 +261,19 @@
           </p>
           <p style="font-size:0.75rem; color:#71717A; margin-top:16px;">
             © 2026 AURA LABS Clinic International (`auralabs.ch`). Tous droits réservés.
+            <a href="#" onclick="openAdminLoginModal(); return false;" style="color:#52525B; text-decoration:none; margin-left:8px; font-size:0.7rem;" title="Accès réservé au propriétaire">🔒 Accès Propriétaire</a>
           </p>
         </div>
       </div>
     </footer>
   </main>
 
-  <!-- ==================== VUE 2 : BACKOFFICE EXÉCUTIF COMPLET (3 ONGLETS) ==================== -->
+  <!-- ==================== VUE 2 : BACKOFFICE EXÉCUTIF COMPLET (PROTÉGÉ PAR MOT DE PASSE) ==================== -->
   <section id="backofficeView" class="backoffice-view hidden">
     <div class="backoffice-container">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px; padding-bottom:22px; border-bottom:1px solid #27272A;">
         <div>
-          <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;">BACKOFFICE PROPRIÉTAIRE • AURA LABS CLINIC™</span>
+          <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;">🔒 ESPACE PRIVÉ PROPRIÉTAIRE (INVISIBLE POUR VOS CLIENTS) • AURA LABS CLINIC™</span>
           <h1 style="font-family:var(--font-serif); font-size:2.4rem; font-weight:500; margin-top:4px;">Pilotage des Commissions, Clés API & Mise en Ligne</h1>
         </div>
         <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
@@ -281,7 +282,10 @@
             <span>Afficher mes marges sur la boutique</span>
           </label>
           <button class="btn-luxury-dark" style="background:#10B981; border-color:#10B981; color:#052E16;" onclick="switchView('storefront')">
-            ← Retourner à la Boutique Client
+            ← Retourner à la Boutique
+          </button>
+          <button class="btn-luxury-dark" style="background:#27272A; border-color:#3F3F46; color:#F87171;" onclick="logoutAdminSession()">
+            🔒 Verrouiller Session Admin
           </button>
         </div>
       </div>
@@ -427,12 +431,16 @@
                 <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Votre IBAN de réception des commissions (affiché pour votre suivi)</label>
                 <input type="text" id="setPayoutIban" class="form-input" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="FR76 ... ou CH93 ..." />
               </div>
-              <div style="margin-bottom:6px;">
+              <div style="margin-bottom:14px;">
                 <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Nom de domaine officiel & Email Service Client</label>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                   <input type="text" id="setDomainName" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="auralabs.ch" />
                   <input type="text" id="setSupportEmail" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="concierge@auralabs.ch" />
                 </div>
+              </div>
+              <div style="margin-bottom:6px;">
+                <label style="display:block; font-size:0.78rem; color:#6EE7B7; font-weight:700; margin-bottom:5px;">🔒 Votre Mot de Passe Propriétaire Admin (protège ce Backoffice)</label>
+                <input type="text" id="setAdminPassword" style="background:#18181B; border:1px solid #10B981; color:#6EE7B7; font-family:monospace; width:100%; padding:11px; border-radius:6px;" placeholder="AURA2026" />
               </div>
             </div>
 
@@ -812,19 +820,23 @@
 
           <div style="background:var(--obsidian); color:#fff; padding:14px 18px; border-radius:8px; margin-bottom:16px; font-size:0.82rem;">
             <div style="color:#D4B98C; font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px;">
-              RÉCAPITULATIF & AUTOMATISATION FOURNISSEUR
+              RÉCAPITULATIF DE VOTRE COMMANDE
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
               <span>Total commande (Livraison Express Offerte) :</span>
               <strong id="chkPaidDisplay"></strong>
             </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#A1A1AA;">
-              <span>Coût fournisseur (expédition incluse) :</span>
-              <span id="chkCostDisplay"></span>
-            </div>
-            <div style="display:flex; justify-content:space-between; padding-top:6px; border-top:1px solid rgba(255,255,255,0.14); color:#6EE7B7; font-size:0.93rem;">
-              <span>Votre Commission Nette Créditée :</span>
-              <strong id="chkCommissionDisplay"></strong>
+            <!-- Visible uniquement si connecté en tant que Propriétaire Admin -->
+            <div id="ownerCheckoutBreakdown" class="hidden" style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">
+              <div style="font-size:0.68rem; color:#10B981; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px;">🔒 APERÇU PRIVÉ PROPRIÉTAIRE (INVISIBLE CLIENT)</div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#A1A1AA;">
+                <span>Coût fournisseur (expédition incluse) :</span>
+                <span id="chkCostDisplay"></span>
+              </div>
+              <div style="display:flex; justify-content:space-between; color:#6EE7B7; font-size:0.9rem;">
+                <span>Votre Commission Nette Créditée :</span>
+                <strong id="chkCommissionDisplay"></strong>
+              </div>
             </div>
           </div>
 
@@ -836,27 +848,53 @@
 
       <div id="checkoutSuccessWrap" class="hidden" style="text-align:center; padding:16px 0;">
         <div style="width:56px; height:56px; border-radius:50%; background:#DCFCE7; color:#14532D; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 16px; font-weight:700;">✓</div>
-        <h3 style="font-family:var(--font-serif); font-size:2rem; margin-bottom:8px;">Commande Confirmée & Transmise</h3>
+        <h3 style="font-family:var(--font-serif); font-size:2rem; margin-bottom:8px;">Commande Confirmée & En Préparation</h3>
         <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:20px;">
-          L'ordre d'expédition a été envoyé par API à l'entrepôt local et votre commission nette a été créditée.
+          Votre commande a été transmise à notre centre logistique local pour une expédition express suivie.
         </p>
         <div id="orderConfirmationBox" style="background:var(--bg-stone); padding:18px; border-radius:8px; text-align:left; font-size:0.84rem; margin-bottom:22px; line-height:1.7;"></div>
         <div style="display:flex; gap:12px;">
-          <button class="btn-luxury-dark" style="flex:1;" onclick="closeCheckoutModal(); switchView('backoffice')">
+          <button id="ownerConfirmBackofficeBtn" class="btn-luxury-dark hidden" style="flex:1;" onclick="closeCheckoutModal(); switchView('backoffice')">
             Voir ma Commission dans le Backoffice
           </button>
-          <button class="btn-luxury-outline" onclick="closeCheckoutModal()">
-            Fermer
+          <button class="btn-luxury-outline" style="flex:1;" onclick="closeCheckoutModal()">
+            Fermer & Retourner à la Boutique
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- DOCK FLOTTANT DISCRET POUR BASCULER VERS VOTRE BACKOFFICE -->
-  <div class="partner-floating-dock">
+  <!-- MODALE D'AUTHENTIFICATION PROPRIÉTAIRE (ADMIN SEULEMENT) -->
+  <div id="adminLoginModal" class="pdp-modal-backdrop" onclick="if(event.target===this) closeAdminLoginModal()">
+    <div class="checkout-modal-card" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div>
+          <span class="section-eyebrow" style="margin-bottom:2px;">ESPACE SÉCURISÉ</span>
+          <h3 style="font-family:var(--font-serif); font-size:1.75rem;">Accès Propriétaire AURA LABS™</h3>
+        </div>
+        <button onclick="closeAdminLoginModal()" style="background:none; border:none; font-size:1.6rem; cursor:pointer;">×</button>
+      </div>
+      <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">
+        Cet espace (Commissions, Fichier Clients, Clés API Stripe & Fournisseurs) est <strong>strictement invisible pour vos clients</strong>. Entrez votre mot de passe administrateur :
+      </p>
+      <form onsubmit="submitAdminLogin(event)">
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:4px;">Mot de Passe Propriétaire *</label>
+          <input type="password" id="adminPasswordInput" required placeholder="Votre mot de passe admin..." style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+        </div>
+        <div id="adminLoginError" style="color:#DC2626; font-size:0.8rem; font-weight:600; margin-bottom:10px;"></div>
+        <button type="submit" class="btn-luxury-dark" style="width:100%; padding:14px;">
+          🔓 Déverrouiller mon Backoffice & mes Clés API
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DOCK FLOTTANT CACHÉ PAR DÉFAUT POUR TOUS LES CLIENTS (VISIBLE UNIQUEMENT QUAND ADMIN CONNECTÉ) -->
+  <div id="ownerFloatingDock" class="partner-floating-dock hidden">
     <span style="width:8px; height:8px; border-radius:50%; background:#10B981; display:inline-block;"></span>
-    <span>Vos Commissions : <strong id="dockCommissionTotal" style="color:#6EE7B7;">+338.58 €</strong></span>
+    <span>🔒 Admin • Commissions : <strong id="dockCommissionTotal" style="color:#6EE7B7;">+338.58 €</strong></span>
     <button class="partner-dock-btn" onclick="switchView('backoffice')">
       ⌘ Backoffice & Clés API
     </button>

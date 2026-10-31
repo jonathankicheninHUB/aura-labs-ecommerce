@@ -548,7 +548,10 @@ async function submitOrder(e) {
   if (data.success) {
     cart = [];
     renderBag();
-    await loadBackofficeData();
+    if (isAdminAuthenticated) {
+      await loadBackofficeData();
+      await loadBackofficeCustomers();
+    }
 
     const ord = data.order;
     document.getElementById('orderConfirmationBox').innerHTML = `
@@ -556,7 +559,7 @@ async function submitOrder(e) {
       <div><strong>Destinataire :</strong> ${ord.customer.name} (${ord.customer.phone || ord.customer.email})</div>
       <div><strong>Adresse d'expédition enregistrée :</strong> ${ord.customer.address} (${ord.customer.countryName})</div>
       <div><strong>Total réglé :</strong> ${ord.displayTotal} via ${ord.paymentMethod}</div>
-      <div style="color:var(--emerald); font-size:0.95rem; margin:6px 0;"><strong>Votre Commission Nette Créditée : +${ord.netCommissionEur.toFixed(2)} € (${ord.marginPercent}%)</strong></div>
+      ${isAdminAuthenticated ? `<div style="color:var(--emerald); font-size:0.95rem; margin:6px 0;"><strong>🔒 Votre Commission Nette Créditée : +${ord.netCommissionEur.toFixed(2)} € (${ord.marginPercent}%)</strong></div>` : ''}
       <div style="padding-top:8px; border-top:1px solid var(--border-subtle);">
         <div><strong>Entrepôt d'expédition :</strong> ${ord.fulfillment.warehouse}</div>
         <div><strong>Numéro de suivi :</strong> <code>${ord.fulfillment.trackingNumber}</code> (${ord.fulfillment.estimatedDelivery})</div>
@@ -668,13 +671,95 @@ function closeLegalModal() {
   document.getElementById('legalModal').classList.remove('open');
 }
 
-// ==================== BACKOFFICE : COMMANDES, CLIENTS, CLÉS API & DÉPLOIEMENT ====================
+// ==================== AUTHENTIFICATION PROPRIÉTAIRE & BACKOFFICE SÉCURISÉ ====================
 let cachedCustomers = [];
+let isAdminAuthenticated = false;
+
+function getAdminPassword() {
+  return localStorage.getItem('aura_admin_password') || '';
+}
+
+function getAdminHeaders(extra = {}) {
+  const pwd = getAdminPassword();
+  return pwd ? { ...extra, 'x-admin-password': pwd } : { ...extra };
+}
+
+function applyAdminVisibility() {
+  const dock = document.getElementById('ownerFloatingDock');
+  const chkBreakdown = document.getElementById('ownerCheckoutBreakdown');
+  const chkBtn = document.getElementById('ownerConfirmBackofficeBtn');
+
+  if (isAdminAuthenticated) {
+    if (dock) dock.classList.remove('hidden');
+    if (chkBreakdown) chkBreakdown.classList.remove('hidden');
+    if (chkBtn) chkBtn.classList.remove('hidden');
+  } else {
+    if (dock) dock.classList.add('hidden');
+    if (chkBreakdown) chkBreakdown.classList.add('hidden');
+    if (chkBtn) chkBtn.classList.add('hidden');
+  }
+}
+
+function openAdminLoginModal() {
+  if (isAdminAuthenticated) {
+    switchView('backoffice');
+    return;
+  }
+  const errEl = document.getElementById('adminLoginError');
+  if (errEl) errEl.textContent = '';
+  const inp = document.getElementById('adminPasswordInput');
+  if (inp) inp.value = '';
+  document.getElementById('adminLoginModal').classList.add('open');
+}
+
+function closeAdminLoginModal() {
+  document.getElementById('adminLoginModal').classList.remove('open');
+}
+
+async function submitAdminLogin(e) {
+  e.preventDefault();
+  const pwd = document.getElementById('adminPasswordInput').value.trim();
+  const errEl = document.getElementById('adminLoginError');
+  if (!pwd) return;
+
+  try {
+    const res = await fetch('/api/settings', {
+      headers: { 'x-admin-password': pwd }
+    });
+    const data = await res.json();
+    if (data.isAdmin) {
+      localStorage.setItem('aura_admin_password', pwd);
+      isAdminAuthenticated = true;
+      cachedSettings = data;
+      applyAdminVisibility();
+      closeAdminLoginModal();
+      switchView('backoffice');
+    } else {
+      errEl.textContent = 'Mot de passe Propriétaire incorrect.';
+    }
+  } catch (err) {
+    errEl.textContent = 'Erreur de vérification du mot de passe.';
+  }
+}
+
+function logoutAdminSession() {
+  localStorage.removeItem('aura_admin_password');
+  isAdminAuthenticated = false;
+  const marginCheckbox = document.getElementById('toggleMarginOverlay');
+  if (marginCheckbox) marginCheckbox.checked = false;
+  applyAdminVisibility();
+  renderCatalog();
+  switchView('storefront');
+}
 
 function switchView(view) {
   const storefront = document.getElementById('storefrontView');
   const backoffice = document.getElementById('backofficeView');
   if (view === 'backoffice') {
+    if (!isAdminAuthenticated) {
+      openAdminLoginModal();
+      return;
+    }
     storefront.classList.add('hidden');
     backoffice.classList.remove('hidden');
     loadBackofficeData();
@@ -709,8 +794,10 @@ function switchBoTab(tabName) {
 }
 
 async function loadBackofficeCustomers() {
+  if (!isAdminAuthenticated) return;
   try {
-    const res = await fetch('/api/customers');
+    const res = await fetch('/api/customers', { headers: getAdminHeaders() });
+    if (!res.ok) return;
     const data = await res.json();
     cachedCustomers = data.customers || [];
 
@@ -786,7 +873,7 @@ async function saveNeonDatabaseUrl(e) {
     }
     const res = await fetch('/api/settings', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ databaseUrl })
     });
     const data = await res.json();
@@ -844,14 +931,20 @@ function exportCustomersCsv() {
 
 async function loadSettingsForm() {
   try {
-    const res = await fetch('/api/settings');
+    const res = await fetch('/api/settings', { headers: getAdminHeaders() });
     cachedSettings = await res.json();
+    isAdminAuthenticated = Boolean(cachedSettings.isAdmin);
+    applyAdminVisibility();
+
+    if (!isAdminAuthenticated) return;
 
     document.getElementById('setStripePublic').value = cachedSettings.stripe?.publicKey || '';
     document.getElementById('setStripeSecret').value = cachedSettings.stripe?.secretKey || '';
     document.getElementById('setPayoutIban').value = cachedSettings.payout?.iban || '';
     document.getElementById('setDomainName').value = cachedSettings.domainName || 'auralabs.ch';
     document.getElementById('setSupportEmail').value = cachedSettings.supportEmail || 'concierge@auralabs.ch';
+    const adminPwdEl = document.getElementById('setAdminPassword');
+    if (adminPwdEl) adminPwdEl.value = cachedSettings.adminPassword || 'AURA2026';
 
     document.getElementById('setCjApiKey').value = cachedSettings.suppliers?.cjdropshipping?.apiKey || '';
     document.getElementById('setSpocketKey').value = cachedSettings.suppliers?.spocket?.apiKey || '';
@@ -890,9 +983,12 @@ async function saveBackofficeSettings(e) {
     skuMappings[inp.getAttribute('data-sku-prod')] = inp.value.trim();
   });
 
+  const newAdminPwd = document.getElementById('setAdminPassword')?.value.trim() || 'AURA2026';
+
   const payload = {
     domainName: document.getElementById('setDomainName').value.trim(),
     supportEmail: document.getElementById('setSupportEmail').value.trim(),
+    adminPassword: newAdminPwd,
     stripe: {
       publicKey: document.getElementById('setStripePublic').value.trim(),
       secretKey: document.getElementById('setStripeSecret').value.trim()
@@ -916,22 +1012,25 @@ async function saveBackofficeSettings(e) {
 
   const res = await fetch('/api/settings', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify(payload)
   });
   const data = await res.json();
   if (data.success) {
+    localStorage.setItem('aura_admin_password', newAdminPwd);
     cachedSettings = data.settings;
     const fb = document.getElementById('settingsSaveFeedback');
-    fb.textContent = '✓ Configuration et SKUs enregistrés avec succès !';
+    fb.textContent = '✓ Configuration, SKUs et Mot de Passe enregistrés avec succès !';
     setTimeout(() => { fb.textContent = ''; }, 4000);
     loadSettingsForm();
   }
 }
 
 async function loadBackofficeData() {
+  if (!isAdminAuthenticated) return;
   try {
-    const res = await fetch('/api/orders');
+    const res = await fetch('/api/orders', { headers: getAdminHeaders() });
+    if (!res.ok) return;
     const { orders, stats } = await res.json();
 
     document.getElementById('dockCommissionTotal').textContent = `+${stats.totalNetCommissionEur.toFixed(2)} €`;
@@ -972,6 +1071,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateHeaderAccountBadge();
   await loadSettingsForm();
   applyLocalization();
-  loadBackofficeData();
-  loadBackofficeCustomers();
+  if (isAdminAuthenticated) {
+    loadBackofficeData();
+    loadBackofficeCustomers();
+  }
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('admin') === '1') {
+    openAdminLoginModal();
+  }
 });
