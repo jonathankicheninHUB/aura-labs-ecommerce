@@ -332,7 +332,107 @@ function toggleBag(open) {
   }
 }
 
-// Checkout Client
+// ==================== ESPACE COMPTE CLIENT & CARNET D'ADRESSE ====================
+function getSavedCustomerProfile() {
+  try {
+    const raw = localStorage.getItem('aura_customer_profile');
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function updateHeaderAccountBadge() {
+  const prof = getSavedCustomerProfile();
+  const labelEl = document.getElementById('accountBtnLabel');
+  if (!labelEl) return;
+  if (prof && prof.firstName) {
+    labelEl.textContent = `${prof.firstName} (Mon Compte)`;
+  } else {
+    labelEl.textContent = 'Mon Compte';
+  }
+}
+
+async function openAccountModal() {
+  const prof = getSavedCustomerProfile();
+  if (prof) {
+    document.getElementById('accFirstName').value = prof.firstName || '';
+    document.getElementById('accLastName').value = prof.lastName || '';
+    document.getElementById('accEmail').value = prof.email || '';
+    document.getElementById('accPhone').value = prof.phone || '';
+    document.getElementById('accAddress1').value = prof.addressLine1 || '';
+    document.getElementById('accAddress2').value = prof.addressLine2 || '';
+    document.getElementById('accZip').value = prof.postalCode || '';
+    document.getElementById('accCity').value = prof.city || '';
+    document.getElementById('accCountry').value = prof.countryCode || currentMarketCode;
+    await refreshAccountOrders(prof.email);
+  } else {
+    document.getElementById('accCountry').value = currentMarketCode;
+    document.getElementById('accOrdersList').innerHTML = `<p style="font-size:0.82rem; color:var(--text-muted);">Créez votre compte ci-dessus ou entrez votre email de commande pour afficher votre historique.</p>`;
+  }
+  document.getElementById('accountModal').classList.add('open');
+}
+
+function closeAccountModal() {
+  document.getElementById('accountModal').classList.remove('open');
+}
+
+async function saveCustomerAccount(e) {
+  e.preventDefault();
+  const profile = {
+    firstName: document.getElementById('accFirstName').value.trim(),
+    lastName: document.getElementById('accLastName').value.trim(),
+    email: document.getElementById('accEmail').value.trim(),
+    phone: document.getElementById('accPhone').value.trim(),
+    addressLine1: document.getElementById('accAddress1').value.trim(),
+    addressLine2: document.getElementById('accAddress2').value.trim(),
+    postalCode: document.getElementById('accZip').value.trim(),
+    city: document.getElementById('accCity').value.trim(),
+    countryCode: document.getElementById('accCountry').value
+  };
+
+  localStorage.setItem('aura_customer_profile', JSON.stringify(profile));
+  updateHeaderAccountBadge();
+
+  await fetch('/api/customers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(profile)
+  });
+
+  const fb = document.getElementById('accSaveFeedback');
+  fb.textContent = '✓ Compte & adresse sauvegardés !';
+  setTimeout(() => { fb.textContent = ''; }, 3500);
+  await refreshAccountOrders(profile.email);
+}
+
+async function refreshAccountOrders(email) {
+  const listEl = document.getElementById('accOrdersList');
+  if (!email) return;
+  try {
+    const res = await fetch(`/api/customers?email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+    const orders = data.orders || [];
+    if (orders.length === 0) {
+      listEl.innerHTML = `<div style="background:var(--bg-stone); padding:14px; border-radius:6px; font-size:0.82rem;">Aucune commande associée à <strong>${email}</strong> pour le moment. Votre adresse est prête pour votre prochaine commande !</div>`;
+      return;
+    }
+    listEl.innerHTML = orders.map(o => `
+      <div style="background:var(--bg-stone); border:1px solid var(--border-subtle); padding:14px; border-radius:6px; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:4px;">
+          <span>Commande ${o.id} — ${o.displayTotal}</span>
+          <span style="color:var(--emerald);">${o.fulfillment.status}</span>
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-secondary);">Livraison : ${o.customer.address || o.customer.city}</div>
+        <div style="font-size:0.78rem; margin-top:4px;">Suivi : <code>${o.fulfillment.trackingNumber}</code> (${o.fulfillment.carrier})</div>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// Checkout Client (3 Étapes : Contact/Compte + Adresse Complète + Paiement)
 function openCheckoutModal() {
   if (cart.length === 0) {
     addToCart('bundle-sommeil-ultime', 1, 1.0);
@@ -346,15 +446,18 @@ function openCheckoutModal() {
   const paySelect = document.getElementById('custPaymentMethod');
   paySelect.innerHTML = market.paymentMethods.map(m => `<option value="${m}">${m}</option>`).join('');
 
-  const defaultCities = {
-    FR: '75008 Paris, France',
-    CH: '1204 Genève, Suisse',
-    DE: '80331 München, Deutschland',
-    US: 'New York, NY 10013, USA',
-    GB: 'Mayfair, London W1K, UK',
-    AU: 'Sydney NSW 2000, Australia'
-  };
-  document.getElementById('custCity').value = defaultCities[currentMarketCode] || 'Paris';
+  // Si le client a déjà créé son compte, on pré-remplit son adresse automatiquement
+  const savedProf = getSavedCustomerProfile();
+  if (savedProf) {
+    document.getElementById('custEmail').value = savedProf.email || '';
+    document.getElementById('custPhone').value = savedProf.phone || '';
+    document.getElementById('custFirstName').value = savedProf.firstName || '';
+    document.getElementById('custLastName').value = savedProf.lastName || '';
+    document.getElementById('custAddress1').value = savedProf.addressLine1 || '';
+    document.getElementById('custAddress2').value = savedProf.addressLine2 || '';
+    document.getElementById('custPostalCode').value = savedProf.postalCode || '';
+    document.getElementById('custCity').value = savedProf.city || '';
+  }
 
   let totalBaseEur = 0;
   let totalSupplierEur = 0;
@@ -403,13 +506,28 @@ async function submitOrder(e) {
 
   const totalPaidEur = getAdjustedEurPrice(totalBaseEur);
 
+  const customerData = {
+    firstName: document.getElementById('custFirstName').value.trim(),
+    lastName: document.getElementById('custLastName').value.trim(),
+    name: `${document.getElementById('custFirstName').value.trim()} ${document.getElementById('custLastName').value.trim()}`.trim(),
+    email: document.getElementById('custEmail').value.trim(),
+    phone: document.getElementById('custPhone').value.trim(),
+    addressLine1: document.getElementById('custAddress1').value.trim(),
+    addressLine2: document.getElementById('custAddress2').value.trim(),
+    postalCode: document.getElementById('custPostalCode').value.trim(),
+    city: document.getElementById('custCity').value.trim(),
+    state: document.getElementById('custState').value.trim(),
+    countryCode: currentMarketCode
+  };
+
+  if (document.getElementById('chkCreateAccount')?.checked) {
+    localStorage.setItem('aura_customer_profile', JSON.stringify(customerData));
+    updateHeaderAccountBadge();
+  }
+
   const payload = {
-    customer: {
-      name: document.getElementById('custName').value,
-      address: document.getElementById('custAddress').value,
-      email: document.getElementById('custEmail').value,
-      city: document.getElementById('custCity').value
-    },
+    customer: customerData,
+    createAccount: Boolean(document.getElementById('chkCreateAccount')?.checked),
     countryCode: currentMarketCode,
     countryName: market.name,
     currency: market.currency,
@@ -434,9 +552,10 @@ async function submitOrder(e) {
 
     const ord = data.order;
     document.getElementById('orderConfirmationBox').innerHTML = `
-      <div><strong>Référence :</strong> <code>${ord.id}</code> (Vous pouvez la tester dans "Suivre ma commande")</div>
+      <div><strong>Référence :</strong> <code>${ord.id}</code></div>
+      <div><strong>Destinataire :</strong> ${ord.customer.name} (${ord.customer.phone || ord.customer.email})</div>
+      <div><strong>Adresse d'expédition enregistrée :</strong> ${ord.customer.address} (${ord.customer.countryName})</div>
       <div><strong>Total réglé :</strong> ${ord.displayTotal} via ${ord.paymentMethod}</div>
-      <div><strong>Coût fournisseur prélevé :</strong> ${ord.supplierCostTotalEur.toFixed(2)} €</div>
       <div style="color:var(--emerald); font-size:0.95rem; margin:6px 0;"><strong>Votre Commission Nette Créditée : +${ord.netCommissionEur.toFixed(2)} € (${ord.marginPercent}%)</strong></div>
       <div style="padding-top:8px; border-top:1px solid var(--border-subtle);">
         <div><strong>Entrepôt d'expédition :</strong> ${ord.fulfillment.warehouse}</div>
@@ -684,7 +803,11 @@ async function loadBackofficeData() {
     tbody.innerHTML = orders.map(o => `
       <tr>
         <td><strong style="color:#fff;">${o.id}</strong><br/><span style="font-size:0.75rem; color:#71717A;">${new Date(o.createdAt).toLocaleString('fr-FR')}</span></td>
-        <td><strong style="color:#E4E4E7;">${o.customer.name}</strong><br/><span style="font-size:0.78rem; color:#A1A1AA;">${o.customer.city} • ${o.customer.countryName}</span></td>
+        <td>
+          <strong style="color:#E4E4E7;">${o.customer.name}</strong>
+          ${o.customer.phone ? `<span style="font-size:0.73rem; color:#6EE7B7;">(${o.customer.phone})</span>` : ''}<br/>
+          <span style="font-size:0.78rem; color:#A1A1AA;">${o.customer.address || o.customer.city} • ${o.customer.countryName}</span>
+        </td>
         <td>${o.items.map(i => `<div style="font-size:0.8rem; color:#D4D4D8;">• ${i.qty}× ${i.title} <code style="color:#6EE7B7; font-size:0.72rem;">[${i.sku || i.id}]</code></div>`).join('')}</td>
         <td><strong style="color:#fff;">${o.displayTotal}</strong><br/><span style="font-size:0.74rem; color:#71717A;">${o.paymentMethod}</span></td>
         <td style="color:#F87171; font-weight:600;">-${Number(o.supplierCostTotalEur).toFixed(2)} €</td>
@@ -705,6 +828,7 @@ async function loadBackofficeData() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  updateHeaderAccountBadge();
   await loadSettingsForm();
   applyLocalization();
   loadBackofficeData();

@@ -7,6 +7,7 @@ const IS_VERCEL = Boolean(process.env.VERCEL || process.env.NOW_REGION);
 const DATA_DIR = IS_VERCEL ? '/tmp/aura-labs-data' : path.join(__dirname, 'data');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
+const CUSTOMERS_FILE = path.join(DATA_DIR, 'customers.json');
 
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -165,6 +166,9 @@ if (!fs.existsSync(ORDERS_FILE)) {
 if (!fs.existsSync(SETTINGS_FILE)) {
   fs.writeFileSync(SETTINGS_FILE, JSON.stringify(INITIAL_SETTINGS, null, 2), 'utf8');
 }
+if (!fs.existsSync(CUSTOMERS_FILE)) {
+  fs.writeFileSync(CUSTOMERS_FILE, JSON.stringify([], null, 2), 'utf8');
+}
 
 function readJson(filePath, fallback) {
   try {
@@ -207,8 +211,12 @@ async function dispatchToCJDropshippingAPI(orderPayload, settings) {
         orderNumber: orderPayload.id,
         shippingCountryCode: orderPayload.customer.countryCode,
         shippingCustomerName: orderPayload.customer.name,
-        shippingAddress: orderPayload.customer.address || orderPayload.customer.city,
+        shippingPhone: orderPayload.customer.phone || '',
+        shippingAddress: orderPayload.customer.addressLine1 || orderPayload.customer.address || '',
+        shippingAddress2: orderPayload.customer.addressLine2 || '',
+        shippingZip: orderPayload.customer.postalCode || '',
         shippingCity: orderPayload.customer.city,
+        shippingProvince: orderPayload.customer.state || orderPayload.customer.city,
         products: orderPayload.items.map(i => ({
           sku: settings?.skuMappings?.[i.id] || i.sku || i.id,
           quantity: i.qty
@@ -311,14 +319,28 @@ const requestHandler = async (req, res) => {
       const netCommissionEur = Number((totalPaidEur - supplierCostTotalEur - stripeFeeEur).toFixed(2));
       const marginPercent = totalPaidEur > 0 ? Number(((netCommissionEur / totalPaidEur) * 100).toFixed(1)) : 0;
 
+      const fullAddress = [
+        payload.customer?.addressLine1 || payload.customer?.address,
+        payload.customer?.addressLine2,
+        `${payload.customer?.postalCode || ''} ${payload.customer?.city || ''}`.trim(),
+        payload.customer?.state
+      ].filter(Boolean).join(', ');
+
       const newOrder = {
         id: `ORD-${randomNum}-${payload.countryCode || 'FR'}`,
         createdAt: new Date().toISOString(),
         customer: {
-          name: payload.customer?.name || 'Client International',
+          firstName: payload.customer?.firstName || '',
+          lastName: payload.customer?.lastName || '',
+          name: payload.customer?.name || `${payload.customer?.firstName || ''} ${payload.customer?.lastName || ''}`.trim() || 'Client International',
           email: payload.customer?.email || 'client@auralabs.ch',
-          address: payload.customer?.address || payload.customer?.city || 'Genève',
+          phone: payload.customer?.phone || '',
+          addressLine1: payload.customer?.addressLine1 || payload.customer?.address || '',
+          addressLine2: payload.customer?.addressLine2 || '',
+          postalCode: payload.customer?.postalCode || '',
           city: payload.customer?.city || 'Genève',
+          state: payload.customer?.state || '',
+          address: fullAddress,
           countryCode: payload.countryCode || 'FR',
           countryName: `${payload.countryName || 'France'} ${route.flag}`
         },
@@ -351,11 +373,91 @@ const requestHandler = async (req, res) => {
       orders.unshift(newOrder);
       writeJson(ORDERS_FILE, orders);
 
+      // Si le client a coché la création/mise à jour de son compte lors du checkout
+      if (payload.customer?.email) {
+        const customers = readJson(CUSTOMERS_FILE, []);
+        const emailLower = payload.customer.email.toLowerCase();
+        const existingIdx = customers.findIndex(c => (c.email || '').toLowerCase() === emailLower);
+        const customerRecord = {
+          id: existingIdx !== -1 ? customers[existingIdx].id : `CUST-${randomNum}`,
+          firstName: newOrder.customer.firstName,
+          lastName: newOrder.customer.lastName,
+          name: newOrder.customer.name,
+          email: payload.customer.email,
+          phone: newOrder.customer.phone,
+          addressLine1: newOrder.customer.addressLine1,
+          addressLine2: newOrder.customer.addressLine2,
+          postalCode: newOrder.customer.postalCode,
+          city: newOrder.customer.city,
+          state: newOrder.customer.state,
+          countryCode: newOrder.customer.countryCode,
+          updatedAt: new Date().toISOString()
+        };
+        if (existingIdx !== -1) {
+          customers[existingIdx] = { ...customers[existingIdx], ...customerRecord };
+        } else {
+          customers.unshift(customerRecord);
+        }
+        writeJson(CUSTOMERS_FILE, customers);
+      }
+
       res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' });
       return res.end(JSON.stringify({ success: true, order: newOrder, cjResult }));
     } catch (err) {
       res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
       return res.end(JSON.stringify({ error: 'Requête invalide', details: err.message }));
+    }
+  }
+
+  // API 3bis: Espace Compte Client (Inscription / Connexion / Carnet d'adresses / Commandes du client)
+  if (pathname === '/api/customers' && req.method === 'GET') {
+    const email = (parsedUrl.searchParams.get('email') || '').trim().toLowerCase();
+    const customers = readJson(CUSTOMERS_FILE, []);
+    const orders = readJson(ORDERS_FILE, []);
+    const customer = customers.find(c => (c.email || '').toLowerCase() === email) || null;
+    const customerOrders = orders.filter(o => (o.customer?.email || '').toLowerCase() === email);
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    return res.end(JSON.stringify({ customer, orders: customerOrders }));
+  }
+
+  if (pathname === '/api/customers' && req.method === 'POST') {
+    try {
+      const payload = await readRequestBody(req);
+      const customers = readJson(CUSTOMERS_FILE, []);
+      const orders = readJson(ORDERS_FILE, []);
+      const emailLower = (payload.email || '').trim().toLowerCase();
+      if (!emailLower) {
+        res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ error: 'Email requis' }));
+      }
+      const existingIdx = customers.findIndex(c => (c.email || '').toLowerCase() === emailLower);
+      const record = {
+        id: existingIdx !== -1 ? customers[existingIdx].id : `CUST-${Math.floor(1000 + Math.random() * 9000)}`,
+        firstName: payload.firstName || existingIdx !== -1 && customers[existingIdx].firstName || '',
+        lastName: payload.lastName || existingIdx !== -1 && customers[existingIdx].lastName || '',
+        name: `${payload.firstName || ''} ${payload.lastName || ''}`.trim() || payload.name || '',
+        email: payload.email.trim(),
+        phone: payload.phone || existingIdx !== -1 && customers[existingIdx].phone || '',
+        addressLine1: payload.addressLine1 || existingIdx !== -1 && customers[existingIdx].addressLine1 || '',
+        addressLine2: payload.addressLine2 || existingIdx !== -1 && customers[existingIdx].addressLine2 || '',
+        postalCode: payload.postalCode || existingIdx !== -1 && customers[existingIdx].postalCode || '',
+        city: payload.city || existingIdx !== -1 && customers[existingIdx].city || '',
+        state: payload.state || existingIdx !== -1 && customers[existingIdx].state || '',
+        countryCode: payload.countryCode || existingIdx !== -1 && customers[existingIdx].countryCode || 'FR',
+        updatedAt: new Date().toISOString()
+      };
+      if (existingIdx !== -1) {
+        customers[existingIdx] = record;
+      } else {
+        customers.unshift(record);
+      }
+      writeJson(CUSTOMERS_FILE, customers);
+      const customerOrders = orders.filter(o => (o.customer?.email || '').toLowerCase() === emailLower);
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ success: true, customer: record, orders: customerOrders }));
+    } catch (e) {
+      res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ error: e.message }));
     }
   }
 

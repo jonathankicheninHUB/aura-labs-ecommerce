@@ -47,6 +47,11 @@
           <option value="de">DE</option>
         </select>
 
+        <button class="btn-card-detail" style="padding:9px 14px; border-radius:6px; display:flex; align-items:center; gap:6px;" onclick="openAccountModal()">
+          <span>👤</span>
+          <span id="accountBtnLabel">Mon Compte</span>
+        </button>
+
         <button class="bag-button" onclick="toggleBag(true)">
           <span id="bagBtnLabel">Panier</span>
           <span id="bagCount" class="bag-count">0</span>
@@ -561,74 +566,214 @@
         <span id="shippingLabel">Expédition Express Suivie</span>
         <strong style="color:var(--emerald);" id="shippingFree">OFFERTE</strong>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:800; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:800; margin-bottom:10px;">
         <span id="subtotalLabel">Sous-total</span>
         <span id="bagTotalAmount">0.00 €</span>
       </div>
+      <div style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-bottom:10px;">
+        📍 Étape suivante : Création de compte / Adresse de livraison & Paiement
+      </div>
       <button id="checkoutBtn" class="btn-luxury-dark" style="width:100%; padding:17px;" onclick="openCheckoutModal()">
-        Commander Maintenant
+        Renseigner mon Adresse de Livraison →
       </button>
     </div>
   </aside>
 
-  <!-- ==================== MODAL PAIEMENT EXPRESS & SIMULATION AUTOMATISATION ==================== -->
+  <!-- ==================== MODAL ESPACE COMPTE CLIENT (INSCRIPTION / ADRESSE / COMMANDES) ==================== -->
+  <div id="accountModal" class="pdp-backdrop" onclick="if(event.target===this) closeAccountModal()">
+    <div style="background:var(--bg-white); max-width:640px; width:100%; border-radius:10px; padding:34px; box-shadow:0 30px 60px rgba(0,0,0,0.3); position:relative; max-height:92vh; overflow-y:auto;">
+      <button class="pdp-close" onclick="closeAccountModal()">✕</button>
+      <span class="section-eyebrow">ESPACE MEMBRE AURA LABS™</span>
+      <h3 style="font-family:var(--font-serif); font-size:2rem; font-weight:600; margin-bottom:6px;">Mon Compte & Carnet d'Adresse</h3>
+      <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:18px;">
+        Créez votre compte ou connectez-vous pour enregistrer votre adresse de livraison et suivre vos commandes en temps réel.
+      </p>
+
+      <form onsubmit="saveCustomerAccount(event)" style="background:var(--bg-stone); padding:20px; border-radius:8px; margin-bottom:20px;">
+        <div style="font-size:0.74rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--bronze); margin-bottom:12px;">
+          1. MES INFORMATIONS PERSONNELLES & ADRESSE DE LIVRAISON PAR DÉFAUT
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Prénom *</label>
+            <input type="text" id="accFirstName" required placeholder="Ex: Sophie" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Nom *</label>
+            <input type="text" id="accLastName" required placeholder="Ex: Laurent" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Email du compte *</label>
+            <input type="email" id="accEmail" required placeholder="sophie.laurent@email.com" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Téléphone Mobile (SMS Livreur) *</label>
+            <input type="tel" id="accPhone" required placeholder="+33 6 12 34 56 78 ou +41 79..." style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">N° et nom de rue (Adresse de livraison) *</label>
+          <input type="text" id="accAddress1" required placeholder="Ex: 24 Rue du Faubourg Saint-Honoré" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Complément d'adresse (Bâtiment, Appartement, Digicode)</label>
+          <input type="text" id="accAddress2" placeholder="Ex: Bâtiment B, 3ème étage, Porte droite" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+        </div>
+
+        <div style="display:grid; grid-template-columns:0.8fr 1.2fr 1fr; gap:10px; margin-bottom:12px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Code Postal *</label>
+            <input type="text" id="accZip" required placeholder="75008 / 1204" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Ville *</label>
+            <input type="text" id="accCity" required placeholder="Paris / Genève" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Pays *</label>
+            <select id="accCountry" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-weight:600;">
+              <option value="FR">🇫🇷 France / Belgique</option>
+              <option value="CH">🇨🇭 Suisse</option>
+              <option value="DE">🇩🇪 Allemagne / Autriche</option>
+              <option value="US">🇺🇸 USA / Canada</option>
+              <option value="GB">🇬🇧 Royaume-Uni</option>
+              <option value="AU">🇦🇺 Australie</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <button type="submit" class="btn-luxury-dark" style="padding:12px 24px;">
+            ✓ Enregistrer mon Compte & mon Adresse
+          </button>
+          <span id="accSaveFeedback" style="color:var(--emerald); font-size:0.82rem; font-weight:700;"></span>
+        </div>
+      </form>
+
+      <div>
+        <div style="font-size:0.74rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">
+          2. HISTORIQUE DE MES COMMANDES & SUIVI
+        </div>
+        <div id="accOrdersList" style="font-size:0.84rem; color:var(--text-secondary);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL TUNNEL DE LIVRAISON & PAIEMENT COMPLET ==================== -->
   <div id="checkoutModal" class="pdp-backdrop" onclick="if(event.target===this) closeCheckoutModal()">
-    <div style="background:var(--bg-white); max-width:540px; width:100%; border-radius:10px; padding:34px; box-shadow:0 30px 60px rgba(0,0,0,0.3); position:relative; max-height:92vh; overflow-y:auto;">
+    <div style="background:var(--bg-white); max-width:650px; width:100%; border-radius:10px; padding:32px; box-shadow:0 30px 60px rgba(0,0,0,0.3); position:relative; max-height:94vh; overflow-y:auto;">
       <button class="pdp-close" onclick="closeCheckoutModal()">✕</button>
 
       <div id="checkoutFormWrap">
-        <span class="section-eyebrow">PAIEMENT CHIFFRÉ SSL 256-BIT</span>
-        <h3 style="font-family:var(--font-serif); font-size:1.9rem; font-weight:600; margin-bottom:18px;">Finaliser votre commande</h3>
+        <!-- Barre de progression du Checkout en 3 étapes -->
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:18px; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; text-align:center;">
+          <div style="background:var(--obsidian); color:#fff; padding:7px; border-radius:4px;">1. Compte & Contact</div>
+          <div style="background:var(--obsidian); color:#fff; padding:7px; border-radius:4px;">2. Adresse de Livraison</div>
+          <div style="background:var(--bronze-light); color:var(--obsidian); border:1px solid var(--bronze); padding:7px; border-radius:4px;">3. Paiement Sécurisé</div>
+        </div>
 
-        <div style="background:var(--bg-stone); padding:14px 16px; border-radius:6px; font-size:0.82rem; margin-bottom:20px;">
-          <div>🌍 <strong>Destination :</strong> <span id="chkMarketLabel"></span></div>
-          <div style="margin-top:4px;">🚚 <strong>Entrepôt d'expédition assigné :</strong> <span id="chkWarehouseLabel" style="color:var(--emerald); font-weight:700;"></span></div>
+        <h3 style="font-family:var(--font-serif); font-size:1.85rem; font-weight:600; margin-bottom:12px;">Adresse de Livraison & Règlement</h3>
+
+        <div style="background:var(--bg-stone); padding:12px 16px; border-radius:6px; font-size:0.8rem; margin-bottom:18px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <div>🌍 <strong>Pays :</strong> <span id="chkMarketLabel"></span></div>
+          <div>🚚 <strong>Expédition :</strong> <span id="chkWarehouseLabel" style="color:var(--emerald); font-weight:700;"></span></div>
         </div>
 
         <form onsubmit="submitOrder(event)">
-          <div style="margin-bottom:12px;">
-            <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Nom complet du destinataire</label>
-            <input type="text" id="custName" required value="Alexandre Mercier" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+          <!-- SECTION 1 : CONTACT & COMPTE CLIENT -->
+          <div style="font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--bronze); margin-bottom:8px;">
+            ÉTAPE 1 • COORDONNÉES DU CLIENT (POUR LE SUIVI COLIS & SMS LIVREUR)
           </div>
-          <div style="margin-bottom:12px;">
-            <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Adresse complète de livraison</label>
-            <input type="text" id="custAddress" required value="Rue du Rhône 42" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
             <div>
-              <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Email (Suivi colis)</label>
-              <input type="email" id="custEmail" required value="a.mercier@proton.me" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+              <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Adresse Email *</label>
+              <input type="email" id="custEmail" required placeholder="votre.email@exemple.com" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
             </div>
             <div>
-              <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Code Postal & Ville</label>
-              <input type="text" id="custCity" required value="1204 Genève" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+              <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Téléphone Mobile (Requis par le transporteur) *</label>
+              <input type="tel" id="custPhone" required placeholder="+33 6 12 34 56 78 / +41 79..." style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
             </div>
           </div>
-          <div style="margin-bottom:18px;">
-            <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Méthode de paiement</label>
+
+          <label style="display:flex; align-items:center; gap:8px; font-size:0.8rem; background:#F8FAFC; border:1px solid var(--border-subtle); padding:9px 12px; border-radius:6px; margin-bottom:16px; cursor:pointer;">
+            <input type="checkbox" id="chkCreateAccount" checked />
+            <span><strong>Créer mon compte client AURA LABS™</strong> et sauvegarder cette adresse pour suivre mon colis en direct</span>
+          </label>
+
+          <!-- SECTION 2 : ADRESSE DE LIVRAISON COMPLÈTE -->
+          <div style="font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--bronze); margin-bottom:8px;">
+            ÉTAPE 2 • ADRESSE EXACTE DE LIVRAISON DU COLIS
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Prénom du destinataire *</label>
+              <input type="text" id="custFirstName" required placeholder="Prénom" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Nom de famille *</label>
+              <input type="text" id="custLastName" required placeholder="Nom" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+            </div>
+          </div>
+
+          <div style="margin-bottom:10px;">
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">N° et nom de la rue (Adresse ligne 1) *</label>
+            <input type="text" id="custAddress1" required placeholder="Ex: 18 Rue de la Paix / Bahnhofstrasse 12" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+          </div>
+
+          <div style="margin-bottom:10px;">
+            <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Complément d'adresse (Appartement, Étage, Code porte — Optionnel)</label>
+            <input type="text" id="custAddress2" placeholder="Ex: Bâtiment A, Appartement 14, Digicode 4820" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+          </div>
+
+          <div style="display:grid; grid-template-columns:0.8fr 1.2fr 1fr; gap:10px; margin-bottom:16px;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Code Postal *</label>
+              <input type="text" id="custPostalCode" required placeholder="75002 / 1204" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Ville *</label>
+              <input type="text" id="custCity" required placeholder="Paris / Genève / Zürich" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Canton / État / Région</label>
+              <input type="text" id="custState" placeholder="Île-de-France / Vaud / NY" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+            </div>
+          </div>
+
+          <!-- SECTION 3 : PAIEMENT -->
+          <div style="font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--bronze); margin-bottom:8px;">
+            ÉTAPE 3 • MODE DE PAIEMENT SÉCURISÉ
+          </div>
+          <div style="margin-bottom:16px;">
             <select id="custPaymentMethod" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans); font-weight:600;"></select>
           </div>
 
-          <div style="background:var(--obsidian); color:#fff; padding:16px 18px; border-radius:8px; margin-bottom:18px; font-size:0.82rem;">
-            <div style="color:#D4B98C; font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px;">
-              APERÇU AUTOMATISATION PROPRIÉTAIRE
+          <div style="background:var(--obsidian); color:#fff; padding:14px 18px; border-radius:8px; margin-bottom:16px; font-size:0.82rem;">
+            <div style="color:#D4B98C; font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px;">
+              RÉCAPITULATIF & AUTOMATISATION FOURNISSEUR
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <span>Payé par le client :</span>
+              <span>Total commande (Livraison Express Offerte) :</span>
               <strong id="chkPaidDisplay"></strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#A1A1AA;">
               <span>Coût fournisseur (expédition incluse) :</span>
               <span id="chkCostDisplay"></span>
             </div>
-            <div style="display:flex; justify-content:space-between; padding-top:8px; border-top:1px solid rgba(255,255,255,0.14); color:#6EE7B7; font-size:0.95rem;">
+            <div style="display:flex; justify-content:space-between; padding-top:6px; border-top:1px solid rgba(255,255,255,0.14); color:#6EE7B7; font-size:0.93rem;">
               <span>Votre Commission Nette Créditée :</span>
               <strong id="chkCommissionDisplay"></strong>
             </div>
           </div>
 
           <button type="submit" class="btn-luxury-dark" style="width:100%; padding:17px;">
-            Confirmer le Paiement & Expédier Automatiquement
+            🔒 Valider l'Adresse, Payer & Expédier Maintenant
           </button>
         </form>
       </div>
