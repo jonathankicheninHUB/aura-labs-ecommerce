@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA LABS™ — Swiss Biomechanics, Sleep & Photobiomodulation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <!-- BANDEAU D'EXPÉDITION LOCALE SELON LE PAYS DU CLIENT -->
+  <div id="announcementBar" class="announcement-bar">
+    LIVRAISON EXPRESS OFFERTE DÈS 50€ • EXPÉDIÉ DEPUIS PARIS / FRANCFORT EN 48–72H
+  </div>
+
+  <!-- HEADER ÉDITORIAL LUXE -->
+  <header class="luxury-header">
+    <div class="header-inner">
+      <ul class="nav-links">
+        <li><a href="#collectionSection" id="navShop" onclick="switchView('storefront'); filterCategory('all')">Collection</a></li>
+        <li><a href="#collectionSection" id="navBundles" onclick="switchView('storefront'); filterCategory('bundles')">Coffrets (-25%)</a></li>
+        <li><a href="#scienceSection" id="navScience" onclick="switchView('storefront')">Technologie Clinique</a></li>
+        <li><a href="#" onclick="openTrackingModal(); return false;">📦 Suivre ma commande</a></li>
+      </ul>
+
+      <a href="#" class="brand-wordmark" onclick="switchView('storefront'); return false;">
+        <span class="title">AURA LABS</span>
+        <span class="subtitle">Zürich • Paris • New York</span>
+      </a>
+
+      <div class="header-actions">
+        <select id="marketSelect" class="minimal-select" aria-label="Pays et devise" onchange="onMarketChange(this.value)">
+          <option value="FR">🇫🇷 FR / BE (EUR €)</option>
+          <option value="CH">🇨🇭 Suisse (CHF)</option>
+          <option value="DE">🇩🇪 DE / AT (EUR €)</option>
+          <option value="US">🇺🇸 US / CA (USD $)</option>
+          <option value="GB">🇬🇧 UK (GBP £)</option>
+          <option value="AU">🇦🇺 AU / NZ (AUD $)</option>
+        </select>
+
+        <select id="langSelect" class="minimal-select" aria-label="Langue" onchange="onLanguageChange(this.value)">
+          <option value="fr">FR</option>
+          <option value="en">EN</option>
+          <option value="de">DE</option>
+        </select>
+
+        <button class="bag-button" onclick="toggleBag(true)">
+          <span id="bagBtnLabel">Panier</span>
+          <span id="bagCount" class="bag-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== VUE 1 : BOUTIQUE FLAGSHIP CLIENT ==================== -->
+  <main id="storefrontView">
+
+    <!-- HERO ÉDITORIAL -->
+    <section class="editorial-hero">
+      <div>
+        <span id="heroEyebrow" class="hero-eyebrow">INGÉNIERIE BIOMÉCANIQUE SUISSE & RÉCUPÉRATION CELLULAIRE</span>
+        <h1 id="heroTitle" class="hero-headline">La science du sommeil profond et d’un corps sans douleur.</h1>
+        <p id="heroSubtitle" class="hero-lead">
+          Des dispositifs orthopédiques et de photobiomodulation conçus avec des cliniciens du sommeil. Expédiés en 48h depuis nos centres locaux à Paris, Francfort, Genève, New York et Londres.
+        </p>
+
+        <div class="hero-cta-group">
+          <button id="heroCtaPrimary" class="btn-luxury-dark" onclick="filterCategory('all'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'})">
+            Explorer la Collection
+          </button>
+          <button id="heroCtaSecondary" class="btn-luxury-outline" onclick="filterCategory('bundles'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'})">
+            Découvrir les Coffrets (-25%)
+          </button>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric-item">
+            <strong>48,000+</strong>
+            <span id="heroMetric1">Clients équipés dans 14 pays</span>
+          </div>
+          <div class="metric-item">
+            <strong>94.6%</strong>
+            <span id="heroMetric2">Réduction des tensions cervicales dès 7 nuits</span>
+          </div>
+          <div class="metric-item">
+            <strong>30 Nuits</strong>
+            <span id="heroMetric3">Essai à domicile — Satisfait ou remboursé</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual-stage">
+        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=85" alt="Aura Labs Clinical Recovery" />
+        <div class="floating-clinical-card">
+          <div>
+            <span class="tag" id="heroCardHub">HUB LOGISTIQUE ACTIF : PARIS / FRANCFORT</span>
+            <h4>Protocole Cervical & Sommeil Profond AuraCloud™</h4>
+          </div>
+          <button class="btn-card-add" style="background:#B08D57; white-space:nowrap;" onclick="openProductDetail('bundle-sommeil-ultime')">
+            Voir le Coffret →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANDEAU PRESSE INTERNATIONALE -->
+    <section class="press-strip">
+      <div class="press-inner">
+        <span class="press-label">RECOMMANDÉ PAR LA PRESSE INTERNATIONALE</span>
+        <div class="press-logos">
+          <span class="press-logo-item">VOGUE</span>
+          <span class="press-logo-item">FORBES</span>
+          <span class="press-logo-item">GQ</span>
+          <span class="press-logo-item">MEN’S HEALTH</span>
+          <span class="press-logo-item">ELLE</span>
+          <span class="press-logo-item">ARCHITECTURAL DIGEST</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLLECTION PRINCIPALE -->
+    <section id="collectionSection" class="collection-section">
+      <div class="section-header-row">
+        <div>
+          <span id="sectionTag" class="section-eyebrow">COLLECTION CLINIQUE 2026</span>
+          <h2 id="sectionTitle" class="section-heading">Conçus pour transformer vos nuits et votre posture.</h2>
+        </div>
+
+        <div class="category-tabs">
+          <button id="catTab-all" class="cat-tab active" onclick="filterCategory('all')">Toute la Collection</button>
+          <button id="catTab-sleep" class="cat-tab" onclick="filterCategory('sleep')">Sommeil & Récupération</button>
+          <button id="catTab-ergo" class="cat-tab" onclick="filterCategory('ergo')">Posture & Décompression</button>
+          <button id="catTab-beauty" class="cat-tab" onclick="filterCategory('beauty')">Photothérapie & Soins</button>
+          <button id="catTab-bundles" class="cat-tab" onclick="filterCategory('bundles')">Coffrets Signature (-25%)</button>
+        </div>
+      </div>
+
+      <div id="productsGrid" class="luxury-grid"></div>
+    </section>
+
+    <!-- SECTION ÉDITORIALE : TECHNOLOGIE CLINIQUE -->
+    <section id="scienceSection" class="science-banner">
+      <div class="science-inner">
+        <div class="science-media">
+          <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85" alt="Photobiomodulation & Ergonomie" />
+        </div>
+        <div class="science-content">
+          <span id="editorialBadge" class="eyebrow">PROTOCOLE CERTIFIÉ EN LABORATOIRE</span>
+          <h2 id="editorialTitle">Pourquoi 94% de nos utilisateurs ne reviennent jamais à un oreiller ou siège classique.</h2>
+          <p id="editorialP1">
+            Nous passons un tiers de notre vie à dormir et plus de 8 heures par jour assis. Pourtant, la literie et le mobilier traditionnels écrasent les disques intervertébraux et perturbent le rythme circadien.
+          </p>
+          <p id="editorialP2">
+            Chaque dispositif AURA LABS™ combine mousse viscoélastique à mémoire cellulaire haute densité, décompression axiale et photobiomodulation LED médicale (630nm / 850nm).
+          </p>
+
+          <div class="clinical-pillars">
+            <div class="pillar-box">
+              <strong>-78%</strong>
+              <span>Douleurs cervicales et trapèzes au réveil</span>
+            </div>
+            <div class="pillar-box">
+              <strong>+42 min</strong>
+              <span>Cycle de sommeil profond (REM) par nuit</span>
+            </div>
+            <div class="pillar-box">
+              <strong>48–72h</strong>
+              <span>Expédition locale suivie sans frais de douane</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION AVIS CLIENTS VÉRIFIÉS -->
+    <section id="reviewsSection" class="collection-section" style="padding-top:72px;">
+      <div style="text-align:center; max-width:680px; margin:0 auto 48px;">
+        <span class="section-eyebrow">4,9 / 5 SUR +14 200 AVIS VÉRIFIÉS</span>
+        <h2 class="section-heading">Adopté par des milliers de professionnels, athlètes et cliniciens.</h2>
+      </div>
+
+      <div class="luxury-grid">
+        <div class="luxury-card" style="padding:28px;">
+          <div class="stars-gold" style="margin-bottom:12px;">★★★★★ <span style="color:#14532D; font-size:0.74rem; font-weight:700; margin-left:8px;">✓ Achat Vérifié • Genève 🇨🇭</span></div>
+          <h4 style="font-family:var(--font-serif); font-size:1.35rem; margin-bottom:10px;">« Mon kiné m'avait parlé de l'alignement cervical, la différence dès la 2ème nuit est bluffante. »</h4>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
+            Je me réveillais chaque matin avec la nuque bloquée. J'ai commandé le Coffret Sanctuaire du Sommeil un mardi, reçu le jeudi à Genève par la Poste Suisse. Plus aucune douleur depuis 3 semaines.
+          </p>
+          <div style="margin-top:auto; font-size:0.78rem; font-weight:700; color:var(--obsidian);">
+            Dr. Camille V. — Chirurgienne-dentiste (Genève, Suisse)
+          </div>
+        </div>
+
+        <div class="luxury-card" style="padding:28px;">
+          <div class="stars-gold" style="margin-bottom:12px;">★★★★★ <span style="color:#14532D; font-size:0.74rem; font-weight:700; margin-left:8px;">✓ Verified Buyer • Austin, TX 🇺🇸</span></div>
+          <h4 style="font-family:var(--font-serif); font-size:1.35rem; margin-bottom:10px;">« The 6D Shiatsu Massager + Gel Seat Cushion saved my 10-hour coding days. »</h4>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
+            Shipped from their New Jersey hub in 3 days. The U-cutout seat cushion completely removed my sciatica pressure, and the heated 42°C neck massager feels like a real massage therapist.
+          </p>
+          <div style="margin-top:auto; font-size:0.78rem; font-weight:700; color:var(--obsidian);">
+            Marcus T. — Senior Software Architect (Austin, USA)
+          </div>
+        </div>
+
+        <div class="luxury-card" style="padding:28px;">
+          <div class="stars-gold" style="margin-bottom:12px;">★★★★★ <span style="color:#14532D; font-size:0.74rem; font-weight:700; margin-left:8px;">✓ Verifizierter Kauf • München 🇩🇪</span></div>
+          <h4 style="font-family:var(--font-serif); font-size:1.35rem; margin-bottom:10px;">« Die AuraGlow LED-Maske in Kombination mit dem Kupfer-Peptid-Serum ist unschlagbar. »</h4>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
+            Lieferung aus Frankfurt kam nach 48 Stunden per DHL an. Nach 3 Wochen 10 Minuten täglich ist mein Hautbild deutlich straffer und Rötungen sind fast komplett verschwunden.
+          </p>
+          <div style="margin-top:auto; font-size:0.78rem; font-weight:700; color:var(--obsidian);">
+            Elena K. — Innenarchitektin (München, Deutschland)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER LUXE AVEC LIENS LÉGAUX CONFORMES STRIPE -->
+    <footer class="luxury-footer">
+      <div class="footer-inner">
+        <div>
+          <div style="font-family:var(--font-serif); font-size:1.8rem; color:#fff; letter-spacing:0.16em; margin-bottom:12px;">AURA LABS™</div>
+          <p style="font-size:0.84rem; max-width:320px; line-height:1.65;">
+            Ingénierie biomécanique du sommeil, décompression vertébrale et photobiomodulation cellulaire. Expédition locale directe depuis nos 6 hubs internationaux.
+          </p>
+          <p style="font-size:0.78rem; color:#D4B98C; margin-top:12px;">
+            Conciergerie 7j/7 : concierge@auralabs.ch
+          </p>
+        </div>
+        <div>
+          <strong style="color:#fff; font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:14px;">Collections</strong>
+          <ul style="list-style:none; font-size:0.84rem; line-height:2.1;">
+            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="filterCategory('sleep')">Sommeil Orthopédique</a></li>
+            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="filterCategory('ergo')">Décompression & Télétravail</a></li>
+            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="filterCategory('beauty')">Photothérapie LED 630nm/850nm</a></li>
+            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="filterCategory('bundles')">Coffrets Signature (-25%)</a></li>
+          </ul>
+        </div>
+        <div>
+          <strong style="color:#fff; font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:14px;">Service Client & Légal</strong>
+          <ul style="list-style:none; font-size:0.84rem; line-height:2.1;">
+            <li><a href="#" style="color:#fff; text-decoration:none; font-weight:600;" onclick="openTrackingModal(); return false;">📦 Suivre ma commande en direct</a></li>
+            <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('trial'); return false;">Garantie 30 Nuits & Retours</a></li>
+            <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('cgv'); return false;">Conditions Générales de Vente (CGV)</a></li>
+            <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('privacy'); return false;">Confidentialité & RGPD</a></li>
+            <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('mentions'); return false;">Mentions Légales</a></li>
+          </ul>
+        </div>
+        <div>
+          <strong style="color:#fff; font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:14px;">Paiements & Sécurité</strong>
+          <p style="font-size:0.82rem; line-height:1.8;">
+            Apple Pay • Visa • Mastercard • Klarna 3x Sans Frais • TWINT Suisse • PayPal • Afterpay
+          </p>
+          <p style="font-size:0.75rem; color:#71717A; margin-top:16px;">
+            © 2026 AURA LABS Clinic International (`auralabs.ch`). Tous droits réservés.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ==================== VUE 2 : BACKOFFICE EXÉCUTIF COMPLET (3 ONGLETS) ==================== -->
+  <section id="backofficeView" class="backoffice-view hidden">
+    <div class="backoffice-container">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px; padding-bottom:22px; border-bottom:1px solid #27272A;">
+        <div>
+          <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;">BACKOFFICE PROPRIÉTAIRE • AURA LABS CLINIC™</span>
+          <h1 style="font-family:var(--font-serif); font-size:2.4rem; font-weight:500; margin-top:4px;">Pilotage des Commissions, Clés API & Mise en Ligne</h1>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <label style="display:flex; align-items:center; gap:8px; background:#18181B; border:1px solid #27272A; padding:10px 16px; border-radius:6px; font-size:0.8rem; cursor:pointer;">
+            <input type="checkbox" id="toggleMarginOverlay" onchange="renderCatalog()" />
+            <span>Afficher mes marges sur la boutique</span>
+          </label>
+          <button class="btn-luxury-dark" style="background:#10B981; border-color:#10B981; color:#052E16;" onclick="switchView('storefront')">
+            ← Retourner à la Boutique Client
+          </button>
+        </div>
+      </div>
+
+      <!-- SOUS-NAVIGATION DU BACKOFFICE -->
+      <div style="display:flex; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
+        <button id="boTab-orders" class="cat-tab active" style="color:#fff; border-color:#3F3F46;" onclick="switchBoTab('orders')">
+          📊 1. Commandes & Commissions
+        </button>
+        <button id="boTab-keys" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('keys')">
+          🔑 2. Connecter mes Clés API (Stripe, CJdropshipping, SKUs & IBAN)
+        </button>
+        <button id="boTab-deploy" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('deploy')">
+          🚀 3. Mettre en ligne sur Internet (auralabs.ch)
+        </button>
+      </div>
+
+      <!-- SOUS-ONGLET 1 : COMMANDES & COMMISSIONS -->
+      <div id="boPanel-orders">
+        <div class="bo-kpi-grid">
+          <div class="bo-card emerald-glow">
+            <div style="font-size:0.74rem; text-transform:uppercase; letter-spacing:0.1em; color:#A7F3D0;">VOS COMMISSIONS NETTES ACQUISES</div>
+            <div id="kpiNetCommission" style="font-size:2.4rem; font-weight:800; margin:8px 0;">+338.58 €</div>
+            <div style="font-size:0.78rem; color:#D1FAE5;">Marge nette moyenne : 76.7% • Virement Stripe Connect J+2</div>
+          </div>
+          <div class="bo-card">
+            <div style="font-size:0.74rem; text-transform:uppercase; letter-spacing:0.1em; color:#A1A1AA;">VOLUME D'AFFAIRES ENCAISSÉ</div>
+            <div id="kpiTotalRevenue" style="font-size:2.2rem; font-weight:700; margin:8px 0;">441.31 €</div>
+            <div style="font-size:0.78rem; color:#71717A;">Paiements multi-devises (CHF, USD, EUR, GBP, AUD)</div>
+          </div>
+          <div class="bo-card">
+            <div style="font-size:0.74rem; text-transform:uppercase; letter-spacing:0.1em; color:#A1A1AA;">COÛT FOURNISSEURS (LIVRÉ)</div>
+            <div id="kpiSupplierCost" style="font-size:2.2rem; font-weight:700; margin:8px 0; color:#F87171;">-93.90 €</div>
+            <div style="font-size:0.78rem; color:#71717A;">Réglé automatiquement à CJdropshipping / Spocket / Supliful</div>
+          </div>
+          <div class="bo-card">
+            <div style="font-size:0.74rem; text-transform:uppercase; letter-spacing:0.1em; color:#A1A1AA;">COMMANDES EXPÉDIÉES AUTO</div>
+            <div id="kpiOrdersCount" style="font-size:2.2rem; font-weight:700; margin:8px 0; color:#38BDF8;">3</div>
+            <div style="font-size:0.78rem; color:#10B981;">100% routées vers l'entrepôt local du pays client</div>
+          </div>
+        </div>
+
+        <div class="bo-card" style="overflow-x:auto;">
+          <h3 style="font-size:1.15rem; margin-bottom:6px;">Journal des Commandes & Ventilation Automatique des Commissions</h3>
+          <p style="font-size:0.82rem; color:#A1A1AA; margin-bottom:18px;">
+            Chaque commande passée sur la boutique déclenche l'ordre d'expédition dans l'entrepôt local correspondant au pays du client :
+          </p>
+          <table class="bo-table">
+            <thead>
+              <tr>
+                <th>Réf. Commande</th>
+                <th>Client & Pays</th>
+                <th>Articles & SKU Fournisseur</th>
+                <th>Encaissé Client</th>
+                <th>Coût Fournisseur</th>
+                <th>Votre Commission Nette</th>
+                <th>Hub Logistique & Numéro de Suivi</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SOUS-ONGLET 2 : CONFIGURATION SANS CODE DES CLÉS API & SKUs -->
+      <div id="boPanel-keys" class="hidden">
+        <form onsubmit="saveBackofficeSettings(event)">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+            <!-- Colonne Stripe & Banque -->
+            <div class="bo-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="font-size:1.2rem;">💳 1. Passerelle d'Encaissement Stripe & Votre IBAN</h3>
+                <span id="stripeModeBadge" style="background:#064E3B; color:#6EE7B7; padding:4px 10px; border-radius:4px; font-size:0.72rem; font-weight:700;">PRÊT À CONNECTER</span>
+              </div>
+              <p style="font-size:0.82rem; color:#A1A1AA; margin-bottom:16px;">
+                Créez votre compte sur <a href="https://dashboard.stripe.com/apikeys" target="_blank" style="color:#38BDF8;">dashboard.stripe.com/apikeys</a> et collez vos clés ci-dessous pour encaisser de vraies cartes bancaires, Apple Pay, TWINT et Klarna :
+              </p>
+              <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Clé Publique Stripe (`pk_live_...` ou `pk_test_...`)</label>
+                <input type="text" id="setStripePublic" class="form-input" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="pk_live_..." />
+              </div>
+              <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Clé Secrète Stripe (`sk_live_...` ou `sk_test_...`)</label>
+                <input type="password" id="setStripeSecret" class="form-input" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="sk_live_..." />
+              </div>
+              <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Votre IBAN de réception des commissions (affiché pour votre suivi)</label>
+                <input type="text" id="setPayoutIban" class="form-input" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="FR76 ... ou CH93 ..." />
+              </div>
+              <div style="margin-bottom:6px;">
+                <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Nom de domaine officiel & Email Service Client</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <input type="text" id="setDomainName" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="auralabs.ch" />
+                  <input type="text" id="setSupportEmail" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="concierge@auralabs.ch" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Colonne Fournisseurs CJdropshipping & Supliful -->
+            <div class="bo-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="font-size:1.2rem;">🏭 2. Automatisation Fournisseurs (CJdropshipping & Supliful)</h3>
+                <span style="background:#064E3B; color:#6EE7B7; padding:4px 10px; border-radius:4px; font-size:0.72rem; font-weight:700;">API V2 INTÉGRÉE</span>
+              </div>
+              <p style="font-size:0.82rem; color:#A1A1AA; margin-bottom:16px;">
+                Ouvrez votre compte gratuit sur <a href="https://cjdropshipping.com" target="_blank" style="color:#38BDF8;">cjdropshipping.com</a> (Menu <em>My CJ → Authorization → API</em>) et collez votre jeton d'accès pour activer l'envoi automatique des commandes payées :
+              </p>
+              <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Clé API CJdropshipping (`CJ-Access-Token`)</label>
+                <input type="password" id="setCjApiKey" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="Collez votre CJ-Access-Token ici..." />
+              </div>
+              <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Clé API Spocket / Syncee (Optionnel - Masque LED)</label>
+                <input type="password" id="setSpocketKey" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="Collez votre clé Spocket si utilisé..." />
+              </div>
+              <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:0.78rem; color:#D4D4D8; margin-bottom:5px;">Email Compte Supliful Marque Blanche (Gummies & Sérum)</label>
+                <input type="email" id="setSuplifulEmail" style="background:#18181B; border:1px solid #3F3F46; color:#fff; width:100%; padding:11px; border-radius:6px;" placeholder="production@auralabs.ch" />
+              </div>
+              <div style="background:#18181B; border:1px solid #27272A; padding:12px; border-radius:6px; font-size:0.78rem; color:#A1A1AA;">
+                ✓ <strong>Routage Entrepôt Local actif :</strong> Les commandes FR/CH/DE sont automatiquement routées vers l'entrepôt de Francfort/Paris, et les commandes US vers le New Jersey.
+              </div>
+            </div>
+          </div>
+
+          <!-- Tableau de Correspondance des SKUs Fournisseurs -->
+          <div class="bo-card" style="margin-bottom:24px;">
+            <h3 style="font-size:1.15rem; margin-bottom:6px;">🔗 3. Correspondance des Codes Produits Fournisseurs (SKUs)</h3>
+            <p style="font-size:0.82rem; color:#A1A1AA; margin-bottom:16px;">
+              Vous pouvez modifier ici à tout moment le code SKU fournisseur associé à chaque produit de votre boutique sans toucher au code :
+            </p>
+            <div id="skuMappingGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(380px, 1fr)); gap:12px;"></div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:16px;">
+            <button type="submit" class="btn-luxury-dark" style="background:#10B981; border-color:#10B981; color:#052E16; padding:16px 32px;">
+              💾 Enregistrer toute ma configuration en production
+            </button>
+            <span id="settingsSaveFeedback" style="color:#6EE7B7; font-weight:700; font-size:0.88rem;"></span>
+          </div>
+        </form>
+      </div>
+
+      <!-- SOUS-ONGLET 3 : GUIDE DE MISE EN LIGNE & FICHIERS DE DÉPLOIEMENT -->
+      <div id="boPanel-deploy" class="hidden">
+        <div class="bo-card" style="margin-bottom:24px;">
+          <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;">FICHIERS DE DÉPLOIEMENT DÉJÀ GÉNÉRÉS DANS VOTRE DOSSIER</span>
+          <h3 style="font-size:1.5rem; margin:6px 0 14px;">Comment mettre votre site en ligne sur `www.auralabs.ch` ou `www.auralabsclinic.com` en 10 minutes</h3>
+          <p style="font-size:0.88rem; color:#D4D4D8; margin-bottom:20px;">
+            J'ai déjà généré dans votre dossier `c:\Users\GAME-START\Documents\ecommerce` les fichiers de configuration cloud (`render.yaml`, `railway.json`, `.gitignore`). Voici les 3 étapes pour publier votre site sur Internet gratuitement :
+          </p>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:20px;">
+            <div style="background:#18181B; border:1px solid #27272A; border-radius:8px; padding:20px;">
+              <div style="color:#38BDF8; font-weight:800; font-size:0.8rem; margin-bottom:8px;">ÉTAPE 1 • NOM DE DOMAINE (~10 €/an)</div>
+              <h4 style="font-size:1.05rem; margin-bottom:8px;">Acheter `auralabs.ch` ou `auralabsclinic.com`</h4>
+              <p style="font-size:0.82rem; color:#A1A1AA; line-height:1.6;">
+                Rendez-vous sur <strong>Infomaniak.ch</strong>, <strong>Hostinger</strong> ou <strong>OVH</strong> et enregistrez le domaine <code>auralabs.ch</code> (vérifié 100% libre aujourd'hui) ou <code>auralabsclinic.com</code>.
+              </p>
+            </div>
+
+            <div style="background:#18181B; border:1px solid #27272A; border-radius:8px; padding:20px;">
+              <div style="color:#10B981; font-weight:800; font-size:0.8rem; margin-bottom:8px;">ÉTAPE 2 • HÉBERGEMENT CLOUD GRATUIT</div>
+              <h4 style="font-size:1.05rem; margin-bottom:8px;">Connecter à Render.com ou Railway.app</h4>
+              <p style="font-size:0.82rem; color:#A1A1AA; line-height:1.6;">
+                Créez un compte gratuit sur <strong>Render.com</strong> ou <strong>Railway.app</strong>, sélectionnez ce dossier (`server.js` démarre automatiquement grâce au fichier `render.yaml` inclus) et obtenez votre URL publique sécurisée `https://`.
+              </p>
+            </div>
+
+            <div style="background:#18181B; border:1px solid #27272A; border-radius:8px; padding:20px;">
+              <div style="color:#F59E0B; font-weight:800; font-size:0.8rem; margin-bottom:8px;">ÉTAPE 3 • ACTIVATION STRIPE & CJ</div>
+              <h4 style="font-size:1.05rem; margin-bottom:8px;">Coller vos 2 clés API dans l'onglet N°2</h4>
+              <p style="font-size:0.82rem; color:#A1A1AA; line-height:1.6;">
+                Une fois vos clés <strong>Stripe</strong> et <strong>CJdropshipping</strong> collées dans l'onglet <em>2. Connecter mes Clés API</em>, chaque commande client est encaissée et expédiée en pilote automatique.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== FICHE PRODUIT DÉTAILLÉE (PDP FLAGSHIP MODAL) ==================== -->
+  <div id="pdpBackdrop" class="pdp-backdrop" onclick="if(event.target===this) closePdp()">
+    <div class="pdp-sheet">
+      <button class="pdp-close" onclick="closePdp()">✕</button>
+      <div class="pdp-gallery">
+        <img id="pdpMainImg" class="pdp-main-img" src="" alt="" />
+        <div id="pdpThumbs" class="pdp-thumbs"></div>
+        <div id="pdpOwnerBox" style="background:#064E3B; color:#D1FAE5; padding:14px 16px; border-radius:6px; font-size:0.8rem; margin-top:auto;"></div>
+      </div>
+      <div class="pdp-info">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span id="pdpBadge" class="badge-editorial">BEST-SELLER</span>
+          <span id="pdpRating" class="stars-gold" style="font-size:0.84rem;">★★★★★ 4.9</span>
+        </div>
+        <h2 id="pdpTitle" style="font-family:var(--font-serif); font-size:2.1rem; font-weight:600; line-height:1.15; margin-bottom:6px;"></h2>
+        <div id="pdpSubtitle" style="color:var(--bronze); font-size:0.84rem; font-weight:600; margin-bottom:16px;"></div>
+
+        <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:16px;">
+          <span id="pdpPriceNow" style="font-size:1.75rem; font-weight:800;"></span>
+          <span id="pdpPriceWas" style="font-size:1rem; color:var(--text-muted); text-decoration:line-through;"></span>
+          <span style="background:#DCFCE7; color:#14532D; font-size:0.72rem; font-weight:700; padding:3px 8px; border-radius:4px;">EN STOCK LOCAL</span>
+        </div>
+
+        <p id="pdpDesc" style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.65;"></p>
+
+        <ul id="pdpHighlights" style="list-style:none; font-size:0.84rem; margin-bottom:20px; line-height:1.8;"></ul>
+
+        <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px;">
+          CHOISISSEZ VOTRE OFFRE :
+        </div>
+        <div id="pdpTiers" class="tier-selector"></div>
+
+        <button id="pdpAddBtn" class="btn-luxury-dark" style="width:100%; padding:18px; font-size:0.88rem; margin-top:8px;">
+          Ajouter au Panier
+        </button>
+
+        <div id="pdpShippingNote" style="font-size:0.78rem; color:var(--text-secondary); text-align:center; margin-top:14px;"></div>
+        <div id="pdpSpecs" style="font-size:0.75rem; color:var(--text-muted); margin-top:16px; padding-top:14px; border-top:1px solid var(--border-subtle);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SUIVI DE COMMANDE EN DIRECT (CLIENT) ==================== -->
+  <div id="trackingModal" class="pdp-backdrop" onclick="if(event.target===this) closeTrackingModal()">
+    <div style="background:var(--bg-white); max-width:560px; width:100%; border-radius:10px; padding:34px; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.3);">
+      <button class="pdp-close" onclick="closeTrackingModal()">✕</button>
+      <span class="section-eyebrow">LOGISTIQUE INTERNATIONALE SUIVIE</span>
+      <h3 style="font-family:var(--font-serif); font-size:2rem; font-weight:600; margin-bottom:8px;">Suivre mon colis en direct</h3>
+      <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
+        Entrez votre numéro de commande (ex: <code>ORD-8942-CH</code> ou <code>ORD-8941-US</code>) ou votre adresse email :
+      </p>
+      <form onsubmit="lookupOrderTracking(event)" style="display:flex; gap:10px; margin-bottom:20px;">
+        <input type="text" id="trackingQueryInput" value="ORD-8942-CH" required placeholder="Ex: ORD-8942-CH ou votre email" style="flex:1; padding:12px 14px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+        <button type="submit" class="btn-luxury-dark" style="padding:12px 22px;">Rechercher</button>
+      </form>
+      <div id="trackingResultBox"></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL PAGES LÉGALES (CGV, GARANTIE 30 NUITS, RGPD, MENTIONS) ==================== -->
+  <div id="legalModal" class="pdp-backdrop" onclick="if(event.target===this) closeLegalModal()">
+    <div style="background:var(--bg-white); max-width:740px; width:100%; max-height:86vh; overflow-y:auto; border-radius:10px; padding:38px; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.3);">
+      <button class="pdp-close" onclick="closeLegalModal()">✕</button>
+      <div id="legalModalContent" style="font-size:0.88rem; line-height:1.75; color:var(--text-secondary);"></div>
+    </div>
+  </div>
+
+  <!-- ==================== TIROIR PANIER (SLIDE-OVER BAG) ==================== -->
+  <div id="bagBackdrop" class="bag-backdrop" onclick="toggleBag(false)"></div>
+  <aside id="bagDrawer" class="bag-drawer">
+    <div class="bag-header">
+      <h3 id="bagHeaderTitle">Votre Sélection</h3>
+      <button class="pdp-close" style="position:static; width:34px; height:34px;" onclick="toggleBag(false)">✕</button>
+    </div>
+    <div class="bag-shipping-bar" id="bagShippingBar">
+      ✓ LIVRAISON EXPRESS PRIORITAIRE + ESSAI 30 NUITS OFFERTS
+    </div>
+
+    <div id="bagItemsContainer" class="bag-items"></div>
+
+    <div class="bag-upsell">
+      <div style="font-size:0.68rem; font-weight:700; letter-spacing:0.12em; color:var(--bronze); text-transform:uppercase; margin-bottom:8px;" id="upsellHeader">
+        COMPLÉTEZ VOTRE ROUTINE (AJOUT RAPIDE)
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=200&q=80" alt="AuraRest" style="width:48px; height:48px; border-radius:4px; object-fit:cover;" />
+        <div style="flex:1;">
+          <div style="font-size:0.82rem; font-weight:700;">Complexe Nuit Profonde AuraRest™</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">Ashwagandha KSM-66® & Magnésium</div>
+        </div>
+        <button class="btn-card-add" style="padding:8px 12px; font-size:0.72rem;" onclick="addToCart('prod-sleep-gummies', 1)">
+          + Ajouter
+        </button>
+      </div>
+    </div>
+
+    <div class="bag-footer">
+      <div style="display:flex; justify-content:space-between; font-size:0.82rem; color:var(--text-secondary); margin-bottom:6px;">
+        <span id="shippingLabel">Expédition Express Suivie</span>
+        <strong style="color:var(--emerald);" id="shippingFree">OFFERTE</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:800; margin-bottom:16px;">
+        <span id="subtotalLabel">Sous-total</span>
+        <span id="bagTotalAmount">0.00 €</span>
+      </div>
+      <button id="checkoutBtn" class="btn-luxury-dark" style="width:100%; padding:17px;" onclick="openCheckoutModal()">
+        Commander Maintenant
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================== MODAL PAIEMENT EXPRESS & SIMULATION AUTOMATISATION ==================== -->
+  <div id="checkoutModal" class="pdp-backdrop" onclick="if(event.target===this) closeCheckoutModal()">
+    <div style="background:var(--bg-white); max-width:540px; width:100%; border-radius:10px; padding:34px; box-shadow:0 30px 60px rgba(0,0,0,0.3); position:relative; max-height:92vh; overflow-y:auto;">
+      <button class="pdp-close" onclick="closeCheckoutModal()">✕</button>
+
+      <div id="checkoutFormWrap">
+        <span class="section-eyebrow">PAIEMENT CHIFFRÉ SSL 256-BIT</span>
+        <h3 style="font-family:var(--font-serif); font-size:1.9rem; font-weight:600; margin-bottom:18px;">Finaliser votre commande</h3>
+
+        <div style="background:var(--bg-stone); padding:14px 16px; border-radius:6px; font-size:0.82rem; margin-bottom:20px;">
+          <div>🌍 <strong>Destination :</strong> <span id="chkMarketLabel"></span></div>
+          <div style="margin-top:4px;">🚚 <strong>Entrepôt d'expédition assigné :</strong> <span id="chkWarehouseLabel" style="color:var(--emerald); font-weight:700;"></span></div>
+        </div>
+
+        <form onsubmit="submitOrder(event)">
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Nom complet du destinataire</label>
+            <input type="text" id="custName" required value="Alexandre Mercier" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Adresse complète de livraison</label>
+            <input type="text" id="custAddress" required value="Rue du Rhône 42" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div>
+              <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Email (Suivi colis)</label>
+              <input type="email" id="custEmail" required value="a.mercier@proton.me" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Code Postal & Ville</label>
+              <input type="text" id="custCity" required value="1204 Genève" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
+            </div>
+          </div>
+          <div style="margin-bottom:18px;">
+            <label style="display:block; font-size:0.78rem; font-weight:600; margin-bottom:4px;">Méthode de paiement</label>
+            <select id="custPaymentMethod" style="width:100%; padding:11px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans); font-weight:600;"></select>
+          </div>
+
+          <div style="background:var(--obsidian); color:#fff; padding:16px 18px; border-radius:8px; margin-bottom:18px; font-size:0.82rem;">
+            <div style="color:#D4B98C; font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px;">
+              APERÇU AUTOMATISATION PROPRIÉTAIRE
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span>Payé par le client :</span>
+              <strong id="chkPaidDisplay"></strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#A1A1AA;">
+              <span>Coût fournisseur (expédition incluse) :</span>
+              <span id="chkCostDisplay"></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-top:8px; border-top:1px solid rgba(255,255,255,0.14); color:#6EE7B7; font-size:0.95rem;">
+              <span>Votre Commission Nette Créditée :</span>
+              <strong id="chkCommissionDisplay"></strong>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-luxury-dark" style="width:100%; padding:17px;">
+            Confirmer le Paiement & Expédier Automatiquement
+          </button>
+        </form>
+      </div>
+
+      <div id="checkoutSuccessWrap" class="hidden" style="text-align:center; padding:16px 0;">
+        <div style="width:56px; height:56px; border-radius:50%; background:#DCFCE7; color:#14532D; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 16px; font-weight:700;">✓</div>
+        <h3 style="font-family:var(--font-serif); font-size:2rem; margin-bottom:8px;">Commande Confirmée & Transmise</h3>
+        <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:20px;">
+          L'ordre d'expédition a été envoyé par API à l'entrepôt local et votre commission nette a été créditée.
+        </p>
+        <div id="orderConfirmationBox" style="background:var(--bg-stone); padding:18px; border-radius:8px; text-align:left; font-size:0.84rem; margin-bottom:22px; line-height:1.7;"></div>
+        <div style="display:flex; gap:12px;">
+          <button class="btn-luxury-dark" style="flex:1;" onclick="closeCheckoutModal(); switchView('backoffice')">
+            Voir ma Commission dans le Backoffice
+          </button>
+          <button class="btn-luxury-outline" onclick="closeCheckoutModal()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCK FLOTTANT DISCRET POUR BASCULER VERS VOTRE BACKOFFICE -->
+  <div class="partner-floating-dock">
+    <span style="width:8px; height:8px; border-radius:50%; background:#10B981; display:inline-block;"></span>
+    <span>Vos Commissions : <strong id="dockCommissionTotal" style="color:#6EE7B7;">+338.58 €</strong></span>
+    <button class="partner-dock-btn" onclick="switchView('backoffice')">
+      ⌘ Backoffice & Clés API
+    </button>
+  </div>
+
+  <script src="/products-data.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

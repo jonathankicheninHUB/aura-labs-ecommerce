@@ -1,0 +1,140 @@
+[
+  {
+    "id": "ORD-8942-CH",
+    "createdAt": "2026-10-31T14:22:10Z",
+    "customer": {
+      "name": "Marc-Antoine Rochat",
+      "email": "ma.rochat@bluewin.ch",
+      "address": "Rue de Bourg 18, 1003 Lausanne",
+      "city": "Lausanne",
+      "countryCode": "CH",
+      "countryName": "Suisse 🇨🇭"
+    },
+    "items": [
+      {
+        "id": "prod-neck-massager",
+        "sku": "CJ-SHIATSU-PRO-02",
+        "title": "Masseur Cervical Shiatsu & Infrarouge AuraPulse™ 6D",
+        "qty": 1,
+        "retailEur": 94.8,
+        "supplierCostEur": 18.5,
+        "supplier": "CJdropshipping EU (Francfort)"
+      },
+      {
+        "id": "prod-ergo-pillow",
+        "sku": "CJ-ORT-PIL-01",
+        "title": "Oreiller Cervical Orthopédique AuraCloud™ Pro",
+        "qty": 1,
+        "retailEur": 76.8,
+        "supplierCostEur": 14.5,
+        "supplier": "CJdropshipping EU (Francfort)"
+      }
+    ],
+    "currency": "CHF",
+    "displayTotal": "171.60 CHF",
+    "totalPaidEur": 171.6,
+    "supplierCostTotalEur": 33,
+    "stripeFeeEur": 3.43,
+    "netCommissionEur": 135.17,
+    "marginPercent": 78.8,
+    "paymentMethod": "TWINT / Apple Pay (Stripe)",
+    "fulfillment": {
+      "status": "EN_TRANSIT_VERS_CLIENT",
+      "warehouse": "Entrepôt Francfort (DE) → Hub Bâle",
+      "carrier": "Swiss Post Priority",
+      "trackingNumber": "CH-SWISS-994821048",
+      "estimatedDelivery": "2 à 3 jours ouvrés",
+      "autoDispatchedAt": "2026-10-31T14:22:14Z",
+      "cjDispatchMode": "AUTO_ROUTED"
+    }
+  },
+  {
+    "id": "ORD-8941-US",
+    "createdAt": "2026-10-31T11:05:40Z",
+    "customer": {
+      "name": "Jessica Miller",
+      "email": "j.miller88@gmail.com",
+      "address": "742 Congress Ave, Austin, TX 78701",
+      "city": "Austin, TX",
+      "countryCode": "US",
+      "countryName": "United States 🇺🇸"
+    },
+    "items": [
+      {
+        "id": "prod-led-mask",
+        "sku": "SPK-LED-7C-03",
+        "title": "Masque Photothérapie LED AuraGlow™ Pro",
+        "qty": 1,
+        "retailEur": 124.95,
+        "supplierCostEur": 24,
+        "supplier": "Spocket / CJ US (New Jersey)"
+      },
+      {
+        "id": "prod-hyaluronic-serum",
+        "sku": "BLK-SERUM-PEP-10",
+        "title": "Sérum Cellulaire Tri-Hyaluronique AuraHydra™",
+        "qty": 1,
+        "retailEur": 39.9,
+        "supplierCostEur": 7.2,
+        "supplier": "Blanka / Supliful US"
+      }
+    ],
+    "currency": "USD",
+    "displayTotal": "$178.04 USD",
+    "totalPaidEur": 164.85,
+    "supplierCostTotalEur": 31.2,
+    "stripeFeeEur": 3.3,
+    "netCommissionEur": 130.35,
+    "marginPercent": 79.1,
+    "paymentMethod": "Apple Pay / Visa (Stripe US)",
+    "fulfillment": {
+      "status": "EXPÉDIÉ_PAR_ENTREPÔT",
+      "warehouse": "Entrepôt Newark, New Jersey (USA)",
+      "carrier": "USPS Priority Mail",
+      "trackingNumber": "USPS-940551189956",
+      "estimatedDelivery": "2 à 4 jours ouvrés",
+      "autoDispatchedAt": "2026-10-31T11:05:43Z",
+      "cjDispatchMode": "AUTO_ROUTED"
+    }
+  },
+  {
+    "id": "ORD-8940-DE",
+    "createdAt": "2026-10-30T19:40:12Z",
+    "customer": {
+      "name": "Lukas Weber",
+      "email": "lukas.weber@web.de",
+      "address": "Maximilianstraße 24, 80539 München",
+      "city": "München",
+      "countryCode": "DE",
+      "countryName": "Deutschland 🇩🇪"
+    },
+    "items": [
+      {
+        "id": "bundle-teletravail",
+        "sku": "BND-BACK-PRO-12",
+        "title": "Coffret Posture & Récupération (AuraPulse™ + AuraSeat™)",
+        "qty": 1,
+        "retailEur": 104.86,
+        "supplierCostEur": 29.7,
+        "supplier": "CJdropshipping DE (Francfort)"
+      }
+    ],
+    "currency": "EUR",
+    "displayTotal": "104.86 €",
+    "totalPaidEur": 104.86,
+    "supplierCostTotalEur": 29.7,
+    "stripeFeeEur": 2.1,
+    "netCommissionEur": 73.06,
+    "marginPercent": 69.7,
+    "paymentMethod": "Klarna Rechnung (30 Tage)",
+    "fulfillment": {
+      "status": "LIVRÉ_AU_CLIENT",
+      "warehouse": "Logistikzentrum Frankfurt am Main (DE)",
+      "carrier": "DHL Paket Deutschland",
+      "trackingNumber": "DHL-DE-0034043429",
+      "estimatedDelivery": "48h (Livré)",
+      "autoDispatchedAt": "2026-10-30T19:40:15Z",
+      "cjDispatchMode": "AUTO_ROUTED"
+    }
+  }
+]

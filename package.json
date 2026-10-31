@@ -1,0 +1,12 @@
+{
+  "name": "aura-wellness-international-ecommerce",
+  "version": "1.0.0",
+  "description": "Plateforme E-Commerce Internationale Multi-Pays (FR/EN/DE - EUR/CHF/USD/GBP/AUD) avec Automatisation Fournisseurs & Suivi des Commissions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "Engine": {
+    "node": ">=18.0.0"
+  }
+}
