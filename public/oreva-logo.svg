@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="orevaGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E3C3" />
+      <stop offset="35%" stop-color="#D4B483" />
+      <stop offset="70%" stop-color="#B08D57" />
+      <stop offset="100%" stop-color="#7E5E2E" />
+    </linearGradient>
+    <radialGradient id="orevaObsidian" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#1A2234" />
+      <stop offset="100%" stop-color="#090C12" />
+    </radialGradient>
+  </defs>
+
+  <!-- Médaillon Obsidienne Haute Horlogerie -->
+  <circle cx="60" cy="60" r="56" fill="url(#orevaObsidian)" stroke="url(#orevaGold)" stroke-width="2.5" />
+  <circle cx="60" cy="60" r="49" fill="none" stroke="url(#orevaGold)" stroke-width="0.75" stroke-dasharray="2 3" opacity="0.75" />
+  <circle cx="60" cy="60" r="42" fill="none" stroke="url(#orevaGold)" stroke-width="1.2" opacity="0.9" />
+
+  <!-- Méridiens d'Équilibre Biomécanique & Circadien -->
+  <ellipse cx="60" cy="60" rx="42" ry="18" fill="none" stroke="url(#orevaGold)" stroke-width="0.9" opacity="0.55" transform="rotate(-30 60 60)" />
+  <ellipse cx="60" cy="60" rx="42" ry="18" fill="none" stroke="url(#orevaGold)" stroke-width="0.9" opacity="0.55" transform="rotate(30 60 60)" />
+
+  <!-- Étoile Polaire Clinique Centrale (8 branches Haute Précision) -->
+  <path d="M60 18 L64.5 51.5 L98 60 L64.5 68.5 L60 102 L55.5 68.5 L22 60 L55.5 51.5 Z" fill="url(#orevaGold)" />
+  <path d="M60 32 L62.5 55.5 L86 60 L62.5 64.5 L60 88 L57.5 64.5 L34 60 L57.5 55.5 Z" fill="#090C12" opacity="0.35" />
+  <circle cx="60" cy="60" r="4.5" fill="#F9F1DF" />
+
+  <!-- 4 Points Cardinaux Or Champagne -->
+  <circle cx="60" cy="11" r="1.8" fill="url(#orevaGold)" />
+  <circle cx="60" cy="109" r="1.8" fill="url(#orevaGold)" />
+  <circle cx="11" cy="60" r="1.8" fill="url(#orevaGold)" />
+  <circle cx="109" cy="60" r="1.8" fill="url(#orevaGold)" />
+</svg>

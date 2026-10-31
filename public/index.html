@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OREVA LAB™ — Sommeil, Posture, Beauté Tech & Coffrets Cadeaux de Noël</title>
-  <link rel="icon" type="image/png" href="/oreva-logo.png" />
+  <link rel="icon" type="image/svg+xml" href="/oreva-logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -27,11 +27,44 @@
         <li><a href="#" onclick="openTrackingModal(); return false;">📦 Suivre mon colis</a></li>
       </ul>
 
-      <a href="#" class="brand-wordmark" style="display:flex; align-items:center; gap:12px; text-decoration:none;" onclick="switchView('storefront'); filterCategory('all'); return false;">
-        <img src="/oreva-logo.png" alt="Oreva Lab Logo" style="width:44px; height:44px; border-radius:10px; object-fit:cover; box-shadow:0 4px 12px rgba(0,0,0,0.18);" />
-        <div style="text-align:left;">
-          <span class="title" id="activeBrandTitle" style="display:block; line-height:1.05;">OREVA SLEEP LAB</span>
-          <span class="subtitle" id="activeSubdomainLabel" style="display:block;">sleep.orevalabs.com</span>
+      <a href="#" class="brand-wordmark oreva-couture-lockup" onclick="switchView('storefront'); filterCategory('all'); return false;">
+        <!-- Emblème Vectoriel Haute Précision (Zéro pixelisation, fond transparent, géométrie sacrée Or Champagne) -->
+        <div class="oreva-crest-wrap" aria-hidden="true">
+          <svg class="oreva-crest-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="hdrGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#E6C994" />
+                <stop offset="45%" stop-color="#B89254" />
+                <stop offset="100%" stop-color="#7D5B28" />
+              </linearGradient>
+              <radialGradient id="hdrCoreObsidian" cx="50%" cy="35%" r="70%">
+                <stop offset="0%" stop-color="#1E2638" />
+                <stop offset="100%" stop-color="#0A0D14" />
+              </radialGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="url(#hdrCoreObsidian)" stroke="url(#hdrGoldGrad)" stroke-width="1.6"/>
+            <circle cx="32" cy="32" r="25.5" stroke="url(#hdrGoldGrad)" stroke-width="0.6" stroke-dasharray="1.5 2.5" opacity="0.75"/>
+            <ellipse cx="32" cy="32" rx="22" ry="9.5" stroke="url(#hdrGoldGrad)" stroke-width="0.65" opacity="0.5" transform="rotate(-30 32 32)"/>
+            <ellipse cx="32" cy="32" rx="22" ry="9.5" stroke="url(#hdrGoldGrad)" stroke-width="0.65" opacity="0.5" transform="rotate(30 32 32)"/>
+            <!-- Motif central dynamique selon le sous-domaine (Sommeil, Posture, Glow, Thermo) -->
+            <g id="headerCrestDynamicMotif">
+              <path d="M32 10 L34.4 27.6 L52 32 L34.4 36.4 L32 54 L29.6 36.4 L12 32 L29.6 27.6 Z" fill="url(#hdrGoldGrad)"/>
+              <circle cx="32" cy="32" r="2.6" fill="#FAF5EA"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="oreva-wordmark-stack">
+          <div class="oreva-top-crown">
+            <span id="activeCrownOrigin">GENÈVE • PARIS</span>
+            <span class="oreva-crown-dot">◆</span>
+            <span id="activeDivisionPill" class="oreva-division-pill">SLEEP LAB™</span>
+          </div>
+          <div class="oreva-main-row">
+            <span class="title" id="activeBrandTitle">OREVA</span>
+            <span class="oreva-reg">®</span>
+          </div>
+          <span class="subtitle" id="activeSubdomainLabel">sleep.orevalabs.com</span>
         </div>
       </a>
 
@@ -105,7 +138,7 @@
         <img id="heroMainImg" src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1400&q=85" alt="Oreva Lab Clinical Recovery" />
         <div class="floating-clinical-card">
           <div style="display:flex; align-items:center; gap:12px;">
-            <img src="/oreva-logo.png" alt="Oreva Lab" style="width:42px; height:42px; border-radius:8px; object-fit:cover;" />
+            <img src="/oreva-logo.svg" alt="Oreva Lab" style="width:44px; height:44px; border-radius:50%; object-fit:contain; flex-shrink:0;" />
             <div>
               <span class="tag" id="heroCardHub">HUB LOGISTIQUE ACTIF : PARIS / FRANCFORT</span>
               <h4 id="heroCardTitle">Coffret Sanctuaire du Sommeil (-25%)</h4>
@@ -195,11 +228,12 @@
     <footer class="luxury-footer">
       <div class="footer-inner">
         <div>
-          <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-            <img src="/oreva-logo.png" alt="Oreva Lab Logo" style="width:42px; height:42px; border-radius:10px; object-fit:cover;" />
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+            <img src="/oreva-logo.svg" alt="Oreva Lab Emblem" style="width:46px; height:46px; border-radius:50%; object-fit:contain;" />
             <div>
-              <div id="footerBrandTitle" style="font-family:var(--font-serif); font-size:1.65rem; color:#fff; letter-spacing:0.14em;">OREVA SLEEP LAB™</div>
-              <div id="footerSubdomainUrl" style="font-size:0.75rem; color:#D4B98C;">sleep.orevalabs.com</div>
+              <div style="font-size:0.6rem; letter-spacing:0.28em; color:#D4B98C; text-transform:uppercase; margin-bottom:2px;">GENÈVE • PARIS • CLINICAL MAISON</div>
+              <div id="footerBrandTitle" style="font-family:var(--font-serif); font-size:1.75rem; color:#fff; letter-spacing:0.22em; line-height:1;">OREVA SLEEP LAB™</div>
+              <div id="footerSubdomainUrl" style="font-size:0.72rem; color:#A1A1AA; letter-spacing:0.12em; margin-top:3px;">sleep.orevalabs.com</div>
             </div>
           </div>
           <p id="footerDescription" style="font-size:0.84rem; max-width:340px; line-height:1.65;">

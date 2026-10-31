@@ -76,6 +76,28 @@ const STOREFRONT_PRODUCT_RULES = {
   }
 };
 
+const CREST_SVG_MOTIFS = {
+  sleep: `
+    <path d="M35.5 15.5 C26.5 17.5 22 26.8 25 35.5 C28 44.2 37.5 48 45.5 44 C38 49.5 26.5 47.5 21 39.5 C15.5 31.5 18 20 26.5 15 C29.5 13.5 32.5 14 35.5 15.5 Z" fill="url(#hdrGoldGrad)"/>
+    <path d="M40 16 L41.3 22.7 L48 24 L41.3 25.3 L40 32 L38.7 25.3 L32 24 L38.7 22.7 Z" fill="#FAF5EA"/>
+  `,
+  ergo: `
+    <path d="M32 9 L34.8 27.2 L53 32 L34.8 36.8 L32 55 L29.2 36.8 L11 32 L29.2 27.2 Z" fill="url(#hdrGoldGrad)"/>
+    <circle cx="32" cy="21" r="2.1" fill="#FAF5EA"/>
+    <circle cx="32" cy="32" r="2.8" fill="#FAF5EA"/>
+    <circle cx="32" cy="43" r="2.1" fill="#FAF5EA"/>
+  `,
+  glow: `
+    <path d="M32 8 L34.6 26.4 L53 20 L37.6 32 L53 44 L34.6 37.6 L32 56 L29.4 37.6 L11 44 L26.4 32 L11 20 L29.4 26.4 Z" fill="url(#hdrGoldGrad)"/>
+    <circle cx="32" cy="32" r="3.4" fill="#FAF5EA"/>
+  `,
+  thermo: `
+    <path d="M32 10 L35 27 L52 32 L35 37 L32 54 L29 37 L12 32 L29 27 Z" fill="url(#hdrGoldGrad)"/>
+    <path d="M18 28 Q25 20 32 28 T46 28" stroke="#FAF5EA" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M18 36 Q25 28 32 36 T46 36" stroke="#E6C994" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  `
+};
+
 function switchUniverse(universeId) {
   const validIds = ['sleep', 'ergo', 'glow', 'thermo'];
   currentUniverse = validIds.includes(universeId) ? universeId : 'sleep';
@@ -84,7 +106,13 @@ function switchUniverse(universeId) {
   if (uniConfig) {
     document.title = uniConfig.pageTitle;
     const brandTitleEl = document.getElementById('activeBrandTitle');
-    if (brandTitleEl) brandTitleEl.textContent = uniConfig.brandDivision.replace('™', '');
+    if (brandTitleEl) brandTitleEl.textContent = 'OREVA';
+    const divPillEl = document.getElementById('activeDivisionPill');
+    if (divPillEl) divPillEl.textContent = uniConfig.brandDivision.replace('OREVA ', '');
+    const motifEl = document.getElementById('headerCrestDynamicMotif');
+    if (motifEl && CREST_SVG_MOTIFS[currentUniverse]) {
+      motifEl.innerHTML = CREST_SVG_MOTIFS[currentUniverse];
+    }
     const subLabel = document.getElementById('activeSubdomainLabel');
     if (subLabel) subLabel.textContent = uniConfig.subdomain;
 

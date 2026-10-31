@@ -102,29 +102,105 @@ body {
   color: var(--bronze);
 }
 
-.brand-wordmark {
+.brand-wordmark.oreva-couture-lockup {
   text-decoration: none;
   color: var(--obsidian);
-  text-align: center;
+  display: inline-flex;
+   flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 10px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-wordmark.oreva-couture-lockup:hover {
+  transform: translateY(-1px);
+}
+
+.oreva-crest-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(11, 12, 14, 0.16), 0 0 0 1px rgba(176, 141, 87, 0.32);
+  flex-shrink: 0;
+  background: #0A0D14;
+}
+
+.oreva-crest-svg {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+
+.oreva-wordmark-stack {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.oreva-top-crown {
+  display: flex;
   align-items: center;
+  gap: 6px;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #8C6D3F;
+  margin-bottom: 2px;
+}
+
+.oreva-crown-dot {
+  color: #B08D57;
+  font-size: 0.48rem;
+}
+
+.oreva-division-pill {
+  background: linear-gradient(135deg, #11131A 0%, #1F2433 100%);
+  color: #E6C994;
+  border: 1px solid rgba(212, 180, 131, 0.45);
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 0.54rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.oreva-main-row {
+  display: flex;
+  align-items: flex-start;
+  line-height: 0.95;
 }
 
 .brand-wordmark .title {
   font-family: var(--font-serif);
-  font-size: 1.95rem;
+  font-size: 2.15rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
-  line-height: 1;
+  letter-spacing: 0.26em;
+  color: var(--obsidian);
+  line-height: 0.95;
+}
+
+.oreva-reg {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--bronze);
+  margin-left: 2px;
+  margin-top: 2px;
 }
 
 .brand-wordmark .subtitle {
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
   color: var(--text-muted);
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .header-actions {
