@@ -177,7 +177,34 @@
         <div id="categoryTabsContainer" class="category-tabs"></div>
       </div>
 
+      <!-- BARRE DE RECHERCHE INSTANTANÉE, TRI & COMPTEUR HAUTE CAPACITÉ (POUR DES MILLIERS DE PRODUITS) -->
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:26px; padding:14px 18px; background:var(--bg-white); border:1px solid var(--border-subtle); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.03);">
+        <div style="flex:1; min-width:260px; position:relative;">
+          <input
+            type="search"
+            id="catalogSearchInput"
+            oninput="onCatalogSearch(this.value)"
+            placeholder="🔍 Rechercher par produit, besoin, édition ou référence SKU (ex: Oreiller, LED, Lombaire, CJ-...)..."
+            style="width:100%; padding:11px 16px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans); font-size:0.86rem; background:var(--bg-alabaster);"
+          />
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span id="catalogCountBadge" style="font-size:0.8rem; font-weight:700; color:var(--obsidian); background:var(--bg-stone); padding:8px 14px; border-radius:6px;">
+            210 références disponibles
+          </span>
+          <select id="catalogSortSelect" class="minimal-select" onchange="onCatalogSort(this.value)" style="padding:10px 14px; font-weight:600;">
+            <option value="featured">Trier : Best-Sellers & Phares</option>
+            <option value="price-asc">Prix : Croissant (↑)</option>
+            <option value="price-desc">Prix : Décroissant (↓)</option>
+            <option value="rating">Meilleures Notes Clients (★)</option>
+          </select>
+        </div>
+      </div>
+
       <div id="productsGrid" class="luxury-grid"></div>
+
+      <!-- PAGINATION HAUTE CAPACITÉ (24 PRODUITS PAR PAGE) -->
+      <div id="catalogPaginationBar" style="display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin-top:40px; padding-top:24px; border-top:1px solid var(--border-subtle);"></div>
     </section>
 
     <!-- SECTION ÉDITORIALE : TECHNOLOGIE CLINIQUE DU SOUS-DOMAINE -->
@@ -298,45 +325,17 @@
         </div>
       </div>
 
-      <!-- BARRE PRIVÉE PROPRIÉTAIRE : VOS 4 SITES / SOUS-DOMAINES SÉPARÉS (INVISIBLE POUR LES CLIENTS) -->
+      <!-- BARRE PRIVÉE PROPRIÉTAIRE : TOUS VOS SOUS-DOMAINES SÉPARÉS (INVISIBLE POUR LES CLIENTS) -->
       <div style="background:#12131A; border:1px solid #27272A; border-radius:8px; padding:16px 20px; margin-bottom:26px;">
-        <div style="font-size:0.74rem; color:#6EE7B7; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px;">
-          🌐 VOS 4 BOUTIQUES INDÉPENDANTES PAR SOUS-DOMAINE (ZÉRO MÉLANGE ENTRE LES SITES POUR VOS CLIENTS) :
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <div style="font-size:0.74rem; color:#6EE7B7; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;">
+            🌐 VOS BOUTIQUES INDÉPENDANTES PAR SOUS-DOMAINE (<span id="adminTotalSubdomainsCount">8</span> SOUS-DOMAINES • <span id="adminTotalCatalogCount">1 535</span> PRODUITS ACTIFS • ZÉRO MÉLANGE CÔTÉ CLIENT) :
+          </div>
+          <button class="btn-luxury-dark" style="background:#38BDF8; border-color:#38BDF8; color:#090A0F; padding:6px 14px; font-size:0.74rem;" onclick="switchBoTab('catalog')">
+            ➕ Créer un Sous-Domaine / Importer des Produits
+          </button>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
-          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
-            <div style="font-weight:700; color:#fff; font-size:0.86rem;">🌙 1. Boutique Sommeil & Nuit</div>
-            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Oreillers, Masque 3D, Bouchons -28dB, Cryo</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <a href="https://sleep-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir sleep-orevalab.vercel.app ↗</a>
-              <button onclick="switchUniverse('sleep'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
-            </div>
-          </div>
-          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
-            <div style="font-weight:700; color:#fff; font-size:0.86rem;">🦴 2. Boutique Posture, Dos & Pieds</div>
-            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Coussin Gel, Lombaire, Shiatsu 6D, Semelles</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <a href="https://ergo-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir ergo-orevalab.vercel.app ↗</a>
-              <button onclick="switchUniverse('ergo'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
-            </div>
-          </div>
-          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
-            <div style="font-weight:700; color:#fff; font-size:0.86rem;">✨ 3. Boutique Beauté Tech (Adultes/Ados/Enfants)</div>
-            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Masque LED, Station Pinceaux, Miroir Ado, Kit Enfant</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <a href="https://glow-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir glow-orevalab.vercel.app ↗</a>
-              <button onclick="switchUniverse('glow'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
-            </div>
-          </div>
-          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
-            <div style="font-weight:700; color:#fff; font-size:0.86rem;">🔥 4. Boutique Soulagement Thermique & Cycle</div>
-            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Ceinture Graphène Cycle, Masque 42°C, Bonnet Cryo</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <a href="https://thermo-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir thermo-orevalab.vercel.app ↗</a>
-              <button onclick="switchUniverse('thermo'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
-            </div>
-          </div>
-        </div>
+        <div id="adminSubdomainsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(245px, 1fr)); gap:10px;"></div>
       </div>
 
       <!-- SOUS-NAVIGATION DU BACKOFFICE -->
@@ -347,11 +346,14 @@
         <button id="boTab-customers" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('customers')">
           👥 2. Fichier Clients & Base Neon Postgres (<span id="boCustomersCount">3</span>)
         </button>
+        <button id="boTab-catalog" class="cat-tab" style="color:#6EE7B7; border-color:#10B981;" onclick="switchBoTab('catalog')">
+          🌐 3. Sous-Domaines & Méga-Catalogue (1 500+ Produits)
+        </button>
         <button id="boTab-keys" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('keys')">
-          🔑 3. Connecter mes Clés API (Stripe, CJdropshipping, SKUs)
+          🔑 4. Clés API (Stripe, CJdropshipping, SKUs)
         </button>
         <button id="boTab-deploy" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('deploy')">
-          🚀 4. Mettre en ligne & Domaine (orevalabs.com)
+          🚀 5. Domaine Officiel (orevalabs.com)
         </button>
       </div>
 
@@ -452,6 +454,94 @@
             </thead>
             <tbody id="customersTableBody"></tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- SOUS-ONGLET 3 : CRÉATEUR DE SOUS-DOMAINES ILLIMITÉS & IMPORTATEUR DE MILLIERS DE PRODUITS -->
+      <div id="boPanel-catalog" class="hidden">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(380px, 1fr)); gap:24px; margin-bottom:24px;">
+          <!-- 1. Créer un nouveau sous-domaine -->
+          <div class="bo-card" style="border-color:#10B981;">
+            <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">USINE MULTI-BOUTIQUES OREVA®</span>
+            <h3 style="font-size:1.3rem; margin:6px 0 10px;">➕ 1. Créer un Nouveau Sous-Domaine Spécialisé</h3>
+            <p style="font-size:0.82rem; color:#A1A1AA; margin-bottom:16px; line-height:1.5;">
+              Créez autant de boutiques indépendantes que vous le souhaitez sous la marque <strong>OREVA®</strong> (ex: <code>yoga</code>, <code>fitness</code>, <code>kitchen</code>, <code>audio</code>, <code>auto</code>). Chaque sous-domaine est 100% isolé et sauvegarde son catalogue dans votre base Neon Postgres :
+            </p>
+            <form onsubmit="submitNewSubdomain(event)">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+                <div>
+                  <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Préfixe du Sous-Domaine *</label>
+                  <input type="text" id="newSubSlug" required placeholder="Ex: yoga, kitchen, audio..." style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Nom de la Division Lab *</label>
+                  <input type="text" id="newSubDivision" required placeholder="Ex: YOGA & PILATES" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
+                </div>
+              </div>
+              <div style="margin-bottom:12px;">
+                <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Titre Principal Hero de cette Boutique *</label>
+                <input type="text" id="newSubTitle" required placeholder="Ex: L’équipement biomécanique pour le Pilates, le Yoga et la souplesse." style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
+              </div>
+              <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">URL Photo Hero (Optionnel)</label>
+                <input type="url" id="newSubHeroImg" placeholder="https://images.unsplash.com/..." style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
+              </div>
+              <button type="submit" class="btn-luxury-dark" style="background:#10B981; border-color:#10B981; color:#052E16; width:100%; padding:13px;">
+                🌐 Créer ce Sous-Domaine dans ma Base Neon Postgres
+              </button>
+              <div id="newSubFeedback" style="color:#6EE7B7; font-size:0.82rem; font-weight:700; margin-top:10px;"></div>
+            </form>
+          </div>
+
+          <!-- 2. Importer des centaines de produits par sous-domaine -->
+          <div class="bo-card" style="border-color:#38BDF8;">
+            <span style="color:#38BDF8; font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">IMPORTATEUR MASSIF CJDROPSHIPPING API V2 & GÉNÉRATEUR</span>
+            <h3 style="font-size:1.3rem; margin:6px 0 10px;">📦 2. Ajouter +50 à +250 Produits d'un Coup</h3>
+            <p style="font-size:0.82rem; color:#A1A1AA; margin-bottom:16px; line-height:1.5;">
+              Injectez des centaines de nouvelles références (synchronisées avec CJdropshipping API V2 ou générées par gamme/édition) directement dans le sous-domaine de votre choix, sans jamais mélanger les niches :
+            </p>
+            <form onsubmit="submitBulkProductImport(event)">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+                <div>
+                  <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Sous-Domaine Cible *</label>
+                  <select id="importTargetUniverse" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;"></select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Nombre de Produits à Importer *</label>
+                  <select id="importBatchCount" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;">
+                    <option value="50">+50 Nouvelles Références</option>
+                    <option value="100" selected>+100 Nouvelles Références</option>
+                    <option value="250">+250 Nouvelles Références (Lot Massif)</option>
+                  </select>
+                </div>
+              </div>
+              <div style="margin-bottom:12px;">
+                <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Famille de Produits / Mot-Clé CJdropshipping *</label>
+                <input type="text" id="importKeyword" required placeholder="Ex: Anneau Pilates & Tapis Acupression / Appareil Anti-Cellulite..." style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px;">
+                <div>
+                  <label style="display:block; font-size:0.74rem; color:#D4D4D8; margin-bottom:4px;">Coût Fournisseur (€)</label>
+                  <input type="number" step="0.1" id="importCostEur" value="11.50" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.74rem; color:#D4D4D8; margin-bottom:4px;">Prix Vente Client (€)</label>
+                  <input type="number" step="0.5" id="importPriceEur" value="54.00" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.74rem; color:#D4D4D8; margin-bottom:4px;">Source d'Import</label>
+                  <select id="importSourceMode" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;">
+                    <option value="cj_live">API CJdropshipping + Variantes</option>
+                    <option value="generator">Générateur Multi-Éditions</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn-luxury-dark" style="background:#38BDF8; border-color:#38BDF8; color:#090A0F; width:100%; padding:13px;">
+                🚀 Importer ce Lot de Produits dans le Sous-Domaine
+              </button>
+              <div id="importBatchFeedback" style="color:#38BDF8; font-size:0.82rem; font-weight:700; margin-top:10px;"></div>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -952,6 +1042,7 @@
   </div>
 
   <script src="/products-data.js"></script>
+  <script src="/mega-catalog-engine.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>

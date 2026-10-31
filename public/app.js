@@ -41,6 +41,10 @@ function onLanguageChange(lang) {
 }
 
 let currentUniverse = 'sleep';
+let currentSearchQuery = '';
+let currentSortMode = 'featured';
+let currentCatalogPage = 1;
+const CATALOG_PAGE_SIZE = 24;
 
 // Règles d'isolation stricte par sous-domaine : AUCUN produit d'une autre niche n'apparaît sur un sous-domaine !
 const STOREFRONT_PRODUCT_RULES = {
@@ -95,12 +99,49 @@ const CREST_SVG_MOTIFS = {
     <path d="M32 10 L35 27 L52 32 L35 37 L32 54 L29 37 L12 32 L29 27 Z" fill="url(#hdrGoldGrad)"/>
     <path d="M18 28 Q25 20 32 28 T46 28" stroke="#FAF5EA" stroke-width="1.6" fill="none" stroke-linecap="round"/>
     <path d="M18 36 Q25 28 32 36 T46 36" stroke="#E6C994" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  `,
+  sport: `
+    <polygon points="32,9 49,21 49,43 32,55 15,43 15,21" fill="none" stroke="url(#hdrGoldGrad)" stroke-width="1.8"/>
+    <path d="M35 16 L23 33 L32 33 L29 48 L41 31 L32 31 Z" fill="url(#hdrGoldGrad)"/>
+  `,
+  pets: `
+    <circle cx="32" cy="36" r="7.5" fill="url(#hdrGoldGrad)"/>
+    <circle cx="21" cy="25" r="3.4" fill="#FAF5EA"/>
+    <circle cx="28" cy="20" r="3.6" fill="#FAF5EA"/>
+    <circle cx="36" cy="20" r="3.6" fill="#FAF5EA"/>
+    <circle cx="43" cy="25" r="3.4" fill="#FAF5EA"/>
+  `,
+  baby: `
+    <path d="M32 13 L35.5 25 L48 25 L38 32.5 L41.5 45 L32 37.5 L22.5 45 L26 32.5 L16 25 L28.5 25 Z" fill="url(#hdrGoldGrad)"/>
+    <circle cx="32" cy="31" r="3.2" fill="#FAF5EA"/>
+  `,
+  home: `
+    <circle cx="32" cy="32" r="9" fill="url(#hdrGoldGrad)"/>
+    <path d="M32 10 V18 M32 46 V54 M10 32 H18 M46 32 H54 M16.5 16.5 L22 22 M42 42 L47.5 47.5 M47.5 16.5 L42 22 M22 42 L16.5 47.5" stroke="#FAF5EA" stroke-width="1.8" stroke-linecap="round"/>
   `
 };
 
+function getProductsForUniverse(uniId) {
+  const allowedMap = STOREFRONT_PRODUCT_RULES[uniId];
+  return window.PRODUCTS_CATALOG.filter(p => {
+    if (allowedMap && allowedMap[p.id]) return true;
+    return p.universe === uniId;
+  });
+}
+
+function getSubCategoryForProduct(prod, uniId) {
+  const allowedMap = STOREFRONT_PRODUCT_RULES[uniId];
+  if (allowedMap && allowedMap[prod.id]) return allowedMap[prod.id];
+  return prod.subCategory || prod.category || 'flagship';
+}
+
 function switchUniverse(universeId) {
-  const validIds = ['sleep', 'ergo', 'glow', 'thermo'];
-  currentUniverse = validIds.includes(universeId) ? universeId : 'sleep';
+  currentUniverse = window.OREVA_UNIVERSES?.[universeId] ? universeId : 'sleep';
+  currentSearchQuery = '';
+  currentCatalogPage = 1;
+  const searchInput = document.getElementById('catalogSearchInput');
+  if (searchInput) searchInput.value = '';
+
   const uniConfig = window.OREVA_UNIVERSES?.[currentUniverse] || window.OREVA_UNIVERSES.sleep;
 
   if (uniConfig) {
@@ -110,8 +151,8 @@ function switchUniverse(universeId) {
     const divPillEl = document.getElementById('activeDivisionPill');
     if (divPillEl) divPillEl.textContent = uniConfig.brandDivision.replace('OREVA ', '');
     const motifEl = document.getElementById('headerCrestDynamicMotif');
-    if (motifEl && CREST_SVG_MOTIFS[currentUniverse]) {
-      motifEl.innerHTML = CREST_SVG_MOTIFS[currentUniverse];
+    if (motifEl) {
+      motifEl.innerHTML = CREST_SVG_MOTIFS[currentUniverse] || CREST_SVG_MOTIFS.sleep;
     }
     const subLabel = document.getElementById('activeSubdomainLabel');
     if (subLabel) subLabel.textContent = uniConfig.subdomain;
@@ -142,12 +183,17 @@ function switchUniverse(universeId) {
     const secTitle = document.getElementById('sectionTitle');
     if (secTitle) secTitle.textContent = uniConfig.sectionTitle;
 
-    // Onglets de sous-catégories strictement limités au sous-domaine actif
+    const totalUniProds = getProductsForUniverse(currentUniverse).length;
+
+    // Onglets de sous-catégories strictement limités au sous-domaine actif avec compteur dynamique
     const tabsWrap = document.getElementById('categoryTabsContainer');
     if (tabsWrap && Array.isArray(uniConfig.subCategories)) {
-      tabsWrap.innerHTML = uniConfig.subCategories.map((sc, idx) => `
-        <button id="catTab-${sc.id}" class="cat-tab ${idx === 0 ? 'active' : ''}" onclick="filterCategory('${sc.id}')">${sc.label}</button>
-      `).join('');
+      tabsWrap.innerHTML = uniConfig.subCategories.map((sc, idx) => {
+        const labelText = sc.id === 'all'
+          ? `${sc.label.replace(/\s*\(\d+\)/, '')} (${totalUniProds})`
+          : sc.label;
+        return `<button id="catTab-${sc.id}" class="cat-tab ${idx === 0 ? 'active' : ''}" onclick="filterCategory('${sc.id}')">${labelText}</button>`;
+      }).join('');
     }
 
     // Section Science Clinique dédiée au sous-domaine
@@ -185,7 +231,8 @@ function switchUniverse(universeId) {
 function renderStorefrontUpsell(upsellProdId) {
   const upsellBox = document.getElementById('bagUpsellDynamic');
   if (!upsellBox) return;
-  const prod = window.PRODUCTS_CATALOG.find(p => p.id === upsellProdId) || window.PRODUCTS_CATALOG[0];
+  const uniProds = getProductsForUniverse(currentUniverse);
+  const prod = window.PRODUCTS_CATALOG.find(p => p.id === upsellProdId) || uniProds[0] || window.PRODUCTS_CATALOG[0];
   if (!prod) return;
   const title = prod.title[currentLang] || prod.title.fr;
   upsellBox.innerHTML = `
@@ -227,10 +274,29 @@ function applyLocalization() {
 
 function filterCategory(cat) {
   currentCategory = cat || 'all';
+  currentCatalogPage = 1;
   document.querySelectorAll('#collectionSection .cat-tab').forEach(btn => btn.classList.remove('active'));
   const active = document.getElementById(`catTab-${currentCategory}`);
   if (active) active.classList.add('active');
   renderCatalog();
+}
+
+function onCatalogSearch(query) {
+  currentSearchQuery = (query || '').trim().toLowerCase();
+  currentCatalogPage = 1;
+  renderCatalog();
+}
+
+function onCatalogSort(sortMode) {
+  currentSortMode = sortMode || 'featured';
+  currentCatalogPage = 1;
+  renderCatalog();
+}
+
+function goToCatalogPage(pageNum) {
+  currentCatalogPage = Math.max(1, pageNum);
+  renderCatalog();
+  document.getElementById('collectionSection')?.scrollIntoView({ behavior: 'smooth' });
 }
 
 function renderCatalog() {
@@ -239,17 +305,80 @@ function renderCatalog() {
   const t = window.I18N_STRINGS[currentLang] || window.I18N_STRINGS.fr;
   const showMarginOverlay = isAdminAuthenticated && document.getElementById('toggleMarginOverlay')?.checked;
 
-  const allowedMap = STOREFRONT_PRODUCT_RULES[currentUniverse] || STOREFRONT_PRODUCT_RULES.sleep;
+  const uniProducts = getProductsForUniverse(currentUniverse);
 
-  const products = window.PRODUCTS_CATALOG.filter(p => {
-    const subCat = allowedMap[p.id];
-    if (!subCat) return false; // Strictement exclu si le produit n'appartient pas à ce sous-domaine !
-    if (currentCategory === 'all') return true;
-    if (currentCategory === 'bundles') {
-      return subCat === 'bundles' || subCat === 'teens' || subCat === 'kids' || p.category === 'bundles';
+  let filtered = uniProducts.filter(p => {
+    const subCat = getSubCategoryForProduct(p, currentUniverse);
+    if (currentCategory !== 'all') {
+      if (currentCategory === 'bundles') {
+        if (!(subCat === 'bundles' || subCat === 'teens' || subCat === 'kids' || p.category === 'bundles')) return false;
+      } else if (subCat !== currentCategory) {
+        return false;
+      }
     }
-    return subCat === currentCategory;
+    if (currentSearchQuery) {
+      const hay = `${p.title?.fr || ''} ${p.title?.en || ''} ${p.subtitle?.fr || ''} ${p.shortDesc?.fr || ''} ${p.sku || ''}`.toLowerCase();
+      if (!hay.includes(currentSearchQuery)) return false;
+    }
+    return true;
   });
+
+  if (currentSortMode === 'price-asc') {
+    filtered = [...filtered].sort((a, b) => a.basePriceEur - b.basePriceEur);
+  } else if (currentSortMode === 'price-desc') {
+    filtered = [...filtered].sort((a, b) => b.basePriceEur - a.basePriceEur);
+  } else if (currentSortMode === 'rating') {
+    filtered = [...filtered].sort((a, b) => b.rating - a.rating || b.reviewsCount - a.reviewsCount);
+  }
+
+  const totalCount = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / CATALOG_PAGE_SIZE));
+  if (currentCatalogPage > totalPages) currentCatalogPage = totalPages;
+
+  const startIdx = (currentCatalogPage - 1) * CATALOG_PAGE_SIZE;
+  const pageItems = filtered.slice(startIdx, startIdx + CATALOG_PAGE_SIZE);
+
+  const countBadge = document.getElementById('catalogCountBadge');
+  if (countBadge) {
+    countBadge.textContent = totalCount > 0
+      ? `Affichage ${startIdx + 1}–${Math.min(startIdx + CATALOG_PAGE_SIZE, totalCount)} sur ${totalCount} références`
+      : '0 référence trouvée';
+  }
+
+  const pagBar = document.getElementById('catalogPaginationBar');
+  if (pagBar) {
+    if (totalPages <= 1) {
+      pagBar.innerHTML = '';
+    } else {
+      let buttonsHtml = `
+        <button class="btn-card-detail" style="padding:8px 14px;" ${currentCatalogPage === 1 ? 'disabled style="opacity:0.4;padding:8px 14px;"' : ''} onclick="goToCatalogPage(${currentCatalogPage - 1})">
+          ← Page Précédente
+        </button>
+      `;
+      const maxVisible = 7;
+      let startP = Math.max(1, currentCatalogPage - 3);
+      let endP = Math.min(totalPages, startP + maxVisible - 1);
+      if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
+
+      for (let p = startP; p <= endP; p++) {
+        const isCurrent = p === currentCatalogPage;
+        buttonsHtml += `
+          <button
+            onclick="goToCatalogPage(${p})"
+            style="padding:8px 13px; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid ${isCurrent ? 'var(--obsidian)' : 'var(--border-subtle)'}; background:${isCurrent ? 'var(--obsidian)' : '#fff'}; color:${isCurrent ? '#fff' : 'var(--obsidian)'};"
+          >${p}</button>
+        `;
+      }
+      buttonsHtml += `
+        <button class="btn-card-detail" style="padding:8px 14px;" ${currentCatalogPage === totalPages ? 'disabled style="opacity:0.4;padding:8px 14px;"' : ''} onclick="goToCatalogPage(${currentCatalogPage + 1})">
+          Page Suivante (${currentCatalogPage}/${totalPages}) →
+        </button>
+      `;
+      pagBar.innerHTML = buttonsHtml;
+    }
+  }
+
+  const products = pageItems;
 
   grid.innerHTML = products.map(prod => {
     const title = prod.title[currentLang] || prod.title.fr;
@@ -964,7 +1093,7 @@ function switchView(view) {
 }
 
 function switchBoTab(tabName) {
-  ['orders', 'customers', 'keys', 'deploy'].forEach(t => {
+  ['orders', 'customers', 'catalog', 'keys', 'deploy'].forEach(t => {
     const panel = document.getElementById(`boPanel-${t}`);
     const btn = document.getElementById(`boTab-${t}`);
     if (!panel || !btn) return;
@@ -980,6 +1109,148 @@ function switchBoTab(tabName) {
   });
   if (tabName === 'customers') {
     loadBackofficeCustomers();
+  }
+  if (tabName === 'catalog') {
+    renderAdminSubdomainsPanel();
+  }
+}
+
+function mergeCustomCatalogFromSettings(settingsObj) {
+  if (!settingsObj) return;
+  if (settingsObj.customSubdomains && typeof settingsObj.customSubdomains === 'object') {
+    Object.assign(window.OREVA_UNIVERSES, settingsObj.customSubdomains);
+  }
+  if (Array.isArray(settingsObj.customProducts) && settingsObj.customProducts.length > 0) {
+    const existingIds = new Set(window.PRODUCTS_CATALOG.map(p => p.id));
+    settingsObj.customProducts.forEach(cp => {
+      if (!existingIds.has(cp.id)) {
+        window.PRODUCTS_CATALOG.unshift(cp);
+        existingIds.add(cp.id);
+      }
+    });
+  }
+}
+
+function renderAdminSubdomainsPanel() {
+  const grid = document.getElementById('adminSubdomainsGrid');
+  const selectEl = document.getElementById('importTargetUniverse');
+  const subCountEl = document.getElementById('adminTotalSubdomainsCount');
+  const prodCountEl = document.getElementById('adminTotalCatalogCount');
+
+  const uniKeys = Object.keys(window.OREVA_UNIVERSES || {});
+  if (subCountEl) subCountEl.textContent = uniKeys.length;
+  if (prodCountEl) prodCountEl.textContent = window.PRODUCTS_CATALOG.length.toLocaleString('fr-FR');
+
+  if (selectEl) {
+    selectEl.innerHTML = uniKeys.map(k => {
+      const u = window.OREVA_UNIVERSES[k];
+      const cnt = getProductsForUniverse(k).length;
+      return `<option value="${k}">${u.brandDivision} — ${u.subdomain} (${cnt} produits)</option>`;
+    }).join('');
+  }
+
+  if (!grid) return;
+  const officialVercelSet = new Set(['sleep', 'ergo', 'glow', 'thermo', 'sport', 'pets', 'baby', 'home']);
+
+  grid.innerHTML = uniKeys.map((k, idx) => {
+    const u = window.OREVA_UNIVERSES[k];
+    const cnt = getProductsForUniverse(k).length;
+    const liveUrl = officialVercelSet.has(k)
+      ? `https://${k}-orevalab.vercel.app`
+      : `https://oreva-lab.vercel.app/?vitrine=${k}`;
+    return `
+      <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+            <strong style="color:#fff; font-size:0.84rem;">${idx + 1}. ${u.brandDivision}</strong>
+            <span style="background:rgba(16,185,129,0.18); color:#6EE7B7; border:1px solid #10B981; font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:99px;">${cnt} produits</span>
+          </div>
+          <div style="font-size:0.73rem; color:#D4B98C; margin:3px 0 8px;">${u.subdomain}</div>
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+          <a href="${liveUrl}" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.7rem; padding:5px 9px; border-radius:4px; text-decoration:none;">Ouvrir le Site ↗</a>
+          <button onclick="switchUniverse('${k}'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.7rem; padding:5px 9px; border-radius:4px; cursor:pointer;">Prévisualiser</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function submitNewSubdomain(e) {
+  e.preventDefault();
+  const slug = document.getElementById('newSubSlug')?.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+  const divisionName = document.getElementById('newSubDivision')?.value.trim();
+  const title = document.getElementById('newSubTitle')?.value.trim();
+  const heroImg = document.getElementById('newSubHeroImg')?.value.trim();
+  const fb = document.getElementById('newSubFeedback');
+
+  if (!slug || !divisionName) return;
+  if (fb) fb.textContent = 'Création du sous-domaine et génération des premiers produits...';
+
+  try {
+    const res = await fetch('/api/catalog/subdomain', {
+      method: 'POST',
+      headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ slug, divisionName, title, heroImg })
+    });
+    const data = await res.json();
+    if (data.success && data.subdomain) {
+      window.OREVA_UNIVERSES[slug] = data.subdomain;
+      // Générer automatiquement 50 premiers produits dédiés à ce nouveau sous-domaine
+      await fetch('/api/catalog/import', {
+        method: 'POST',
+        headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          universe: slug,
+          keyword: divisionName,
+          count: 50,
+          supplierCostEur: 12.0,
+          basePriceEur: 59.0,
+          imageUrl: heroImg || undefined,
+          source: 'generator'
+        })
+      });
+      await loadSettingsForm();
+      renderAdminSubdomainsPanel();
+      if (fb) {
+        fb.textContent = `✓ Sous-domaine ${slug}.orevalabs.com créé avec 50 produits dédiés !`;
+      }
+    }
+  } catch (err) {
+    if (fb) fb.textContent = 'Erreur lors de la création du sous-domaine.';
+  }
+}
+
+async function submitBulkProductImport(e) {
+  e.preventDefault();
+  const universe = document.getElementById('importTargetUniverse')?.value || 'sleep';
+  const count = Number(document.getElementById('importBatchCount')?.value) || 100;
+  const keyword = document.getElementById('importKeyword')?.value.trim();
+  const supplierCostEur = Number(document.getElementById('importCostEur')?.value) || 11.5;
+  const basePriceEur = Number(document.getElementById('importPriceEur')?.value) || 54.0;
+  const source = document.getElementById('importSourceMode')?.value || 'cj_live';
+  const fb = document.getElementById('importBatchFeedback');
+
+  if (!keyword) return;
+  if (fb) fb.textContent = `Importation de +${count} produits vers ${universe}.orevalabs.com en cours...`;
+
+  try {
+    const res = await fetch('/api/catalog/import', {
+      method: 'POST',
+      headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ universe, count, keyword, supplierCostEur, basePriceEur, source })
+    });
+    const data = await res.json();
+    if (data.success) {
+      await loadSettingsForm();
+      renderAdminSubdomainsPanel();
+      renderCatalog();
+      if (fb) {
+        fb.textContent = `✓ +${data.importedCount} nouvelles références ajoutées dans ${universe}.orevalabs.com (sauvegardées sur Neon Postgres) !`;
+      }
+    }
+  } catch (err) {
+    if (fb) fb.textContent = 'Erreur lors de l’importation.';
   }
 }
 
@@ -1123,10 +1394,13 @@ async function loadSettingsForm() {
   try {
     const res = await fetch('/api/settings', { headers: getAdminHeaders() });
     cachedSettings = await res.json();
+    mergeCustomCatalogFromSettings(cachedSettings);
     isAdminAuthenticated = Boolean(cachedSettings.isAdmin);
     applyAdminVisibility();
 
     if (!isAdminAuthenticated) return;
+
+    renderAdminSubdomainsPanel();
 
     document.getElementById('setStripePublic').value = cachedSettings.stripe?.publicKey || '';
     document.getElementById('setStripeSecret').value = cachedSettings.stripe?.secretKey || '';
@@ -1148,7 +1422,7 @@ async function loadSettingsForm() {
     }
 
     const skuGrid = document.getElementById('skuMappingGrid');
-    skuGrid.innerHTML = window.PRODUCTS_CATALOG.map(p => {
+    skuGrid.innerHTML = window.PRODUCTS_CATALOG.slice(0, 24).map(p => {
       const currentSku = cachedSettings.skuMappings?.[p.id] || p.sku;
       return `
         <div style="background:#18181B; border:1px solid #27272A; padding:10px 14px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
@@ -1261,27 +1535,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateHeaderAccountBadge();
   await loadSettingsForm();
 
-  // Détection automatique et stricte du sous-domaine (Zéro mélange entre les boutiques !)
+  // Détection automatique et stricte du sous-domaine parmi les 8 officiels + tous vos sous-domaines personnalisés !
   const host = (window.location.hostname || '').toLowerCase();
   const urlParams = new URLSearchParams(window.location.search);
   const vitrineParam = (urlParams.get('vitrine') || urlParams.get('store') || '').toLowerCase();
 
-  if (vitrineParam && ['sleep', 'ergo', 'glow', 'thermo'].includes(vitrineParam)) {
-    switchUniverse(vitrineParam);
-  } else if (host.startsWith('ergo.') || host.startsWith('ergo-') || host.startsWith('posture.')) {
-    switchUniverse('ergo');
-  } else if (host.startsWith('glow.') || host.startsWith('glow-') || host.startsWith('derma.') || host.startsWith('beauty.')) {
-    switchUniverse('glow');
-  } else if (host.startsWith('thermo.') || host.startsWith('thermo-') || host.startsWith('relief.')) {
-    switchUniverse('thermo');
+  let detectedUni = 'sleep';
+  if (vitrineParam && window.OREVA_UNIVERSES?.[vitrineParam]) {
+    detectedUni = vitrineParam;
   } else {
-    // Par défaut (sleep.orevalabs.com / sleep-orevalab.vercel.app / oreva-lab.vercel.app) : 100% Boutique Sommeil
-    switchUniverse('sleep');
+    const allSlugs = Object.keys(window.OREVA_UNIVERSES || {});
+    for (const slug of allSlugs) {
+      if (host.startsWith(`${slug}.`) || host.startsWith(`${slug}-`)) {
+        detectedUni = slug;
+        break;
+      }
+    }
   }
 
+  switchUniverse(detectedUni);
   applyLocalization();
 
   if (isAdminAuthenticated) {
+    renderAdminSubdomainsPanel();
     loadBackofficeData();
     loadBackofficeCustomers();
   }
