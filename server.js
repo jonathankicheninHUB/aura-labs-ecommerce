@@ -233,9 +233,34 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-const requestHandler = (req, res) => {
+function readRequestBody(req) {
+  return new Promise((resolve, reject) => {
+    if (req.body && typeof req.body === 'object') {
+      return resolve(req.body);
+    }
+    if (typeof req.body === 'string' && req.body.length > 0) {
+      try {
+        return resolve(JSON.parse(req.body));
+      } catch (e) {
+        return reject(e);
+      }
+    }
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        resolve(body ? JSON.parse(body) : {});
+      } catch (e) {
+        reject(e);
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+const requestHandler = async (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-  const pathname = parsedUrl.pathname;
+  const pathname = parsedUrl.pathname.replace(/\/+$/, '') || '/';
 
   // API 1: Récupérer toutes les commandes + KPIs financiers
   if (pathname === '/api/orders' && req.method === 'GET') {
@@ -272,71 +297,66 @@ const requestHandler = (req, res) => {
 
   // API 3: Créer une commande client + Paiement + Envoi automatique au fournisseur
   if (pathname === '/api/orders' && req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', async () => {
-      try {
-        const payload = JSON.parse(body);
-        const orders = readJson(ORDERS_FILE, []);
-        const settings = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
-        const route = resolveFulfillmentRouting(payload.countryCode || 'FR');
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        const trackingRandom = Math.floor(100000000 + Math.random() * 900000000);
+    try {
+      const payload = await readRequestBody(req);
+      const orders = readJson(ORDERS_FILE, []);
+      const settings = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
+      const route = resolveFulfillmentRouting(payload.countryCode || 'FR');
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const trackingRandom = Math.floor(100000000 + Math.random() * 900000000);
 
-        const totalPaidEur = Number(payload.totalPaidEur || 0);
-        const supplierCostTotalEur = Number(payload.supplierCostTotalEur || 0);
-        const stripeFeeEur = Number((totalPaidEur * 0.02).toFixed(2));
-        const netCommissionEur = Number((totalPaidEur - supplierCostTotalEur - stripeFeeEur).toFixed(2));
-        const marginPercent = totalPaidEur > 0 ? Number(((netCommissionEur / totalPaidEur) * 100).toFixed(1)) : 0;
+      const totalPaidEur = Number(payload.totalPaidEur || 0);
+      const supplierCostTotalEur = Number(payload.supplierCostTotalEur || 0);
+      const stripeFeeEur = Number((totalPaidEur * 0.02).toFixed(2));
+      const netCommissionEur = Number((totalPaidEur - supplierCostTotalEur - stripeFeeEur).toFixed(2));
+      const marginPercent = totalPaidEur > 0 ? Number(((netCommissionEur / totalPaidEur) * 100).toFixed(1)) : 0;
 
-        const newOrder = {
-          id: `ORD-${randomNum}-${payload.countryCode || 'FR'}`,
-          createdAt: new Date().toISOString(),
-          customer: {
-            name: payload.customer?.name || 'Client International',
-            email: payload.customer?.email || 'client@auralabs.ch',
-            address: payload.customer?.address || payload.customer?.city || 'Genève',
-            city: payload.customer?.city || 'Genève',
-            countryCode: payload.countryCode || 'FR',
-            countryName: `${payload.countryName || 'France'} ${route.flag}`
-          },
-          items: (payload.items || []).map(item => ({
-            ...item,
-            sku: settings?.skuMappings?.[item.id] || item.sku || item.id
-          })),
-          currency: payload.currency || 'EUR',
-          displayTotal: payload.displayTotal || `${totalPaidEur.toFixed(2)} €`,
-          totalPaidEur,
-          supplierCostTotalEur,
-          stripeFeeEur,
-          netCommissionEur,
-          marginPercent,
-          paymentMethod: payload.paymentMethod || 'Apple Pay / Carte Bancaire (Stripe)',
-          fulfillment: {
-            status: 'TRANSMIS_ET_PAYÉ_AU_FOURNISSEUR',
-            warehouse: route.warehouse,
-            carrier: route.carrier,
-            trackingNumber: `${route.prefix}-${trackingRandom}`,
-            estimatedDelivery: route.eta,
-            autoDispatchedAt: new Date().toISOString(),
-            cjDispatchMode: 'PENDING'
-          }
-        };
+      const newOrder = {
+        id: `ORD-${randomNum}-${payload.countryCode || 'FR'}`,
+        createdAt: new Date().toISOString(),
+        customer: {
+          name: payload.customer?.name || 'Client International',
+          email: payload.customer?.email || 'client@auralabs.ch',
+          address: payload.customer?.address || payload.customer?.city || 'Genève',
+          city: payload.customer?.city || 'Genève',
+          countryCode: payload.countryCode || 'FR',
+          countryName: `${payload.countryName || 'France'} ${route.flag}`
+        },
+        items: (payload.items || []).map(item => ({
+          ...item,
+          sku: settings?.skuMappings?.[item.id] || item.sku || item.id
+        })),
+        currency: payload.currency || 'EUR',
+        displayTotal: payload.displayTotal || `${totalPaidEur.toFixed(2)} €`,
+        totalPaidEur,
+        supplierCostTotalEur,
+        stripeFeeEur,
+        netCommissionEur,
+        marginPercent,
+        paymentMethod: payload.paymentMethod || 'Apple Pay / Carte Bancaire (Stripe)',
+        fulfillment: {
+          status: 'TRANSMIS_ET_PAYÉ_AU_FOURNISSEUR',
+          warehouse: route.warehouse,
+          carrier: route.carrier,
+          trackingNumber: `${route.prefix}-${trackingRandom}`,
+          estimatedDelivery: route.eta,
+          autoDispatchedAt: new Date().toISOString(),
+          cjDispatchMode: 'PENDING'
+        }
+      };
 
-        const cjResult = await dispatchToCJDropshippingAPI(newOrder, settings);
-        newOrder.fulfillment.cjDispatchMode = cjResult.mode;
+      const cjResult = await dispatchToCJDropshippingAPI(newOrder, settings);
+      newOrder.fulfillment.cjDispatchMode = cjResult.mode;
 
-        orders.unshift(newOrder);
-        writeJson(ORDERS_FILE, orders);
+      orders.unshift(newOrder);
+      writeJson(ORDERS_FILE, orders);
 
-        res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ success: true, order: newOrder, cjResult }));
-      } catch (err) {
-        res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: 'Requête invalide', details: err.message }));
-      }
-    });
-    return;
+      res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ success: true, order: newOrder, cjResult }));
+    } catch (err) {
+      res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ error: 'Requête invalide', details: err.message }));
+    }
   }
 
   // API 4: Lire & Enregistrer vos Clés API (Stripe, CJdropshipping, Supliful, SKUs, IBAN)
@@ -347,39 +367,34 @@ const requestHandler = (req, res) => {
   }
 
   if (pathname === '/api/settings' && req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', () => {
-      try {
-        const incoming = JSON.parse(body);
-        const current = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
-        const merged = {
-          ...current,
-          ...incoming,
-          stripe: { ...current.stripe, ...(incoming.stripe || {}) },
-          suppliers: {
-            ...current.suppliers,
-            cjdropshipping: { ...current.suppliers.cjdropshipping, ...(incoming.suppliers?.cjdropshipping || {}) },
-            supliful: { ...current.suppliers.supliful, ...(incoming.suppliers?.supliful || {}) },
-            spocket: { ...current.suppliers.spocket, ...(incoming.suppliers?.spocket || {}) }
-          },
-          skuMappings: { ...current.skuMappings, ...(incoming.skuMappings || {}) },
-          payout: { ...current.payout, ...(incoming.payout || {}) }
-        };
-        if (merged.stripe.secretKey && merged.stripe.secretKey.startsWith('sk_')) {
-          merged.stripe.mode = 'LIVE_STRIPE_ACTIVE';
-        } else {
-          merged.stripe.mode = 'SANDBOX_SIMULATION';
-        }
-        writeJson(SETTINGS_FILE, merged);
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ success: true, settings: merged }));
-      } catch (e) {
-        res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: e.message }));
+    try {
+      const incoming = await readRequestBody(req);
+      const current = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
+      const merged = {
+        ...current,
+        ...incoming,
+        stripe: { ...current.stripe, ...(incoming.stripe || {}) },
+        suppliers: {
+          ...current.suppliers,
+          cjdropshipping: { ...current.suppliers.cjdropshipping, ...(incoming.suppliers?.cjdropshipping || {}) },
+          supliful: { ...current.suppliers.supliful, ...(incoming.suppliers?.supliful || {}) },
+          spocket: { ...current.suppliers.spocket, ...(incoming.suppliers?.spocket || {}) }
+        },
+        skuMappings: { ...current.skuMappings, ...(incoming.skuMappings || {}) },
+        payout: { ...current.payout, ...(incoming.payout || {}) }
+      };
+      if (merged.stripe.secretKey && merged.stripe.secretKey.startsWith('sk_')) {
+        merged.stripe.mode = 'LIVE_STRIPE_ACTIVE';
+      } else {
+        merged.stripe.mode = 'SANDBOX_SIMULATION';
       }
-    });
-    return;
+      writeJson(SETTINGS_FILE, merged);
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ success: true, settings: merged }));
+    } catch (e) {
+      res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ error: e.message }));
+    }
   }
 
   // Servir les fichiers statiques
