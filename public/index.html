@@ -17,39 +17,21 @@
     🎄 OPÉRATION NOËL OREVA LAB™ : 2ÈME À -50% • LIVRAISON GARANTIE AVANT LE 24/12 • RETOURS PROLONGÉS JUSQU'AU 15 JANVIER
   </div>
 
-  <!-- BARRE MULTI-VITRINES (SOUS-DOMAINES OREVA LAB™) -->
-  <div style="background:#0B132B; color:#E2E8F0; border-bottom:1px solid rgba(212,185,140,0.22); padding:8px 18px; font-size:0.75rem;">
-    <div style="max-width:1360px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-        <span style="color:#D4B98C; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;">Vitrines OREVA LAB™ :</span>
-        <button id="uniBtn-all" onclick="switchUniverse('all')" style="background:rgba(212,185,140,0.2); color:#fff; border:1px solid #D4B98C; padding:4px 10px; border-radius:99px; font-size:0.72rem; font-weight:700; cursor:pointer;">🏛️ Maison Oreva Lab</button>
-        <button id="uniBtn-christmas" onclick="switchUniverse('christmas')" style="background:rgba(220,38,38,0.25); color:#FCA5A5; border:1px solid #EF4444; padding:4px 10px; border-radius:99px; font-size:0.72rem; font-weight:700; cursor:pointer;">🎄 Cadeaux Noël (Adultes • Ados • Enfants)</button>
-        <button id="uniBtn-sleep" onclick="switchUniverse('sleep')" style="background:transparent; color:#CBD5E1; border:1px solid rgba(255,255,255,0.16); padding:4px 10px; border-radius:99px; font-size:0.72rem; cursor:pointer;">🌙 sleep.orevalabs.com</button>
-        <button id="uniBtn-ergo" onclick="switchUniverse('ergo')" style="background:transparent; color:#CBD5E1; border:1px solid rgba(255,255,255,0.16); padding:4px 10px; border-radius:99px; font-size:0.72rem; cursor:pointer;">🦴 ergo.orevalabs.com</button>
-        <button id="uniBtn-glow" onclick="switchUniverse('glow')" style="background:transparent; color:#CBD5E1; border:1px solid rgba(255,255,255,0.16); padding:4px 10px; border-radius:99px; font-size:0.72rem; cursor:pointer;">✨ glow.orevalabs.com (Enfants/Ados/Adultes)</button>
-        <button id="uniBtn-thermo" onclick="switchUniverse('thermo')" style="background:transparent; color:#CBD5E1; border:1px solid rgba(255,255,255,0.16); padding:4px 10px; border-radius:99px; font-size:0.72rem; cursor:pointer;">🔥 thermo.orevalabs.com</button>
-      </div>
-      <div style="font-size:0.72rem; color:#6EE7B7; font-weight:600;">
-        🎁 Guide Protocole PDF (15p) OFFERT + Option Pochette Cadeau Satin
-      </div>
-    </div>
-  </div>
-
-  <!-- HEADER ÉDITORIAL LUXE AVEC VOTRE LOGO OREVA LAB -->
+  <!-- HEADER ÉDITORIAL LUXE 100% DÉDIÉ AU SOUS-DOMAINE ACTIF (AUCUN MÉLANGE ENTRE LES SITES) -->
   <header class="luxury-header">
     <div class="header-inner">
       <ul class="nav-links">
         <li><a href="#collectionSection" id="navShop" onclick="switchView('storefront'); filterCategory('all')">Collection</a></li>
-        <li><a href="#collectionSection" style="color:#B91C1C; font-weight:700;" onclick="switchView('storefront'); switchUniverse('christmas')">🎄 Cadeaux de Noël</a></li>
-        <li><a href="#collectionSection" id="navBundles" onclick="switchView('storefront'); filterCategory('bundles')">Coffrets (-25%)</a></li>
+        <li><a href="#scienceSection" id="navScience" onclick="switchView('storefront')">Technologie Clinique</a></li>
+        <li><a href="#collectionSection" id="navBundles" style="color:#B91C1C; font-weight:700;" onclick="switchView('storefront'); filterCategory('bundles')">🎄 Coffrets Cadeaux (-25%)</a></li>
         <li><a href="#" onclick="openTrackingModal(); return false;">📦 Suivre mon colis</a></li>
       </ul>
 
-      <a href="#" class="brand-wordmark" style="display:flex; align-items:center; gap:12px; text-decoration:none;" onclick="switchView('storefront'); switchUniverse('all'); return false;">
+      <a href="#" class="brand-wordmark" style="display:flex; align-items:center; gap:12px; text-decoration:none;" onclick="switchView('storefront'); filterCategory('all'); return false;">
         <img src="/oreva-logo.png" alt="Oreva Lab Logo" style="width:44px; height:44px; border-radius:10px; object-fit:cover; box-shadow:0 4px 12px rgba(0,0,0,0.18);" />
         <div style="text-align:left;">
-          <span class="title" style="display:block; line-height:1.05;">OREVA LAB</span>
-          <span class="subtitle" id="activeSubdomainLabel" style="display:block;">sleep • ergo • glow • thermo</span>
+          <span class="title" id="activeBrandTitle" style="display:block; line-height:1.05;">OREVA SLEEP LAB</span>
+          <span class="subtitle" id="activeSubdomainLabel" style="display:block;">sleep.orevalabs.com</span>
         </div>
       </a>
 
@@ -82,24 +64,24 @@
     </div>
   </header>
 
-  <!-- ==================== VUE 1 : BOUTIQUE FLAGSHIP CLIENT ==================== -->
+  <!-- ==================== VUE 1 : BOUTIQUE SPÉCIALISÉE DU SOUS-DOMAINE ACTIF ==================== -->
   <main id="storefrontView">
 
-    <!-- HERO ÉDITORIAL -->
+    <!-- HERO ÉDITORIAL DÉDIÉ À LA NICHE DU SOUS-DOMAINE -->
     <section class="editorial-hero">
       <div>
-        <span id="heroEyebrow" class="hero-eyebrow">MAISON-MÈRE OREVA LAB™ • OPÉRATION CADEAUX DE NOËL 2026</span>
-        <h1 id="heroTitle" class="hero-headline">La science du sommeil profond, de la posture et de la beauté tech.</h1>
+        <span id="heroEyebrow" class="hero-eyebrow">LABORATOIRE DU SOMMEIL & RÉCUPÉRATION NOCTURNE • SLEEP.OREVALABS.COM</span>
+        <h1 id="heroTitle" class="hero-headline">La science du sommeil profond, de l’alignement cervical et du silence absolu.</h1>
         <p id="heroSubtitle" class="hero-lead">
-          Découvrez nos 4 laboratoires spécialisés et nos Coffrets Cadeaux de Noël prêts à offrir (Adultes, Ados & Enfants). Expédition locale en 48h, Guide Protocole PDF offert et retours prolongés jusqu’au 15 janvier.
+          Oreillers orthopédiques à mémoire cellulaire, masques d’obscurité totale 3D Bluetooth, bouchons acoustiques haute fidélité -28 dB et cryothérapie anti-migraine. Expédié en 48h depuis Paris, Francfort et Genève.
         </p>
 
         <div class="hero-cta-group">
-          <button id="heroCtaPrimary" class="btn-luxury-dark" onclick="switchUniverse('christmas'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'})">
-            🎄 Voir les Coffrets de Noël (Adultes • Ados • Enfants)
+          <button id="heroCtaPrimary" class="btn-luxury-dark" onclick="filterCategory('all'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'})">
+            Explorer la Collection
           </button>
-          <button id="heroCtaSecondary" class="btn-luxury-outline" onclick="filterCategory('all'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'})">
-            Explorer les 4 Vitrines Oreva Lab
+          <button id="heroCtaSecondary" class="btn-luxury-outline" onclick="filterCategory('bundles'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'})">
+            🎄 Coffrets Cadeaux de Noël (-25%)
           </button>
         </div>
 
@@ -120,16 +102,16 @@
       </div>
 
       <div class="hero-visual-stage">
-        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=85" alt="Oreva Lab Clinical Recovery" />
+        <img id="heroMainImg" src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1400&q=85" alt="Oreva Lab Clinical Recovery" />
         <div class="floating-clinical-card">
           <div style="display:flex; align-items:center; gap:12px;">
             <img src="/oreva-logo.png" alt="Oreva Lab" style="width:42px; height:42px; border-radius:8px; object-fit:cover;" />
             <div>
               <span class="tag" id="heroCardHub">HUB LOGISTIQUE ACTIF : PARIS / FRANCFORT</span>
-              <h4>Protocole Complet & Coffrets Cadeaux OREVA LAB™</h4>
+              <h4 id="heroCardTitle">Coffret Sanctuaire du Sommeil (-25%)</h4>
             </div>
           </div>
-          <button class="btn-card-add" style="background:#B08D57; white-space:nowrap;" onclick="openProductDetail('bundle-sommeil-ultime')">
+          <button id="heroCardBtn" class="btn-card-add" style="background:#B08D57; white-space:nowrap;" onclick="openProductDetail('bundle-sommeil-ultime')">
             Voir le Coffret →
           </button>
         </div>
@@ -151,51 +133,44 @@
       </div>
     </section>
 
-    <!-- COLLECTION PRINCIPALE -->
+    <!-- COLLECTION PRINCIPALE (UNIQUEMENT LES PRODUITS ET SOUS-CATÉGORIES DE CE SOUS-DOMAINE) -->
     <section id="collectionSection" class="collection-section">
       <div class="section-header-row">
         <div>
-          <span id="sectionTag" class="section-eyebrow">VITRINES SPÉCIALISÉES OREVA LAB™ • ÉDITION NOËL 2026</span>
-          <h2 id="sectionTitle" class="section-heading">Choisissez votre laboratoire ou un coffret prêt à offrir.</h2>
+          <span id="sectionTag" class="section-eyebrow">COLLECTION CLINIQUE DU SOMMEIL 2026</span>
+          <h2 id="sectionTitle" class="section-heading">Conçus pour transformer vos nuits dès la première semaine.</h2>
         </div>
 
-        <div class="category-tabs">
-          <button id="catTab-all" class="cat-tab active" onclick="filterCategory('all')">Toutes les Vitrines (16)</button>
-          <button id="catTab-christmas" class="cat-tab" style="border-color:#EF4444; color:#B91C1C; font-weight:700;" onclick="filterCategory('christmas')">🎄 Sélection Cadeaux Noël</button>
-          <button id="catTab-sleep" class="cat-tab" onclick="filterCategory('sleep')">🌙 Sommeil & Nuit</button>
-          <button id="catTab-ergo" class="cat-tab" onclick="filterCategory('ergo')">🦴 Posture & Thermique</button>
-          <button id="catTab-beauty" class="cat-tab" onclick="filterCategory('beauty')">✨ Beauté Tech (Adultes/Ados/Enfants)</button>
-          <button id="catTab-bundles" class="cat-tab" onclick="filterCategory('bundles')">🎁 Coffrets (-25%)</button>
-        </div>
+        <div id="categoryTabsContainer" class="category-tabs"></div>
       </div>
 
       <div id="productsGrid" class="luxury-grid"></div>
     </section>
 
-    <!-- SECTION ÉDITORIALE : TECHNOLOGIE CLINIQUE -->
+    <!-- SECTION ÉDITORIALE : TECHNOLOGIE CLINIQUE DU SOUS-DOMAINE -->
     <section id="scienceSection" class="science-banner">
       <div class="science-inner">
         <div class="science-media">
-          <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85" alt="Photobiomodulation & Ergonomie" />
+          <img id="scienceMainImg" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85" alt="Protocole Clinique Oreva Lab" />
         </div>
         <div class="science-content">
-          <span id="editorialBadge" class="eyebrow">PROTOCOLE CERTIFIÉ EN LABORATOIRE</span>
-          <h2 id="editorialTitle">Pourquoi 94% de nos utilisateurs ne reviennent jamais à un oreiller ou siège classique.</h2>
+          <span id="editorialBadge" class="eyebrow">INGÉNIERIE DU SOMMEIL & RYTHME CIRCADIEN</span>
+          <h2 id="editorialTitle">Pourquoi 96% de nos dormeurs ne reviennent jamais à un oreiller ou masque standard.</h2>
           <p id="editorialP1">
-            Nous passons un tiers de notre vie à dormir et plus de 8 heures par jour assis. Pourtant, la literie et le mobilier traditionnels écrasent les disques intervertébraux et perturbent le rythme circadien.
+            Un mauvais alignement des 7 vertèbres cervicales et la moindre pollution lumineuse ou sonore fragmentent vos cycles de sommeil paradoxal (REM) sans même que vous vous en rendiez compte.
           </p>
           <p id="editorialP2">
-            Chaque dispositif OREVA LAB™ combine mousse viscoélastique à mémoire cellulaire haute densité, décompression axiale et photobiomodulation LED médicale (630nm / 850nm).
+            Chaque dispositif OREVA SLEEP LAB™ associe mousse viscoélastique haute densité OEKO-TEX®, isolation acoustique -28 dB et obscurité 3D sans pression oculaire.
           </p>
 
           <div class="clinical-pillars">
             <div class="pillar-box">
               <strong>-78%</strong>
-              <span>Douleurs cervicales et trapèzes au réveil</span>
+              <span>Tensions & inconfort dès la 1ère semaine</span>
             </div>
             <div class="pillar-box">
-              <strong>+42 min</strong>
-              <span>Cycle de sommeil profond (REM) par nuit</span>
+              <strong>15 Janv.</strong>
+              <span>Retours & échanges prolongés Spécial Noël</span>
             </div>
             <div class="pillar-box">
               <strong>48–72h</strong>
@@ -206,79 +181,48 @@
       </div>
     </section>
 
-    <!-- SECTION AVIS CLIENTS VÉRIFIÉS -->
+    <!-- SECTION AVIS CLIENTS VÉRIFIÉS (100% SPÉCIFIQUES AU SOUS-DOMAINE) -->
     <section id="reviewsSection" class="collection-section" style="padding-top:72px;">
       <div style="text-align:center; max-width:680px; margin:0 auto 48px;">
         <span class="section-eyebrow">4,9 / 5 SUR +14 200 AVIS VÉRIFIÉS</span>
-        <h2 class="section-heading">Adopté par des milliers de professionnels, athlètes et cliniciens.</h2>
+        <h2 class="section-heading">Adopté par des milliers d'utilisateurs et spécialistes.</h2>
       </div>
 
-      <div class="luxury-grid">
-        <div class="luxury-card" style="padding:28px;">
-          <div class="stars-gold" style="margin-bottom:12px;">★★★★★ <span style="color:#14532D; font-size:0.74rem; font-weight:700; margin-left:8px;">✓ Achat Vérifié • Genève 🇨🇭</span></div>
-          <h4 style="font-family:var(--font-serif); font-size:1.35rem; margin-bottom:10px;">« Mon kiné m'avait parlé de l'alignement cervical, la différence dès la 2ème nuit est bluffante. »</h4>
-          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
-            Je me réveillais chaque matin avec la nuque bloquée. J'ai commandé le Coffret Sanctuaire du Sommeil un mardi, reçu le jeudi à Genève par la Poste Suisse. Plus aucune douleur depuis 3 semaines.
-          </p>
-          <div style="margin-top:auto; font-size:0.78rem; font-weight:700; color:var(--obsidian);">
-            Dr. Camille V. — Chirurgienne-dentiste (Genève, Suisse)
-          </div>
-        </div>
-
-        <div class="luxury-card" style="padding:28px;">
-          <div class="stars-gold" style="margin-bottom:12px;">★★★★★ <span style="color:#14532D; font-size:0.74rem; font-weight:700; margin-left:8px;">✓ Verified Buyer • Austin, TX 🇺🇸</span></div>
-          <h4 style="font-family:var(--font-serif); font-size:1.35rem; margin-bottom:10px;">« The 6D Shiatsu Massager + Gel Seat Cushion saved my 10-hour coding days. »</h4>
-          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
-            Shipped from their New Jersey hub in 3 days. The U-cutout seat cushion completely removed my sciatica pressure, and the heated 42°C neck massager feels like a real massage therapist.
-          </p>
-          <div style="margin-top:auto; font-size:0.78rem; font-weight:700; color:var(--obsidian);">
-            Marcus T. — Senior Software Architect (Austin, USA)
-          </div>
-        </div>
-
-        <div class="luxury-card" style="padding:28px;">
-          <div class="stars-gold" style="margin-bottom:12px;">★★★★★ <span style="color:#14532D; font-size:0.74rem; font-weight:700; margin-left:8px;">✓ Verifizierter Kauf • München 🇩🇪</span></div>
-          <h4 style="font-family:var(--font-serif); font-size:1.35rem; margin-bottom:10px;">« Die OrevaGlow LED-Maske in Kombination mit dem Kupfer-Peptid-Serum ist unschlagbar. »</h4>
-          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
-            Lieferung aus Frankfurt kam nach 48 Stunden per DHL an. Nach 3 Wochen 10 Minuten täglich ist mein Hautbild deutlich straffer und Rötungen sind fast komplett verschwunden.
-          </p>
-          <div style="margin-top:auto; font-size:0.78rem; font-weight:700; color:var(--obsidian);">
-            Elena K. — Innenarchitektin (München, Deutschland)
-          </div>
-        </div>
-      </div>
+      <div id="reviewsGridContainer" class="luxury-grid"></div>
     </section>
 
-    <!-- FOOTER LUXE OREVA LAB AVEC SOUS-DOMAINES & LIENS LÉGAUX -->
+    <!-- FOOTER LUXE 100% DÉDIÉ À CE SOUS-DOMAINE (ZÉRO MÉLANGE DE NICHES) -->
     <footer class="luxury-footer">
       <div class="footer-inner">
         <div>
           <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
             <img src="/oreva-logo.png" alt="Oreva Lab Logo" style="width:42px; height:42px; border-radius:10px; object-fit:cover;" />
-            <div style="font-family:var(--font-serif); font-size:1.8rem; color:#fff; letter-spacing:0.16em;">OREVA LAB™</div>
+            <div>
+              <div id="footerBrandTitle" style="font-family:var(--font-serif); font-size:1.65rem; color:#fff; letter-spacing:0.14em;">OREVA SLEEP LAB™</div>
+              <div id="footerSubdomainUrl" style="font-size:0.75rem; color:#D4B98C;">sleep.orevalabs.com</div>
+            </div>
           </div>
-          <p style="font-size:0.84rem; max-width:320px; line-height:1.65;">
-            Laboratoire spécialisé en récupération nocturne, biomécanique posturale et beauté technologique (Adultes, Ados & Enfants). Expédition locale directe depuis nos 6 hubs internationaux.
+          <p id="footerDescription" style="font-size:0.84rem; max-width:340px; line-height:1.65;">
+            Laboratoire spécialisé en ingénierie du sommeil profond, alignement cervical et récupération nocturne. Expédition locale directe depuis nos 6 hubs internationaux.
           </p>
           <p style="font-size:0.78rem; color:#D4B98C; margin-top:12px;">
             Conciergerie 7j/7 : concierge@orevalabs.com
           </p>
         </div>
         <div>
-          <strong style="color:#fff; font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:14px;">Nos Sous-Boutiques (Vitrines)</strong>
-          <ul style="list-style:none; font-size:0.84rem; line-height:2.1;">
-            <li><a href="#collectionSection" style="color:#FCA5A5; text-decoration:none; font-weight:700;" onclick="switchUniverse('christmas')">🎄 gifts.orevalabs.com (Cadeaux Noël)</a></li>
-            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="switchUniverse('sleep')">🌙 sleep.orevalabs.com (Sommeil & Nuit)</a></li>
-            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="switchUniverse('ergo')">🦴 ergo.orevalabs.com (Posture & Dos)</a></li>
-            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="switchUniverse('glow')">✨ glow.orevalabs.com (Beauté Tech)</a></li>
-            <li><a href="#collectionSection" style="color:#A1A1AA; text-decoration:none;" onclick="switchUniverse('thermo')">🔥 thermo.orevalabs.com (Thermique & Cycle)</a></li>
+          <strong style="color:#fff; font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:14px;">Engagements Laboratoire</strong>
+          <ul style="list-style:none; font-size:0.84rem; line-height:2.1; color:#A1A1AA;">
+            <li>✓ Expédition Locale 48–72h (Zéro Douane)</li>
+            <li>✓ Offre Duo Noël : le 2ème à -50%</li>
+            <li>✓ Guide Protocole PDF (15 pages) Offert</li>
+            <li>✓ Option Pochette Cadeau Satin Prêt-à-Offrir</li>
           </ul>
         </div>
         <div>
           <strong style="color:#fff; font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:14px;">Service Client & Garanties Noël</strong>
           <ul style="list-style:none; font-size:0.84rem; line-height:2.1;">
             <li><a href="#" style="color:#fff; text-decoration:none; font-weight:600;" onclick="openTrackingModal(); return false;">📦 Suivre ma commande en direct</a></li>
-            <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('trial'); return false;">Garantie 30 Nuits & Retours 15 Janvier</a></li>
+            <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('trial'); return false;">Garantie 30 Jours & Retours 15 Janvier</a></li>
             <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('cgv'); return false;">Conditions Générales de Vente (CGV)</a></li>
             <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('privacy'); return false;">Confidentialité & RGPD</a></li>
             <li><a href="#" style="color:#A1A1AA; text-decoration:none;" onclick="openLegalModal('mentions'); return false;">Mentions Légales</a></li>
@@ -301,10 +245,10 @@
   <!-- ==================== VUE 2 : BACKOFFICE EXÉCUTIF COMPLET (PROTÉGÉ PAR MOT DE PASSE) ==================== -->
   <section id="backofficeView" class="backoffice-view hidden">
     <div class="backoffice-container">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px; padding-bottom:22px; border-bottom:1px solid #27272A;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid #27272A;">
         <div>
           <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;">🔒 ESPACE PRIVÉ PROPRIÉTAIRE (INVISIBLE POUR VOS CLIENTS) • OREVA LAB™</span>
-          <h1 style="font-family:var(--font-serif); font-size:2.4rem; font-weight:500; margin-top:4px;">Pilotage des Commissions, Clés API & Mise en Ligne</h1>
+          <h1 style="font-family:var(--font-serif); font-size:2.4rem; font-weight:500; margin-top:4px;">Pilotage Centralisé de Vos 4 Sous-Domaines, Commissions & Clés API</h1>
         </div>
         <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
           <label style="display:flex; align-items:center; gap:8px; background:#18181B; border:1px solid #27272A; padding:10px 16px; border-radius:6px; font-size:0.8rem; cursor:pointer;">
@@ -317,6 +261,47 @@
           <button class="btn-luxury-dark" style="background:#27272A; border-color:#3F3F46; color:#F87171;" onclick="logoutAdminSession()">
             🔒 Verrouiller Session Admin
           </button>
+        </div>
+      </div>
+
+      <!-- BARRE PRIVÉE PROPRIÉTAIRE : VOS 4 SITES / SOUS-DOMAINES SÉPARÉS (INVISIBLE POUR LES CLIENTS) -->
+      <div style="background:#12131A; border:1px solid #27272A; border-radius:8px; padding:16px 20px; margin-bottom:26px;">
+        <div style="font-size:0.74rem; color:#6EE7B7; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px;">
+          🌐 VOS 4 BOUTIQUES INDÉPENDANTES PAR SOUS-DOMAINE (ZÉRO MÉLANGE ENTRE LES SITES POUR VOS CLIENTS) :
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
+          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
+            <div style="font-weight:700; color:#fff; font-size:0.86rem;">🌙 1. Boutique Sommeil & Nuit</div>
+            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Oreillers, Masque 3D, Bouchons -28dB, Cryo</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <a href="https://sleep-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir sleep-orevalab.vercel.app ↗</a>
+              <button onclick="switchUniverse('sleep'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
+            </div>
+          </div>
+          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
+            <div style="font-weight:700; color:#fff; font-size:0.86rem;">🦴 2. Boutique Posture, Dos & Pieds</div>
+            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Coussin Gel, Lombaire, Shiatsu 6D, Semelles</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <a href="https://ergo-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir ergo-orevalab.vercel.app ↗</a>
+              <button onclick="switchUniverse('ergo'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
+            </div>
+          </div>
+          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
+            <div style="font-weight:700; color:#fff; font-size:0.86rem;">✨ 3. Boutique Beauté Tech (Adultes/Ados/Enfants)</div>
+            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Masque LED, Station Pinceaux, Miroir Ado, Kit Enfant</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <a href="https://glow-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir glow-orevalab.vercel.app ↗</a>
+              <button onclick="switchUniverse('glow'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
+            </div>
+          </div>
+          <div style="background:#18181B; border:1px solid #3F3F46; padding:12px 14px; border-radius:6px;">
+            <div style="font-weight:700; color:#fff; font-size:0.86rem;">🔥 4. Boutique Soulagement Thermique & Cycle</div>
+            <div style="font-size:0.75rem; color:#A1A1AA; margin:4px 0 8px;">Uniquement Ceinture Graphène Cycle, Masque 42°C, Bonnet Cryo</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <a href="https://thermo-orevalab.vercel.app" target="_blank" style="background:#10B981; color:#052E16; font-weight:700; font-size:0.72rem; padding:5px 10px; border-radius:4px; text-decoration:none;">Ouvrir thermo-orevalab.vercel.app ↗</a>
+              <button onclick="switchUniverse('thermo'); switchView('storefront')" style="background:#27272A; color:#E4E4E7; border:1px solid #3F3F46; font-size:0.72rem; padding:5px 10px; border-radius:4px; cursor:pointer;">Prévisualiser ici</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -643,16 +628,7 @@
       <div style="font-size:0.68rem; font-weight:700; letter-spacing:0.12em; color:var(--bronze); text-transform:uppercase; margin-bottom:8px;" id="upsellHeader">
         COMPLÉTEZ VOTRE ROUTINE (AJOUT RAPIDE)
       </div>
-      <div style="display:flex; align-items:center; gap:12px;">
-        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=200&q=80" alt="OrevaRest" style="width:48px; height:48px; border-radius:4px; object-fit:cover;" />
-        <div style="flex:1;">
-          <div style="font-size:0.82rem; font-weight:700;">Complexe Nuit Profonde OrevaRest™</div>
-          <div style="font-size:0.75rem; color:var(--text-muted);">Ashwagandha KSM-66® & Magnésium</div>
-        </div>
-        <button class="btn-card-add" style="padding:8px 12px; font-size:0.72rem;" onclick="addToCart('prod-sleep-gummies', 1)">
-          + Ajouter
-        </button>
-      </div>
+      <div id="bagUpsellDynamic" style="display:flex; align-items:center; gap:12px;"></div>
     </div>
 
     <div class="bag-footer">

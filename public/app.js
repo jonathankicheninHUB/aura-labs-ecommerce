@@ -40,68 +40,150 @@ function onLanguageChange(lang) {
   applyLocalization();
 }
 
-let currentUniverse = 'all';
+let currentUniverse = 'sleep';
+
+// Règles d'isolation stricte par sous-domaine : AUCUN produit d'une autre niche n'apparaît sur un sous-domaine !
+const STOREFRONT_PRODUCT_RULES = {
+  sleep: {
+    'prod-ergo-pillow': 'cervical',
+    'prod-sleep-mask-bt': 'blackout',
+    'prod-acoustic-earplugs': 'blackout',
+    'prod-cryo-migraine': 'migraine',
+    'prod-sleep-gummies': 'migraine',
+    'bundle-sommeil-ultime': 'bundles'
+  },
+  ergo: {
+    'prod-ortho-cushion': 'seating',
+    'prod-lumbar-support': 'seating',
+    'prod-neck-massager': 'massage',
+    'prod-ortho-insoles': 'feet',
+    'bundle-teletravail': 'bundles'
+  },
+  glow: {
+    'prod-led-mask': 'adults',
+    'prod-guasha-microcurrent': 'adults',
+    'prod-brush-cleaner-pro': 'adults',
+    'prod-hyaluronic-serum': 'adults',
+    'prod-teen-led-vanity': 'teens',
+    'prod-kids-creative-kit': 'kids'
+  },
+  thermo: {
+    'prod-thermo-belt': 'heat',
+    'prod-eye-thermo-mask': 'heat',
+    'prod-neck-massager': 'heat',
+    'prod-cryo-migraine': 'cryo',
+    'bundle-thermo-cycle': 'bundles'
+  }
+};
 
 function switchUniverse(universeId) {
-  currentUniverse = universeId || 'all';
-  const uniConfig = window.OREVA_UNIVERSES?.[currentUniverse] || window.OREVA_UNIVERSES?.all;
-
-  ['all', 'christmas', 'sleep', 'ergo', 'glow', 'thermo'].forEach(u => {
-    const btn = document.getElementById(`uniBtn-${u}`);
-    if (!btn) return;
-    if (u === currentUniverse) {
-      btn.style.background = u === 'christmas' ? 'rgba(220,38,38,0.35)' : 'rgba(212,185,140,0.28)';
-      btn.style.color = '#fff';
-      btn.style.borderColor = u === 'christmas' ? '#EF4444' : '#D4B98C';
-      btn.style.fontWeight = '700';
-    } else {
-      btn.style.background = 'transparent';
-      btn.style.color = u === 'christmas' ? '#FCA5A5' : '#CBD5E1';
-      btn.style.borderColor = u === 'christmas' ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.16)';
-      btn.style.fontWeight = '500';
-    }
-  });
+  const validIds = ['sleep', 'ergo', 'glow', 'thermo'];
+  currentUniverse = validIds.includes(universeId) ? universeId : 'sleep';
+  const uniConfig = window.OREVA_UNIVERSES?.[currentUniverse] || window.OREVA_UNIVERSES.sleep;
 
   if (uniConfig) {
+    document.title = uniConfig.pageTitle;
+    const brandTitleEl = document.getElementById('activeBrandTitle');
+    if (brandTitleEl) brandTitleEl.textContent = uniConfig.brandDivision.replace('™', '');
     const subLabel = document.getElementById('activeSubdomainLabel');
     if (subLabel) subLabel.textContent = uniConfig.subdomain;
+
+    const footerBrand = document.getElementById('footerBrandTitle');
+    if (footerBrand) footerBrand.textContent = uniConfig.brandDivision;
+    const footerUrl = document.getElementById('footerSubdomainUrl');
+    if (footerUrl) footerUrl.textContent = `${uniConfig.subdomain} • ${uniConfig.vercelDomain}`;
+
     const eyeEl = document.getElementById('heroEyebrow');
     if (eyeEl) eyeEl.textContent = uniConfig.eyebrow;
     const titleEl = document.getElementById('heroTitle');
     if (titleEl) titleEl.textContent = uniConfig.title;
     const subEl = document.getElementById('heroSubtitle');
     if (subEl) subEl.textContent = uniConfig.subtitle;
+
+    const heroImg = document.getElementById('heroMainImg');
+    if (heroImg && uniConfig.heroImg) heroImg.src = uniConfig.heroImg;
+    const heroCardTitle = document.getElementById('heroCardTitle');
+    if (heroCardTitle && uniConfig.heroCardTitle) heroCardTitle.textContent = uniConfig.heroCardTitle;
+    const heroCardBtn = document.getElementById('heroCardBtn');
+    if (heroCardBtn && uniConfig.heroCardProductId) {
+      heroCardBtn.onclick = () => openProductDetail(uniConfig.heroCardProductId);
+    }
+
+    const secTag = document.getElementById('sectionTag');
+    if (secTag) secTag.textContent = uniConfig.sectionTag;
+    const secTitle = document.getElementById('sectionTitle');
+    if (secTitle) secTitle.textContent = uniConfig.sectionTitle;
+
+    // Onglets de sous-catégories strictement limités au sous-domaine actif
+    const tabsWrap = document.getElementById('categoryTabsContainer');
+    if (tabsWrap && Array.isArray(uniConfig.subCategories)) {
+      tabsWrap.innerHTML = uniConfig.subCategories.map((sc, idx) => `
+        <button id="catTab-${sc.id}" class="cat-tab ${idx === 0 ? 'active' : ''}" onclick="filterCategory('${sc.id}')">${sc.label}</button>
+      `).join('');
+    }
+
+    // Section Science Clinique dédiée au sous-domaine
+    const sciImg = document.getElementById('scienceMainImg');
+    if (sciImg && uniConfig.scienceImg) sciImg.src = uniConfig.scienceImg;
+    const edBadge = document.getElementById('editorialBadge');
+    if (edBadge) edBadge.textContent = uniConfig.editorialBadge;
+    const edTitle = document.getElementById('editorialTitle');
+    if (edTitle) edTitle.textContent = uniConfig.editorialTitle;
+    const edP1 = document.getElementById('editorialP1');
+    if (edP1) edP1.textContent = uniConfig.editorialP1;
+    const edP2 = document.getElementById('editorialP2');
+    if (edP2) edP2.textContent = uniConfig.editorialP2;
+
+    // Avis clients vérifiés 100% dédiés au sous-domaine
+    const revWrap = document.getElementById('reviewsGridContainer');
+    if (revWrap && Array.isArray(uniConfig.reviews)) {
+      revWrap.innerHTML = uniConfig.reviews.map(r => `
+        <div class="luxury-card" style="padding:28px;">
+          <div class="stars-gold" style="margin-bottom:12px;">★★★★★ <span style="color:#14532D; font-size:0.74rem; font-weight:700; margin-left:8px;">✓ Achat Vérifié • ${r.city}</span></div>
+          <h4 style="font-family:var(--font-serif); font-size:1.35rem; margin-bottom:10px;">${r.quote}</h4>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">${r.body}</p>
+          <div style="margin-top:auto; font-size:0.78rem; font-weight:700; color:var(--obsidian);">${r.author}</div>
+        </div>
+      `).join('');
+    }
+
+    // Upsell Panier 100% cohérent avec le sous-domaine actif
+    renderStorefrontUpsell(uniConfig.upsellProductId);
   }
 
-  const mapToCat = {
-    all: 'all',
-    christmas: 'christmas',
-    sleep: 'sleep',
-    ergo: 'ergo',
-    glow: 'beauty',
-    thermo: 'thermo'
-  };
-  filterCategory(mapToCat[currentUniverse] || 'all');
+  filterCategory('all');
+}
+
+function renderStorefrontUpsell(upsellProdId) {
+  const upsellBox = document.getElementById('bagUpsellDynamic');
+  if (!upsellBox) return;
+  const prod = window.PRODUCTS_CATALOG.find(p => p.id === upsellProdId) || window.PRODUCTS_CATALOG[0];
+  if (!prod) return;
+  const title = prod.title[currentLang] || prod.title.fr;
+  upsellBox.innerHTML = `
+    <img src="${prod.images[0]}" alt="${title}" style="width:48px; height:48px; border-radius:4px; object-fit:cover;" />
+    <div style="flex:1;">
+      <div style="font-size:0.8rem; font-weight:700; line-height:1.25;">${title}</div>
+      <div style="font-size:0.75rem; color:var(--emerald); font-weight:700;">${formatLocalPrice(prod.basePriceEur)}</div>
+    </div>
+    <button class="btn-card-add" style="padding:8px 12px; font-size:0.72rem; white-space:nowrap;" onclick="addToCart('${prod.id}', 1)">
+      + Ajouter
+    </button>
+  `;
 }
 
 function applyLocalization() {
   const market = window.MARKETS_CONFIG[currentMarketCode];
   const t = window.I18N_STRINGS[currentLang] || window.I18N_STRINGS.fr;
+  const uniConfig = window.OREVA_UNIVERSES?.[currentUniverse] || window.OREVA_UNIVERSES.sleep;
 
-  document.getElementById('announcementBar').textContent = `🎄 OPÉRATION NOËL OREVA LAB™ (2ÈME À -50% • RETOURS JUSQU'AU 15 JANVIER) • ${market.warehouseLabel[currentLang]}`;
+  document.getElementById('announcementBar').textContent = `🎄 OPÉRATION NOËL ${uniConfig.brandDivision} : 2ÈME À -50% • RETOURS JUSQU'AU 15 JANVIER • ${market.warehouseLabel[currentLang]}`;
   const navShop = document.getElementById('navShop');
   if (navShop) navShop.textContent = t.navShop;
-  const navBundles = document.getElementById('navBundles');
-  if (navBundles) navBundles.textContent = t.navBundles;
   const navScience = document.getElementById('navScience');
   if (navScience) navScience.textContent = t.navScience;
 
   document.getElementById('heroCardHub').textContent = `HUB LOGISTIQUE : ${market.warehouseCity.toUpperCase()} (${market.deliveryDays.toUpperCase()})`;
-
-  document.getElementById('editorialBadge').textContent = t.editorialBadge;
-  document.getElementById('editorialTitle').textContent = t.editorialTitle;
-  document.getElementById('editorialP1').textContent = t.editorialP1;
-  document.getElementById('editorialP2').textContent = t.editorialP2;
 
   document.getElementById('bagHeaderTitle').textContent = t.cartHeader;
   document.getElementById('upsellHeader').textContent = t.upsellHeader;
@@ -110,14 +192,15 @@ function applyLocalization() {
   document.getElementById('shippingFree').textContent = t.shippingFree;
   document.getElementById('checkoutBtn').textContent = t.checkoutBtn;
 
+  renderStorefrontUpsell(uniConfig.upsellProductId);
   renderCatalog();
   renderBag();
 }
 
 function filterCategory(cat) {
-  currentCategory = cat;
+  currentCategory = cat || 'all';
   document.querySelectorAll('#collectionSection .cat-tab').forEach(btn => btn.classList.remove('active'));
-  const active = document.getElementById(`catTab-${cat}`);
+  const active = document.getElementById(`catTab-${currentCategory}`);
   if (active) active.classList.add('active');
   renderCatalog();
 }
@@ -128,11 +211,16 @@ function renderCatalog() {
   const t = window.I18N_STRINGS[currentLang] || window.I18N_STRINGS.fr;
   const showMarginOverlay = isAdminAuthenticated && document.getElementById('toggleMarginOverlay')?.checked;
 
+  const allowedMap = STOREFRONT_PRODUCT_RULES[currentUniverse] || STOREFRONT_PRODUCT_RULES.sleep;
+
   const products = window.PRODUCTS_CATALOG.filter(p => {
+    const subCat = allowedMap[p.id];
+    if (!subCat) return false; // Strictement exclu si le produit n'appartient pas à ce sous-domaine !
     if (currentCategory === 'all') return true;
-    if (currentCategory === 'christmas') return Boolean(p.isChristmasStar || p.category === 'bundles');
-    if (currentCategory === 'thermo') return p.universe === 'thermo' || p.id === 'prod-cryo-migraine' || p.id === 'prod-neck-massager';
-    return p.category === currentCategory;
+    if (currentCategory === 'bundles') {
+      return subCat === 'bundles' || subCat === 'teens' || subCat === 'kids' || p.category === 'bundles';
+    }
+    return subCat === currentCategory;
   });
 
   grid.innerHTML = products.map(prod => {
@@ -1144,26 +1232,26 @@ async function loadBackofficeData() {
 document.addEventListener('DOMContentLoaded', async () => {
   updateHeaderAccountBadge();
   await loadSettingsForm();
-  applyLocalization();
 
-  // Détection automatique de la sous-boutique (sous-domaine ou paramètre ?vitrine=...)
+  // Détection automatique et stricte du sous-domaine (Zéro mélange entre les boutiques !)
   const host = (window.location.hostname || '').toLowerCase();
   const urlParams = new URLSearchParams(window.location.search);
   const vitrineParam = (urlParams.get('vitrine') || urlParams.get('store') || '').toLowerCase();
 
-  if (vitrineParam && window.OREVA_UNIVERSES?.[vitrineParam]) {
+  if (vitrineParam && ['sleep', 'ergo', 'glow', 'thermo'].includes(vitrineParam)) {
     switchUniverse(vitrineParam);
-  } else if (host.startsWith('sleep.') || host.startsWith('night.')) {
-    switchUniverse('sleep');
-  } else if (host.startsWith('ergo.') || host.startsWith('posture.')) {
+  } else if (host.startsWith('ergo.') || host.startsWith('ergo-') || host.startsWith('posture.')) {
     switchUniverse('ergo');
-  } else if (host.startsWith('glow.') || host.startsWith('derma.') || host.startsWith('beauty.')) {
+  } else if (host.startsWith('glow.') || host.startsWith('glow-') || host.startsWith('derma.') || host.startsWith('beauty.')) {
     switchUniverse('glow');
-  } else if (host.startsWith('thermo.') || host.startsWith('relief.')) {
+  } else if (host.startsWith('thermo.') || host.startsWith('thermo-') || host.startsWith('relief.')) {
     switchUniverse('thermo');
-  } else if (host.startsWith('gifts.') || host.startsWith('noel.')) {
-    switchUniverse('christmas');
+  } else {
+    // Par défaut (sleep.orevalabs.com / sleep-orevalab.vercel.app / oreva-lab.vercel.app) : 100% Boutique Sommeil
+    switchUniverse('sleep');
   }
+
+  applyLocalization();
 
   if (isAdminAuthenticated) {
     loadBackofficeData();

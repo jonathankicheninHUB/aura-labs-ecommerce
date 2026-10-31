@@ -1101,57 +1101,417 @@ window.PRODUCTS_CATALOG = [
       ]
     },
     specs: 'Poids : 165 g • 3 températures + 4 modes massage • Batterie sans fil USB-C'
+  },
+  {
+    id: 'prod-lumbar-support',
+    sku: 'CJ-LUMBAR-PRO-19',
+    category: 'ergo',
+    universe: 'ergo',
+    subCategory: 'seating',
+    badge: 'MAINTIEN LOMBAIRE',
+    clinicalStat: '95%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 10.80,
+    basePriceEur: 49.00,
+    compareAtEur: 79.00,
+    rating: 4.9,
+    reviewsCount: 1490,
+    images: [
+      'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Support Lombaire Orthopédique Courbure S OrevaSpine™ (Bureau & Voiture)',
+      en: 'OrevaSpine™ Orthopedic S-Curve Lumbar Support Backrest (Office & Car)',
+      de: 'OrevaSpine™ Orthopädische Lendenwirbelstütze für Bürostuhl & Auto'
+    },
+    subtitle: {
+      fr: 'Restaure la lordose lombaire naturelle • Double sangle universelle • Mesh 3D',
+      en: 'Restores Natural Lumbar Lordosis • Dual Adjustable Straps • Breathable 3D Mesh',
+      de: 'Stellt die natürliche Lendenlordose wieder her • Verstellbare Doppelgurte'
+    },
+    shortDesc: {
+      fr: 'Épouse le creux des reins pour empêcher l’affaissement du dos devant l’ordinateur ou au volant. Forme le duo biomécanique parfait avec le coussin d’assise OrevaSeat™.',
+      en: 'Hugs your lower spine to prevent slouching at your desk or behind the wheel. Pairs seamlessly with the OrevaSeat™ gel cushion for full spinal alignment.',
+      de: 'Stützt die untere Wirbelsäule präzise ab und verhindert das Einsinken am Schreibtisch oder im Auto.'
+    },
+    highlights: {
+      fr: [
+        'Mousse viscoélastique moulée selon la courbure physiologique L1–L5',
+        'Sangles élastiques renforcées compatibles avec 100% des sièges bureau et auto',
+        'Tissu micro-perforé respirant anti-transpiration lavable en machine'
+      ],
+      en: [
+        'Precision-molded memory foam supporting vertebrae L1 through L5',
+        'Heavy-duty dual straps fit any office chair, gaming seat, or car seat',
+        'Breathable, removable 3D air-mesh cover'
+      ],
+      de: [
+        'Präzisionsgeformter Memory-Schaum zur Entlastung der Wirbel L1 bis L5',
+        'Doppeltes Gurtsystem passend für jeden Bürostuhl und Autositz',
+        'Atmungsaktiver, abnehmbarer 3D-Mesh-Bezug'
+      ]
+    },
+    specs: 'Dimensions : 44 × 38 × 13 cm • Densité : 55 kg/m³ • Double sangle de fixation'
+  },
+  {
+    id: 'prod-ortho-insoles',
+    sku: 'CJ-STEP-INS-20',
+    category: 'ergo',
+    universe: 'ergo',
+    subCategory: 'feet',
+    badge: 'PODOLOGIE & MARCHE',
+    clinicalStat: '96%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 5.90,
+    basePriceEur: 39.00,
+    compareAtEur: 65.00,
+    rating: 4.9,
+    reviewsCount: 2310,
+    images: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Kit Podologie OrevaStep™ : Semelles Gel Voûte Plantaire + Chaussettes Compression',
+      en: 'OrevaStep™ Podiatry Kit: Arch Support Gel Insoles + Copper Compression Socks',
+      de: 'OrevaStep™ Podologie-Set: Orthopädische Gel-Einlagen + Kompressionsstrümpfe'
+    },
+    subtitle: {
+      fr: 'Absorption des chocs talonniers • Soulage l’aponévrosite plantaire & jambes lourdes',
+      en: 'Heel Shock Absorption • Plantar Fasciitis Relief & Venous Return Support',
+      de: 'Fersen-Stoßdämpfung • Gegen Plantarfasziitis & schwere Beine'
+    },
+    shortDesc: {
+      fr: 'L’alignement du dos commence par les pieds : nos semelles orthopédiques à dôme métatarsien et coussinet talon en gel absorbent 80% des impacts à la marche, associées aux chaussettes de compression graduée.',
+      en: 'Spinal alignment starts from the ground up: our orthopedic arch-support gel insoles absorb 80% of heel impact, paired with graduated compression socks for all-day standing comfort.',
+      de: 'Eine gesunde Haltung beginnt bei den Füßen: Orthopädische Gel-Einlagen dämpfen 80% der Aufprallkräfte, kombiniert mit Kompressionsstrümpfen gegen müde Beine.'
+    },
+    highlights: {
+      fr: [
+        'Inclus : 1 paire de Semelles Gel Découpables (Pointures 36 à 46) + 1 paire Compression',
+        'Coque talonnière stabilisatrice en U qui réaligne chevilles, genoux et bassin',
+        'Idéal pour les métiers debout, la marche quotidienne et la course à pied'
+      ],
+      en: [
+        'Includes: 1 pair of Trim-to-Fit Orthopedic Gel Insoles + 1 pair Compression Socks',
+        'Deep U-shaped heel cup realigns ankles, knees, and lower back',
+        'Engineered for standing professionals, runners, and plantar fasciitis relief'
+      ],
+      de: [
+        'Enthält: 1 Paar zuschneidbare Gel-Einlagen (Gr. 36–46) + 1 Paar Kompressionsstrümpfe',
+        'Tiefe U-Fersenschale richtet Knöchel, Knie und Becken ergonomisch aus',
+        'Perfekt für Stehberufe, Alltag und Sport'
+      ]
+    },
+    specs: 'Pointures universelles 36–46 (lignes de découpe) • Gel TPE médical + Velours respirant'
+  },
+  {
+    id: 'prod-eye-thermo-mask',
+    sku: 'CJ-IRIS-THERM-21',
+    category: 'thermo',
+    universe: 'thermo',
+    subCategory: 'heat',
+    isChristmasStar: true,
+    badge: 'CHALEUR 42°C & PRESSOTHÉRAPIE',
+    clinicalStat: '95%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 16.40,
+    basePriceEur: 69.00,
+    compareAtEur: 115.00,
+    rating: 4.9,
+    reviewsCount: 1180,
+    images: [
+      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Masque Oculaire Chauffant 42°C & Massage Pression d’Air OrevaIris™',
+      en: 'OrevaIris™ 42°C Heated Air-Compression Temple & Eye Relief Massager',
+      de: 'OrevaIris™ 42°C Wärmendes Augen- & Schläfen-Luftdruckmassagegerät'
+    },
+    subtitle: {
+      fr: 'Compresse chaude constante 42°C • Acupression pneumatique des tempes • Pliable',
+      en: '42°C Constant Warm Compress • Pneumatic Temple Acupressure • 180° Foldable',
+      de: 'Konstante 42°C Wärmekompresse • Pneumatische Schläfen-Akupressur • Faltbar'
+    },
+    shortDesc: {
+      fr: 'Soulage la fatigue numérique des écrans, la sécheresse oculaire et les migraines ophtalmiques grâce à ses coussins d’air intelligents qui massent les tempes sous une chaleur apaisante à 42°C.',
+      en: 'Relieves screen fatigue, dry eyes, and sinus tension using intelligent air-compression chambers that knead your temples while soothing 42°C heat melts stress away.',
+      de: 'Lindert digitale Augenmüdigkeit, trockene Augen und Kopfdruck durch sanfte Luftdruck-Akupressur der Schläfen kombiniert mit 42°C Tiefenwärme.'
+    },
+    highlights: {
+      fr: [
+        'Compresse thermique 42°C qui désobstrue les glandes lacrymales et apaise les sinus',
+        'Massage pneumatique séquentiel des points d’acupression autour des yeux et des tempes',
+        'Revêtement intérieur en cuir protéiné ultra-doux + Bluetooth audio relaxant'
+      ],
+      en: [
+        '42°C therapeutic warmth unclogs tear glands and calms sinus pressure',
+        'Sequential air-bag acupressure targets periorbital and temple trigger points',
+        'Soft protein-leather lining + built-in Bluetooth relaxation audio'
+      ],
+      de: [
+        '42°C therapeutische Wärme entspannt Augenpartie und Stirnhöhlen',
+        'Sequenzielle Luftkissen-Akupressur für Schläfen und Augenringe',
+        'Weiches Proteinleder + integriertes Bluetooth-Entspannungs-Audio'
+      ]
+    },
+    specs: 'Pliable à 180° • Batterie 1500 mAh USB-C • Arrêt automatique 15 minutes'
+  },
+  {
+    id: 'bundle-thermo-cycle',
+    sku: 'BND-THERMO-SER-22',
+    category: 'bundles',
+    universe: 'thermo',
+    subCategory: 'bundles',
+    isChristmasStar: true,
+    badge: '🎄 COFFRET SÉRÉNITÉ -25%',
+    clinicalStat: '98%',
+    supplier: 'CJdropshipping Local Hub (DE / FR / US / UK)',
+    supplierUrl: 'https://cjdropshipping.com',
+    warehouses: ['DE', 'FR', 'CH', 'US', 'GB', 'AU'],
+    supplierCostEur: 18.20,
+    basePriceEur: 69.00,
+    compareAtEur: 119.00,
+    rating: 5.0,
+    reviewsCount: 910,
+    images: [
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1000&q=85'
+    ],
+    title: {
+      fr: 'Coffret "Sérénité Thermique" : Ceinture Graphène OrevaLunar™ + Bonnet Cryo 360° OrevaCryo™',
+      en: 'Thermal Serenity Set: OrevaLunar™ Graphene Belt + OrevaCryo™ 360° Migraine Cap',
+      de: 'Thermo-Serenitäts-Set: OrevaLunar™ Graphen-Wärmegürtel + OrevaCryo™ 360° Haube'
+    },
+    subtitle: {
+      fr: 'L’alliance du Chaud Infrarouge (Ventre/Dos) et du Froid Cryogénique (Tête) à -25%',
+      en: 'Far-Infrared Warmth (Core/Back) + 360° Cryogenic Cooling (Head) — Save 25%',
+      de: 'Infrarot-Tiefenwärme (Bauch/Rücken) + 360° Kryo-Kühlung (Kopf) — 25% Sparen'
+    },
+    shortDesc: {
+      fr: 'Le coffret de secours naturel indispensable à la maison : apaisez simultanément les crampes abdominales ou lombaires par la chaleur au graphène et les migraines par le froid compressif 360°.',
+      en: 'The ultimate natural relief kit for home: soothe abdominal cramps and lower back tension with graphene warmth while calming headaches with 360° cryo-compression.',
+      de: 'Das ultimative natürliche Schmerzlinderungs-Duo für zu Hause: Graphen-Wärme für Bauch und Rücken kombiniert mit 360°-Kältetherapie gegen Migräne.'
+    },
+    highlights: {
+      fr: [
+        'Inclus : 1× Ceinture Chauffante OrevaLunar™ + 1× Bonnet Anti-Migraine OrevaCryo™',
+        'Économie immédiate de 25% + Guide Protocole Thermothérapie 15 pages offert',
+        'Idée cadeau de Noël bienveillante et utile toute l’année'
+      ],
+      en: [
+        'Includes: 1× OrevaLunar™ Graphene Heating Belt + 1× OrevaCryo™ 360° Cap',
+        'Instant 25% Bundle Savings + Free 15-Page Thermal Protocol PDF Guide',
+        'Backed by our extended January 15 Holiday Return Guarantee'
+      ],
+      de: [
+        'Enthält: 1× OrevaLunar™ Wärmegürtel + 1× OrevaCryo™ 360° Migränemaske',
+        '25% Set-Ersparnis + Gratis 15-seitiger Thermotherapie-Leitfaden (PDF)',
+        'Verlängertes Rückgaberecht bis zum 15. Januar'
+      ]
+    },
+    specs: 'Coffret complet livré prêt à offrir • Garantie internationale 2 ans'
   }
 ];
 
-// Configuration des Sous-Domaines / Multi-Vitrines OREVA LAB™
+// Configuration stricte des 4 Boutiques Indépendantes par Sous-Domaine (ZÉRO MÉLANGE ENTRE LES NICHES)
 window.OREVA_UNIVERSES = {
-  all: {
-    id: 'all',
-    subdomain: 'www.orevalabs.com',
-    label: '🏛️ Maison Oreva Lab (Toutes les Vitrines)',
-    eyebrow: 'MAISON-MÈRE OREVA LAB™ • OPÉRATION CADEAUX DE NOËL 2026',
-    title: 'La science du sommeil, de la posture et de la beauté technologique.',
-    subtitle: 'Découvrez nos 4 laboratoires spécialisés et nos Coffrets Cadeaux de Noël prêts à offrir (Adultes, Ados & Enfants). Expédition locale en 48h, Guide Protocole PDF offert et retours prolongés jusqu’au 15 janvier.'
-  },
-  christmas: {
-    id: 'christmas',
-    subdomain: 'gifts.orevalabs.com',
-    label: '🎄 Boutique Cadeaux de Noël (Adultes • Ados • Enfants)',
-    eyebrow: '🎄 ÉDITION LIMITÉE NOËL • LIVRAISON GARANTIE AVANT LE 24 DÉCEMBRE',
-    title: 'Les Coffrets Bien-Être & Beauté Tech qui font mouche sous le sapin.',
-    subtitle: 'Des cadeaux universels sans problème de taille : Coffrets Sommeil Profond pour les parents, Mallette Miroir LED Studio pour les ados, et Mon Premier Spa Créatif (0% chimie) pour les enfants. Offre Duo : le 2ème à -50% !'
-  },
   sleep: {
     id: 'sleep',
     subdomain: 'sleep.orevalabs.com',
-    label: '🌙 sleep.orevalabs.com (Sommeil & Nuit)',
-    eyebrow: 'VITRINE SPÉCIALISÉE • SLEEP.OREVALABS.COM',
-    title: 'Le laboratoire de la récupération nocturne et du silence absolu.',
-    subtitle: 'Oreillers cervicaux orthopédiques, bonnets cryogéniques anti-migraine 360°, bouchons d’oreilles acoustiques -28 dB et masques audio 3D. Réveillez-vous enfin régénéré.'
+    vercelDomain: 'sleep-orevalab.vercel.app',
+    brandDivision: 'OREVA SLEEP LAB™',
+    pageTitle: 'OREVA SLEEP LAB™ — Laboratoire du Sommeil Profond, Alignement Cervical & Silence',
+    eyebrow: 'LABORATOIRE DU SOMMEIL & RÉCUPÉRATION NOCTURNE • SLEEP.OREVALABS.COM',
+    title: 'La science du sommeil profond, de l’alignement cervical et du silence absolu.',
+    subtitle: 'Oreillers orthopédiques à mémoire cellulaire, masques d’obscurité totale 3D Bluetooth, bouchons acoustiques haute fidélité -28 dB et cryothérapie anti-migraine. Expédié en 48h depuis Paris, Francfort et Genève.',
+    heroImg: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1400&q=85',
+    heroCardTitle: 'Coffret Sanctuaire du Sommeil (-25%)',
+    heroCardProductId: 'bundle-sommeil-ultime',
+    sectionTag: 'COLLECTION CLINIQUE DU SOMMEIL 2026',
+    sectionTitle: 'Conçus pour transformer vos nuits dès la première semaine.',
+    editorialBadge: 'INGÉNIERIE DU SOMMEIL & RYTHME CIRCADIEN',
+    editorialTitle: 'Pourquoi 96% de nos dormeurs ne reviennent jamais à un oreiller ou masque standard.',
+    editorialP1: 'Un mauvais alignement des 7 vertèbres cervicales et la moindre pollution lumineuse ou sonore fragmentent vos cycles de sommeil paradoxal (REM) sans même que vous vous en rendiez compte.',
+    editorialP2: 'Chaque dispositif OREVA SLEEP LAB™ associe mousse viscoélastique haute densité OEKO-TEX®, isolation acoustique -28 dB et obscurité 3D sans pression oculaire.',
+    scienceImg: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85',
+    upsellProductId: 'prod-acoustic-earplugs',
+    subCategories: [
+      { id: 'all', label: 'Toute la Collection Nuit (6)' },
+      { id: 'cervical', label: '🛏️ Oreillers & Cervicales' },
+      { id: 'blackout', label: '🔇 Silence -28dB & Masque 3D' },
+      { id: 'migraine', label: '❄️ Migraine & Détente Nuit' },
+      { id: 'bundles', label: '🎄 Coffrets Cadeaux Nuit (-25%)' }
+    ],
+    reviews: [
+      {
+        city: 'Genève 🇨🇭',
+        quote: '« Mon kiné m’avait parlé de l’alignement cervical, la différence dès la 2ème nuit est bluffante. »',
+        body: 'Je me réveillais chaque matin avec la nuque bloquée. J’ai commandé le Coffret Sanctuaire du Sommeil un mardi, reçu le jeudi à Genève par la Poste Suisse. Plus aucune douleur depuis 3 semaines.',
+        author: 'Dr. Camille V. — Chirurgienne-dentiste (Genève)'
+      },
+      {
+        city: 'Paris 🇫🇷',
+        quote: '« Les bouchons OrevaMute -28dB + le masque 3D Bluetooth ont littéralement sauvé mes nuits. »',
+        body: 'Mon conjoint ronfle et je dors sur le côté : les écouteurs plats de 3mm du masque sont totalement invisibles sous la tête et les bouchons filtrent tout sans pression dans l’oreille.',
+        author: 'Julien M. — Architecte (Paris)'
+      },
+      {
+        city: 'Bruxelles 🇧🇪',
+        quote: '« Le bonnet cryo anti-migraine sorti du congélateur stoppe mes crises en 10 minutes. »',
+        body: 'Le gel reste ultra-souple même glacé et plonge les yeux dans le noir complet. J’en ai repris un deuxième à -50% pour l’offrir à ma sœur pour Noël.',
+        author: 'Claire D. — Pharmacienne (Bruxelles)'
+      }
+    ]
   },
   ergo: {
     id: 'ergo',
     subdomain: 'ergo.orevalabs.com',
-    label: '🦴 ergo.orevalabs.com (Posture & Dos)',
-    eyebrow: 'VITRINE SPÉCIALISÉE • ERGO.OREVALABS.COM',
-    title: 'Biomécanique vertébrale pour le bureau, la route et la maison.',
-    subtitle: 'Coussins d’assise en gel alvéolé anti-sciatique, masseurs Shiatsu infrarouges 6D et décompression lombaire. Éliminez les douleurs assises dès la première journée.'
+    vercelDomain: 'ergo-orevalab.vercel.app',
+    brandDivision: 'OREVA ERGO LAB™',
+    pageTitle: 'OREVA ERGO LAB™ — Biomécanique Posturale, Dos, Assise Orthopédique & Podologie',
+    eyebrow: 'LABORATOIRE DE BIOMÉCANIQUE VERTÉBRALE & POSTURE • ERGO.OREVALABS.COM',
+    title: 'Libérez votre colonne vertébrale, votre coccyx et vos appuis au quotidien.',
+    subtitle: 'Coussins d’assise en gel alvéolé anti-sciatique, supports lombaires en courbure S, masseurs Shiatsu 6D sans fil et semelles orthopédiques. Conçus pour le bureau, la voiture et la marche.',
+    heroImg: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1400&q=85',
+    heroCardTitle: 'Coffret Posture & Récupération (-25%)',
+    heroCardProductId: 'bundle-teletravail',
+    sectionTag: 'COLLECTION BIOMÉCANIQUE & POSTURE 2026',
+    sectionTitle: 'Éliminez les douleurs assises et la fatigue posturale dès le 1er jour.',
+    editorialBadge: 'DÉCOMPRESSION AXIALE & ERGONOMIE ACTIVE',
+    editorialTitle: 'Pourquoi 8 heures assis par jour écrasent vos disques lombaires L4–L5.',
+    editorialP1: 'Sur un siège de bureau ou de voiture classique, tout le poids du buste comprime directement le coccyx et le nerf sciatique, provoquant raideurs lombaires et tensions jusque dans les trapèzes.',
+    editorialP2: 'La découpe flottante en U d’OrevaSeat™ associée au support lombaire OrevaSpine™ et aux semelles OrevaStep™ réaligne l’ensemble du squelette de la voûte plantaire jusqu’aux cervicales.',
+    scienceImg: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=85',
+    upsellProductId: 'prod-ortho-insoles',
+    subCategories: [
+      { id: 'all', label: 'Toute la Gamme Posture (5)' },
+      { id: 'seating', label: '🪑 Assise Bureau & Voiture' },
+      { id: 'massage', label: '💆‍♂️ Shiatsu 6D & Cervicales' },
+      { id: 'feet', label: '👟 Podologie & Jambes Légères' },
+      { id: 'bundles', label: '🎄 Coffrets Cadeaux Dos (-25%)' }
+    ],
+    reviews: [
+      {
+        city: 'Lausanne 🇨🇭',
+        quote: '« 10 heures par jour devant mes écrans : ma sciatique a disparu dès la première semaine. »',
+        body: 'Le coussin OrevaSeat avec la découpe coccyx change absolument tout sur ma chaise de bureau. Je l’emmène même dans ma voiture pour les longs trajets.',
+        author: 'Marc-Antoine R. — Ingénieur logiciel (Lausanne)'
+      },
+      {
+        city: 'Lyon 🇫🇷',
+        quote: '« Le masseur Shiatsu 6D attrape vraiment les trapèzes comme les mains d’un kiné. »',
+        body: 'Rien à voir avec les appareils qui ne font que vibrer : les 6 têtes bioniques pétrissent en profondeur avec une vraie chaleur à 42°C. Toute la famille se l’arrache le soir.',
+        author: 'Stéphane B. — Chirurgien (Lyon)'
+      },
+      {
+        city: 'Francfort 🇩🇪',
+        quote: '« Les semelles gel OrevaStep + chaussettes de compression ont sauvé mes journées debout. »',
+        body: 'Infirmière à l’hôpital, je fais plus de 12 000 pas par garde. L’amorti au talon et le maintien de la voûte plantaire sont exceptionnels.',
+        author: 'Sabine K. — Infirmière chef (Francfort)'
+      }
+    ]
   },
   glow: {
     id: 'glow',
     subdomain: 'glow.orevalabs.com',
-    label: '✨ glow.orevalabs.com (Beauté Tech : Adultes / Ados / Enfants)',
-    eyebrow: 'VITRINE SPÉCIALISÉE • GLOW.OREVALABS.COM (ZÉRO RISQUE COSMÉTIQUE)',
-    title: 'Haute technologie beauté & accessoires pour les 3 générations.',
-    subtitle: 'Photothérapie LED clinique & Station nettoyeur de pinceaux pour Adultes, Coiffeuse Miroir LED TikTok pour Ados, et Kit Spa Créatif 100% silicone sans chimie pour Enfants.'
+    vercelDomain: 'glow-orevalab.vercel.app',
+    brandDivision: 'OREVA GLOW LAB™',
+    pageTitle: 'OREVA GLOW LAB™ — Beauté Technologique, Photothérapie LED & Coffrets Ados / Enfants',
+    eyebrow: 'LABORATOIRE DE BEAUTÉ TECHNOLOGIQUE • GLOW.OREVALABS.COM',
+    title: 'La haute technologie beauté & accessoires, sans chimie risquée.',
+    subtitle: 'Photothérapie LED clinique 630nm et hygiène sonique des pinceaux pour Adultes, Coiffeuse Miroir LED Studio pour Ados, et Kit Spa Créatif 100% hypoallergénique pour Enfants.',
+    heroImg: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=85',
+    heroCardTitle: 'Coffret Noël Ados "Studio Glow" LED',
+    heroCardProductId: 'prod-teen-led-vanity',
+    sectionTag: 'COLLECTION BEAUTÉ TECH & CADEAUX 2026',
+    sectionTitle: 'L’innovation esthétique pour Adultes, Ados et Enfants.',
+    editorialBadge: 'PHOTOBIOMODULATION LED & HYGIÈNE DERMATOLOGIQUE',
+    editorialTitle: 'La puissance des appareils esthétiques cliniques à domicile, zéro risque d’allergie.',
+    editorialP1: '80% des imperfections cutanées proviennent de pinceaux de maquillage mal nettoyés ou d’un manque de stimulation cellulaire. Et pour les plus jeunes, les cosmétiques chimiques bon marché présentent de vrais risques d’allergie.',
+    editorialP2: 'OREVA GLOW LAB™ privilégie les dispositifs physiques durables : diodes LED médicales 630nm/850nm, nettoyage sonique 7000 tr/min et accessoires 100% silicone alimentaire pour les enfants.',
+    scienceImg: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85',
+    upsellProductId: 'prod-brush-cleaner-pro',
+    subCategories: [
+      { id: 'all', label: 'Toute la Beauté Tech (6)' },
+      { id: 'adults', label: '✨ Adultes (LED, EMS & Hygiène Pro)' },
+      { id: 'teens', label: '💄 Ados (Coffret Miroir LED Studio)' },
+      { id: 'kids', label: '👧 Enfants (Spa Créatif 0% Chimie)' }
+    ],
+    reviews: [
+      {
+        city: 'Munich 🇩🇪',
+        quote: '« Le masque LED OrevaGlow combiné au sculpteur EMS a transformé l’éclat de ma peau. »',
+        body: 'Reçu en 48h depuis Francfort. Après 3 semaines à raison de 10 minutes le soir, mes rougeurs ont diminué de moitié et l’ovale du visage est nettement plus ferme.',
+        author: 'Elena K. — Architecte d’intérieur (Munich)'
+      },
+      {
+        city: 'Paris 🇫🇷',
+        quote: '« La mallette Miroir LED Studio Glow est le meilleur cadeau de Noël pour ma fille de 15 ans ! »',
+        body: 'L’éclairage LED tactile à 3 couleurs est digne d’un studio photo et le recourbe-cils chauffant est super sécurisé. Aucune crème chimique douteuse, je recommande à 100%.',
+        author: 'Sophie L. — Maman de Chloé (Paris)'
+      },
+      {
+        city: 'Zürich 🇨🇭',
+        quote: '« La station nettoyeur de pinceaux OrevaClean Pro est magique : propres et secs en 1 minute. »',
+        body: 'Je repoussais toujours le lavage de mes pinceaux à cause du temps de séchage. Là j’en mets 6 d’un coup, ça tourne et ça sèche tout seul.',
+        author: 'Nadia W. — Make-up Artist (Zürich)'
+      }
+    ]
   },
   thermo: {
     id: 'thermo',
     subdomain: 'thermo.orevalabs.com',
-    label: '🔥 thermo.orevalabs.com (Soulagement Thermique & Cycle)',
-    eyebrow: 'VITRINE SPÉCIALISÉE • THERMO.OREVALABS.COM',
-    title: 'La thérapie par le chaud infrarouge et le froid cryogénique.',
-    subtitle: 'Ceinture chauffante au graphène OrevaLunar™ ultra-fine (confort féminin & lombaires) et cryothérapie crânienne 360°. Le soulagement naturel instantané, sans médicaments.'
+    vercelDomain: 'thermo-orevalab.vercel.app',
+    brandDivision: 'OREVA THERMO LAB™',
+    pageTitle: 'OREVA THERMO LAB™ — Thermothérapie au Graphène, Confort du Cycle & Cryothérapie 360°',
+    eyebrow: 'LABORATOIRE DE THERMOTHÉRAPIE & CRYOTHÉRAPIE • THERMO.OREVALABS.COM',
+    title: 'Le soulagement naturel instantané par le chaud infrarouge et le froid médical.',
+    subtitle: 'Ceinture chauffante au graphène OrevaLunar™ (douleurs menstruelles, endométriose & lombaires), masque oculaire chauffant 42°C et bonnet cryogénique anti-migraine 360°.',
+    heroImg: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1400&q=85',
+    heroCardTitle: 'Coffret Sérénité Thermique (-25%)',
+    heroCardProductId: 'bundle-thermo-cycle',
+    sectionTag: 'COLLECTION THERMOTHÉRAPIE & CYCLE 2026',
+    sectionTitle: 'Apaisez crampes, migraines et tensions en moins de 5 minutes, sans médicaments.',
+    editorialBadge: 'GRAPHÈNE INFRAROUGE LOINTAIN & CRYOTHÉRAPIE 360°',
+    editorialTitle: 'Comment la chaleur au graphène (3 secondes) bloque les récepteurs de la douleur.',
+    editorialP1: 'Contrairement aux bouillottes classiques lourdes qui refroidissent vite, le film de graphène médical émet un rayonnement infrarouge lointain (8–14 µm) qui pénètre à 3 cm sous les tissus et vasodilate instantanément les muscles utérins et lombaires.',
+    editorialP2: 'À l’inverse, pour les migraines vasculaires, la compression froide à 360° d’OrevaCryo™ réduit l’inflammation des artères temporales en quelques minutes, sans effet secondaire.',
+    scienceImg: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1200&q=85',
+    upsellProductId: 'prod-cryo-migraine',
+    subCategories: [
+      { id: 'all', label: 'Toute la Gamme Thermique (5)' },
+      { id: 'heat', label: '🔥 Chaleur Graphène & Cycle' },
+      { id: 'cryo', label: '❄️ Cryothérapie Anti-Migraine' },
+      { id: 'bundles', label: '🎄 Coffrets Sérénité (-25%)' }
+    ],
+    reviews: [
+      {
+        city: 'Genève 🇨🇭',
+        quote: '« La ceinture chauffante OrevaLunar me permet enfin d’aller travailler sereinement pendant mon cycle. »',
+        body: 'Elle chauffe en 3 secondes chrono et elle est tellement fine qu’on ne voit absolument rien sous mon chemisier. L’autonomie tient toute ma matinée.',
+        author: 'Léa F. — Avocate (Genève)'
+      },
+      {
+        city: 'Bordeaux 🇫🇷',
+        quote: '« Le masque oculaire chauffant 42°C OrevaIris est un pur bonheur après une journée sur ordinateur. »',
+        body: 'Le massage par pression d’air sur les tempes combiné à la compresse chaude détend tout le visage en 15 minutes.',
+        author: 'Thomas G. — Directeur artistique (Bordeaux)'
+      },
+      {
+        city: 'Lausanne 🇨🇭',
+        quote: '« Le Coffret Sérénité (Ceinture chaude + Bonnet froid) est le duo parfait à avoir chez soi. »',
+        body: 'Livré en 48h en Suisse sans aucun frais de douane. La qualité des matériaux est vraiment haut de gamme.',
+        author: 'Amélie P. — Ostéopathe (Lausanne)'
+      }
+    ]
   }
 };
