@@ -8,5 +8,8 @@
   },
   "Engine": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.2.0"
   }
 }

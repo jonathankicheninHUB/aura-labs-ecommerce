@@ -291,11 +291,14 @@
         <button id="boTab-orders" class="cat-tab active" style="color:#fff; border-color:#3F3F46;" onclick="switchBoTab('orders')">
           📊 1. Commandes & Commissions
         </button>
+        <button id="boTab-customers" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('customers')">
+          👥 2. Fichier Clients & Base Neon Postgres (<span id="boCustomersCount">3</span>)
+        </button>
         <button id="boTab-keys" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('keys')">
-          🔑 2. Connecter mes Clés API (Stripe, CJdropshipping, SKUs & IBAN)
+          🔑 3. Connecter mes Clés API (Stripe, CJdropshipping, SKUs)
         </button>
         <button id="boTab-deploy" class="cat-tab" style="color:#A1A1AA; border-color:#27272A;" onclick="switchBoTab('deploy')">
-          🚀 3. Mettre en ligne sur Internet (auralabs.ch)
+          🚀 4. Mettre en ligne & Domaine (auralabs.ch)
         </button>
       </div>
 
@@ -342,6 +345,59 @@
               </tr>
             </thead>
             <tbody id="ordersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SOUS-ONGLET 2 : FICHIER CLIENTS & BASE DE DONNÉES VERCEL NEON POSTGRES -->
+      <div id="boPanel-customers" class="hidden">
+        <div class="bo-card" style="margin-bottom:24px; border-color:#10B981;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+            <div>
+              <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;">OPTION A ACTIVÉE • DRIVER OFFICIEL `@neondatabase/serverless` INSTALLÉ</span>
+              <h3 style="font-size:1.3rem; margin-top:4px;">Base de Données Permanente Vercel Neon Postgres</h3>
+            </div>
+            <span id="dbStorageStatusBadge" style="background:#064E3B; color:#6EE7B7; padding:6px 12px; border-radius:6px; font-size:0.76rem; font-weight:700;">
+              VÉRIFICATION...
+            </span>
+          </div>
+          <p style="font-size:0.84rem; color:#D4D4D8; margin-bottom:14px; line-height:1.6;">
+            Le moteur PostgreSQL (<code>@neondatabase/serverless</code>) est intégré et prêt dans votre code : les tables <code>aura_customers</code>, <code>aura_orders</code> et <code>aura_settings</code> se créent automatiquement dès que la base est reliée.
+            <br/>👉 <strong>Pour activer le stockage illimité gratuit sur votre Vercel :</strong> Allez sur votre projet Vercel (<code>aura-labs-ecommerce</code>) → onglet <strong>Storage</strong> → cliquez sur <strong>Create Database → Neon Postgres (Free)</strong> → cliquez sur <strong>Connect</strong>. (Ou collez directement votre URL <code>postgresql://...</code> ci-dessous) :
+          </p>
+          <form onsubmit="saveNeonDatabaseUrl(event)" style="display:flex; gap:10px; flex-wrap:wrap;">
+            <input type="password" id="setNeonDbUrl" placeholder="postgresql://neondb_owner:...@ep-...neon.tech/neondb?sslmode=require (Auto-détecté si connecté via l'onglet Storage de Vercel)" style="flex:1; min-width:280px; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:11px 14px; border-radius:6px;" />
+            <button type="submit" class="btn-luxury-dark" style="background:#10B981; border-color:#10B981; color:#052E16; padding:11px 22px;">
+              🔌 Connecter Neon Postgres
+            </button>
+          </form>
+        </div>
+
+        <div class="bo-card" style="overflow-x:auto;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+            <div>
+              <h3 style="font-size:1.15rem; margin-bottom:4px;">👥 Répertoire de Vos Comptes Clients & Adresses de Livraison</h3>
+              <p style="font-size:0.82rem; color:#A1A1AA;">
+                Tous les clients inscrits via le bouton « Mon Compte » ou lors du passage de commande :
+              </p>
+            </div>
+            <button class="btn-luxury-dark" style="background:#38BDF8; border-color:#38BDF8; color:#090A0F; padding:10px 18px;" onclick="exportCustomersCsv()">
+              📥 Exporter mes Clients en CSV (Excel)
+            </button>
+          </div>
+          <table class="bo-table">
+            <thead>
+              <tr>
+                <th>ID Client</th>
+                <th>Prénom & Nom</th>
+                <th>Email & Téléphone Mobile</th>
+                <th>Adresse Complète de Livraison</th>
+                <th>Code Postal & Ville</th>
+                <th>Pays</th>
+                <th>Dernière activité</th>
+              </tr>
+            </thead>
+            <tbody id="customersTableBody"></tbody>
           </table>
         </div>
       </div>

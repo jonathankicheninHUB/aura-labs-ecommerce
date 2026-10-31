@@ -668,7 +668,9 @@ function closeLegalModal() {
   document.getElementById('legalModal').classList.remove('open');
 }
 
-// ==================== BACKOFFICE : COMMANDES, CLÉS API & DÉPLOIEMENT ====================
+// ==================== BACKOFFICE : COMMANDES, CLIENTS, CLÉS API & DÉPLOIEMENT ====================
+let cachedCustomers = [];
+
 function switchView(view) {
   const storefront = document.getElementById('storefrontView');
   const backoffice = document.getElementById('backofficeView');
@@ -676,6 +678,7 @@ function switchView(view) {
     storefront.classList.add('hidden');
     backoffice.classList.remove('hidden');
     loadBackofficeData();
+    loadBackofficeCustomers();
     loadSettingsForm();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
@@ -686,9 +689,10 @@ function switchView(view) {
 }
 
 function switchBoTab(tabName) {
-  ['orders', 'keys', 'deploy'].forEach(t => {
+  ['orders', 'customers', 'keys', 'deploy'].forEach(t => {
     const panel = document.getElementById(`boPanel-${t}`);
     const btn = document.getElementById(`boTab-${t}`);
+    if (!panel || !btn) return;
     if (t === tabName) {
       panel.classList.remove('hidden');
       btn.classList.add('active');
@@ -699,6 +703,143 @@ function switchBoTab(tabName) {
       btn.style.color = '#A1A1AA';
     }
   });
+  if (tabName === 'customers') {
+    loadBackofficeCustomers();
+  }
+}
+
+async function loadBackofficeCustomers() {
+  try {
+    const res = await fetch('/api/customers');
+    const data = await res.json();
+    cachedCustomers = data.customers || [];
+
+    const countEl = document.getElementById('boCustomersCount');
+    if (countEl) countEl.textContent = cachedCustomers.length;
+
+    const statusBadge = document.getElementById('dbStorageStatusBadge');
+    if (statusBadge) {
+      if (data.storageMode === 'NEON_POSTGRES_PERMANENT') {
+        statusBadge.textContent = '🟢 CONNECTÉ À NEON POSTGRES PERMANENT (CLOUD)';
+        statusBadge.style.background = 'rgba(16,185,129,0.2)';
+        statusBadge.style.border = '1px solid #10B981';
+        statusBadge.style.color = '#6EE7B7';
+      } else {
+        statusBadge.textContent = '🟡 STOCKAGE PRÊT (AJOUTEZ NEON POSTGRES OU COLLEZ VOTRE URL CI-DESSOUS)';
+        statusBadge.style.background = 'rgba(245,158,11,0.18)';
+        statusBadge.style.border = '1px solid #F59E0B';
+        statusBadge.style.color = '#FCD34D';
+      }
+    }
+
+    const tbody = document.getElementById('customersTableBody');
+    if (!tbody) return;
+    if (cachedCustomers.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px; color:#A1A1AA;">Aucun compte client enregistré pour le moment.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = cachedCustomers.map(c => {
+      const fullName = c.name || `${c.firstName || ''} ${c.lastName || ''}`.trim() || '-';
+      const street = c.addressLine1 || c.street || '';
+      const zip = c.postalCode || c.zip || '';
+      const country = c.countryCode || c.country || 'FR';
+      return `
+      <tr>
+        <td><strong style="color:#fff;">${c.id || 'CUS-PRO'}</strong></td>
+        <td><strong style="color:#E4E4E7;">${fullName}</strong></td>
+        <td>
+          <div style="color:#38BDF8; font-weight:600; font-size:0.84rem;">${c.email || '-'}</div>
+          <div style="color:#6EE7B7; font-size:0.76rem;">${c.phone || '-'}</div>
+        </td>
+        <td>
+          <div style="color:#E4E4E7; font-size:0.82rem;">${street}</div>
+          <div style="color:#A1A1AA; font-size:0.78rem;">${zip} ${c.city || ''}</div>
+        </td>
+        <td><span style="background:#27272A; color:#E4E4E7; padding:3px 9px; border-radius:4px; font-size:0.75rem; font-weight:600;">${country}</span></td>
+        <td style="font-size:0.78rem; color:#A1A1AA;">${c.updatedAt ? new Date(c.updatedAt).toLocaleString('fr-FR') : '-'}</td>
+      </tr>
+    `;
+    }).join('');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function saveNeonDatabaseUrl(e) {
+  e.preventDefault();
+  const dbUrlInput = document.getElementById('setNeonDbUrl');
+  const databaseUrl = dbUrlInput ? dbUrlInput.value.trim() : '';
+  const fb = document.getElementById('neonDbFeedback');
+  if (!databaseUrl) {
+    if (fb) {
+      fb.style.color = '#F87171';
+      fb.textContent = 'Veuillez coller une URL postgresql:// valide.';
+    }
+    return;
+  }
+
+  try {
+    if (fb) {
+      fb.style.color = '#38BDF8';
+      fb.textContent = 'Connexion et initialisation des tables Neon Postgres en cours...';
+    }
+    const res = await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ databaseUrl })
+    });
+    const data = await res.json();
+    if (data.success) {
+      if (fb) {
+        fb.style.color = '#6EE7B7';
+        fb.textContent = '✓ Base Neon Postgres connectée ! Les tables (aura_customers, aura_orders, aura_settings) sont actives.';
+      }
+      await loadBackofficeCustomers();
+      await loadBackofficeData();
+    }
+  } catch (err) {
+    if (fb) {
+      fb.style.color = '#F87171';
+      fb.textContent = 'Erreur de connexion à la base : vérifiez votre URL postgresql://';
+    }
+  }
+}
+
+function exportCustomersCsv() {
+  if (!cachedCustomers || cachedCustomers.length === 0) {
+    alert('Aucun client à exporter pour le moment.');
+    return;
+  }
+  const headers = ['ID_Client', 'Nom_Complet', 'Email', 'Telephone', 'Rue_Numero', 'Code_Postal', 'Ville', 'Pays', 'Date_Inscription'];
+  const rows = cachedCustomers.map(c => {
+    const fullName = c.name || `${c.firstName || ''} ${c.lastName || ''}`.trim();
+    const street = c.addressLine1 || c.street || '';
+    const zip = c.postalCode || c.zip || '';
+    const country = c.countryCode || c.country || '';
+    return [
+      c.id || 'CUS-PRO',
+      `"${fullName.replace(/"/g, '""')}"`,
+      `"${(c.email || '').replace(/"/g, '""')}"`,
+      `"${(c.phone || '').replace(/"/g, '""')}"`,
+      `"${street.replace(/"/g, '""')}"`,
+      `"${zip.replace(/"/g, '""')}"`,
+      `"${(c.city || '').replace(/"/g, '""')}"`,
+      country,
+      c.updatedAt || ''
+    ];
+  });
+
+  const csvContent = '\uFEFF' + [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `aura-labs-clients-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 async function loadSettingsForm() {
@@ -832,4 +973,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadSettingsForm();
   applyLocalization();
   loadBackofficeData();
+  loadBackofficeCustomers();
 });

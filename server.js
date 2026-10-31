@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { neon } = require('@neondatabase/serverless');
 
 const PORT = process.env.PORT || 3000;
 const IS_VERCEL = Boolean(process.env.VERCEL || process.env.NOW_REGION);
@@ -18,10 +19,15 @@ const INITIAL_ORDERS = [
     id: 'ORD-8942-CH',
     createdAt: '2026-10-31T14:22:10Z',
     customer: {
+      firstName: 'Marc-Antoine',
+      lastName: 'Rochat',
       name: 'Marc-Antoine Rochat',
       email: 'ma.rochat@bluewin.ch',
-      address: 'Rue de Bourg 18, 1003 Lausanne',
+      phone: '+41 79 442 18 90',
+      addressLine1: 'Rue de Bourg 18',
+      postalCode: '1003',
       city: 'Lausanne',
+      address: 'Rue de Bourg 18, 1003 Lausanne',
       countryCode: 'CH',
       countryName: 'Suisse 🇨🇭'
     },
@@ -51,10 +57,15 @@ const INITIAL_ORDERS = [
     id: 'ORD-8941-US',
     createdAt: '2026-10-31T11:05:40Z',
     customer: {
+      firstName: 'Jessica',
+      lastName: 'Miller',
       name: 'Jessica Miller',
       email: 'j.miller88@gmail.com',
-      address: '742 Congress Ave, Austin, TX 78701',
+      phone: '+1 (512) 894-2310',
+      addressLine1: '742 Congress Ave',
+      postalCode: '78701',
       city: 'Austin, TX',
+      address: '742 Congress Ave, Austin, TX 78701',
       countryCode: 'US',
       countryName: 'United States 🇺🇸'
     },
@@ -84,10 +95,15 @@ const INITIAL_ORDERS = [
     id: 'ORD-8940-DE',
     createdAt: '2026-10-30T19:40:12Z',
     customer: {
+      firstName: 'Lukas',
+      lastName: 'Weber',
       name: 'Lukas Weber',
       email: 'lukas.weber@web.de',
-      address: 'Maximilianstraße 24, 80539 München',
+      phone: '+49 171 8924102',
+      addressLine1: 'Maximilianstraße 24',
+      postalCode: '80539',
       city: 'München',
+      address: 'Maximilianstraße 24, 80539 München',
       countryCode: 'DE',
       countryName: 'Deutschland 🇩🇪'
     },
@@ -114,12 +130,61 @@ const INITIAL_ORDERS = [
   }
 ];
 
+const INITIAL_CUSTOMERS = [
+  {
+    id: 'CUST-8942',
+    firstName: 'Marc-Antoine',
+    lastName: 'Rochat',
+    name: 'Marc-Antoine Rochat',
+    email: 'ma.rochat@bluewin.ch',
+    phone: '+41 79 442 18 90',
+    addressLine1: 'Rue de Bourg 18',
+    addressLine2: '3ème étage',
+    postalCode: '1003',
+    city: 'Lausanne',
+    state: 'Vaud',
+    countryCode: 'CH',
+    updatedAt: '2026-10-31T14:22:10Z'
+  },
+  {
+    id: 'CUST-8941',
+    firstName: 'Jessica',
+    lastName: 'Miller',
+    name: 'Jessica Miller',
+    email: 'j.miller88@gmail.com',
+    phone: '+1 (512) 894-2310',
+    addressLine1: '742 Congress Ave',
+    addressLine2: 'Suite 400',
+    postalCode: '78701',
+    city: 'Austin',
+    state: 'TX',
+    countryCode: 'US',
+    updatedAt: '2026-10-31T11:05:40Z'
+  },
+  {
+    id: 'CUST-8940',
+    firstName: 'Lukas',
+    lastName: 'Weber',
+    name: 'Lukas Weber',
+    email: 'lukas.weber@web.de',
+    phone: '+49 171 8924102',
+    addressLine1: 'Maximilianstraße 24',
+    addressLine2: '',
+    postalCode: '80539',
+    city: 'München',
+    state: 'Bayern',
+    countryCode: 'DE',
+    updatedAt: '2026-10-30T19:40:12Z'
+  }
+];
+
 const INITIAL_SETTINGS = {
   brandName: 'AURA LABS CLINIC™',
   domainName: 'auralabs.ch',
   supportEmail: 'concierge@auralabs.ch',
   companyAddress: 'AURA LABS International • Bahnhofstrasse 42, 8001 Zürich / 75008 Paris',
   autoFulfillmentEnabled: true,
+  databaseUrl: '',
   stripe: {
     publicKey: 'pk_test_51AuraLabsReadyForLiveKey',
     secretKey: '',
@@ -167,7 +232,7 @@ if (!fs.existsSync(SETTINGS_FILE)) {
   fs.writeFileSync(SETTINGS_FILE, JSON.stringify(INITIAL_SETTINGS, null, 2), 'utf8');
 }
 if (!fs.existsSync(CUSTOMERS_FILE)) {
-  fs.writeFileSync(CUSTOMERS_FILE, JSON.stringify([], null, 2), 'utf8');
+  fs.writeFileSync(CUSTOMERS_FILE, JSON.stringify(INITIAL_CUSTOMERS, null, 2), 'utf8');
 }
 
 function readJson(filePath, fallback) {
@@ -182,6 +247,163 @@ function writeJson(filePath, data) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
 }
 
+// ==================== COUCHE DE STOCKAGE VERCEL NEON POSTGRES (`@neondatabase/serverless`) ====================
+let _sqlClient = null;
+let _schemaInitialized = false;
+
+function getDatabaseUrl() {
+  const localSettings = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
+  return (
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    (localSettings?.databaseUrl && localSettings.databaseUrl.startsWith('postgres') ? localSettings.databaseUrl : '')
+  );
+}
+
+function getSql() {
+  const dbUrl = getDatabaseUrl();
+  if (!dbUrl) return null;
+  if (!_sqlClient) {
+    _sqlClient = neon(dbUrl);
+  }
+  return _sqlClient;
+}
+
+async function ensurePostgresSchema() {
+  const sql = getSql();
+  if (!sql || _schemaInitialized) return Boolean(sql);
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS aura_orders (
+        id TEXT PRIMARY KEY,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        payload JSONB NOT NULL
+      )
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS aura_customers (
+        email TEXT PRIMARY KEY,
+        updated_at TIMESTAMPTZ DEFAULT NOW(),
+        payload JSONB NOT NULL
+      )
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS aura_settings (
+        id TEXT PRIMARY KEY,
+        payload JSONB NOT NULL
+      )
+    `;
+
+    // Seed initial data if tables are empty
+    const existingOrders = await sql`SELECT COUNT(*)::int AS cnt FROM aura_orders`;
+    if (existingOrders[0]?.cnt === 0) {
+      for (const ord of INITIAL_ORDERS) {
+        await sql`
+          INSERT INTO aura_orders (id, created_at, payload)
+          VALUES (${ord.id}, ${ord.createdAt}, ${JSON.stringify(ord)}::jsonb)
+          ON CONFLICT (id) DO NOTHING
+        `;
+      }
+      for (const cust of INITIAL_CUSTOMERS) {
+        await sql`
+          INSERT INTO aura_customers (email, updated_at, payload)
+          VALUES (${cust.email.toLowerCase()}, ${cust.updatedAt}, ${JSON.stringify(cust)}::jsonb)
+          ON CONFLICT (email) DO NOTHING
+        `;
+      }
+      await sql`
+        INSERT INTO aura_settings (id, payload)
+        VALUES ('global', ${JSON.stringify(INITIAL_SETTINGS)}::jsonb)
+        ON CONFLICT (id) DO NOTHING
+      `;
+    }
+    _schemaInitialized = true;
+    return true;
+  } catch (err) {
+    console.error('Neon Postgres fallback to local JSON:', err.message);
+    return false;
+  }
+}
+
+async function storageGetOrders() {
+  if (await ensurePostgresSchema()) {
+    const sql = getSql();
+    const rows = await sql`SELECT payload FROM aura_orders ORDER BY created_at DESC`;
+    return rows.map(r => r.payload);
+  }
+  return readJson(ORDERS_FILE, INITIAL_ORDERS);
+}
+
+async function storageSaveOrder(newOrder) {
+  const orders = readJson(ORDERS_FILE, INITIAL_ORDERS);
+  orders.unshift(newOrder);
+  writeJson(ORDERS_FILE, orders);
+
+  if (await ensurePostgresSchema()) {
+    const sql = getSql();
+    await sql`
+      INSERT INTO aura_orders (id, created_at, payload)
+      VALUES (${newOrder.id}, ${newOrder.createdAt}, ${JSON.stringify(newOrder)}::jsonb)
+      ON CONFLICT (id) DO UPDATE SET payload = EXCLUDED.payload
+    `;
+  }
+}
+
+async function storageGetCustomers() {
+  if (await ensurePostgresSchema()) {
+    const sql = getSql();
+    const rows = await sql`SELECT payload FROM aura_customers ORDER BY updated_at DESC`;
+    return rows.map(r => r.payload);
+  }
+  return readJson(CUSTOMERS_FILE, INITIAL_CUSTOMERS);
+}
+
+async function storageUpsertCustomer(record) {
+  const customers = readJson(CUSTOMERS_FILE, INITIAL_CUSTOMERS);
+  const emailLower = (record.email || '').toLowerCase();
+  const idx = customers.findIndex(c => (c.email || '').toLowerCase() === emailLower);
+  if (idx !== -1) {
+    customers[idx] = { ...customers[idx], ...record };
+  } else {
+    customers.unshift(record);
+  }
+  writeJson(CUSTOMERS_FILE, customers);
+
+  if (await ensurePostgresSchema()) {
+    const sql = getSql();
+    await sql`
+      INSERT INTO aura_customers (email, updated_at, payload)
+      VALUES (${emailLower}, NOW(), ${JSON.stringify(record)}::jsonb)
+      ON CONFLICT (email) DO UPDATE SET updated_at = NOW(), payload = EXCLUDED.payload
+    `;
+  }
+}
+
+async function storageGetSettings() {
+  if (await ensurePostgresSchema()) {
+    const sql = getSql();
+    const rows = await sql`SELECT payload FROM aura_settings WHERE id = 'global'`;
+    if (rows.length > 0) return rows[0].payload;
+  }
+  return readJson(SETTINGS_FILE, INITIAL_SETTINGS);
+}
+
+async function storageSaveSettings(merged) {
+  writeJson(SETTINGS_FILE, merged);
+  if (merged.databaseUrl && merged.databaseUrl.startsWith('postgres')) {
+    _sqlClient = null;
+    _schemaInitialized = false;
+  }
+  if (await ensurePostgresSchema()) {
+    const sql = getSql();
+    await sql`
+      INSERT INTO aura_settings (id, payload)
+      VALUES ('global', ${JSON.stringify(merged)}::jsonb)
+      ON CONFLICT (id) DO UPDATE SET payload = EXCLUDED.payload
+    `;
+  }
+}
+
 function resolveFulfillmentRouting(countryCode) {
   const routingMap = {
     FR: { warehouse: 'Entrepôt Europe (Paris / Francfort)', carrier: 'Colissimo Suivi 48h', prefix: 'FR-COL', eta: '2 à 4 jours ouvrés', flag: '🇫🇷', cjStorageId: 'DE-FRANKFURT-01' },
@@ -194,7 +416,6 @@ function resolveFulfillmentRouting(countryCode) {
   return routingMap[countryCode] || routingMap.FR;
 }
 
-// Connecteur API officiel CJdropshipping v2.0
 async function dispatchToCJDropshippingAPI(orderPayload, settings) {
   const apiKey = process.env.CJ_API_KEY || settings?.suppliers?.cjdropshipping?.apiKey;
   if (!apiKey || apiKey.trim() === '') {
@@ -272,7 +493,7 @@ const requestHandler = async (req, res) => {
 
   // API 1: Récupérer toutes les commandes + KPIs financiers
   if (pathname === '/api/orders' && req.method === 'GET') {
-    const orders = readJson(ORDERS_FILE, []);
+    const orders = await storageGetOrders();
     const stats = orders.reduce(
       (acc, o) => {
         acc.totalRevenueEur += Number(o.totalPaidEur || 0);
@@ -286,13 +507,13 @@ const requestHandler = async (req, res) => {
     );
 
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    return res.end(JSON.stringify({ orders, stats }));
+    return res.end(JSON.stringify({ orders, stats, storageMode: getSql() ? 'NEON_POSTGRES_PERMANENT' : 'LOCAL_FALLBACK' }));
   }
 
-  // API 2: Suivi de colis public pour vos clients (Recherche par N° de commande ou Email)
+  // API 2: Suivi de colis public pour vos clients
   if (pathname === '/api/orders/track' && req.method === 'GET') {
     const q = (parsedUrl.searchParams.get('q') || '').trim().toLowerCase();
-    const orders = readJson(ORDERS_FILE, []);
+    const orders = await storageGetOrders();
     const found = orders.find(
       o => o.id.toLowerCase() === q || (o.customer?.email || '').toLowerCase() === q
     );
@@ -307,8 +528,7 @@ const requestHandler = async (req, res) => {
   if (pathname === '/api/orders' && req.method === 'POST') {
     try {
       const payload = await readRequestBody(req);
-      const orders = readJson(ORDERS_FILE, []);
-      const settings = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
+      const settings = await storageGetSettings();
       const route = resolveFulfillmentRouting(payload.countryCode || 'FR');
       const randomNum = Math.floor(1000 + Math.random() * 9000);
       const trackingRandom = Math.floor(100000000 + Math.random() * 900000000);
@@ -370,16 +590,11 @@ const requestHandler = async (req, res) => {
       const cjResult = await dispatchToCJDropshippingAPI(newOrder, settings);
       newOrder.fulfillment.cjDispatchMode = cjResult.mode;
 
-      orders.unshift(newOrder);
-      writeJson(ORDERS_FILE, orders);
+      await storageSaveOrder(newOrder);
 
-      // Si le client a coché la création/mise à jour de son compte lors du checkout
       if (payload.customer?.email) {
-        const customers = readJson(CUSTOMERS_FILE, []);
-        const emailLower = payload.customer.email.toLowerCase();
-        const existingIdx = customers.findIndex(c => (c.email || '').toLowerCase() === emailLower);
-        const customerRecord = {
-          id: existingIdx !== -1 ? customers[existingIdx].id : `CUST-${randomNum}`,
+        await storageUpsertCustomer({
+          id: `CUST-${randomNum}`,
           firstName: newOrder.customer.firstName,
           lastName: newOrder.customer.lastName,
           name: newOrder.customer.name,
@@ -392,13 +607,7 @@ const requestHandler = async (req, res) => {
           state: newOrder.customer.state,
           countryCode: newOrder.customer.countryCode,
           updatedAt: new Date().toISOString()
-        };
-        if (existingIdx !== -1) {
-          customers[existingIdx] = { ...customers[existingIdx], ...customerRecord };
-        } else {
-          customers.unshift(customerRecord);
-        }
-        writeJson(CUSTOMERS_FILE, customers);
+        });
       }
 
       res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -409,49 +618,51 @@ const requestHandler = async (req, res) => {
     }
   }
 
-  // API 3bis: Espace Compte Client (Inscription / Connexion / Carnet d'adresses / Commandes du client)
+  // API 3bis: Espace Compte Client & Liste Complète des Clients pour le Backoffice
   if (pathname === '/api/customers' && req.method === 'GET') {
     const email = (parsedUrl.searchParams.get('email') || '').trim().toLowerCase();
-    const customers = readJson(CUSTOMERS_FILE, []);
-    const orders = readJson(ORDERS_FILE, []);
+    const customers = await storageGetCustomers();
+    const orders = await storageGetOrders();
+    const storageMode = getSql() ? 'NEON_POSTGRES_PERMANENT' : 'LOCAL_FALLBACK';
+
+    if (!email) {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ customers, totalCustomers: customers.length, storageMode }));
+    }
+
     const customer = customers.find(c => (c.email || '').toLowerCase() === email) || null;
     const customerOrders = orders.filter(o => (o.customer?.email || '').toLowerCase() === email);
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    return res.end(JSON.stringify({ customer, orders: customerOrders }));
+    return res.end(JSON.stringify({ customer, orders: customerOrders, storageMode }));
   }
 
   if (pathname === '/api/customers' && req.method === 'POST') {
     try {
       const payload = await readRequestBody(req);
-      const customers = readJson(CUSTOMERS_FILE, []);
-      const orders = readJson(ORDERS_FILE, []);
+      const customers = await storageGetCustomers();
+      const orders = await storageGetOrders();
       const emailLower = (payload.email || '').trim().toLowerCase();
       if (!emailLower) {
         res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
         return res.end(JSON.stringify({ error: 'Email requis' }));
       }
-      const existingIdx = customers.findIndex(c => (c.email || '').toLowerCase() === emailLower);
+      const existing = customers.find(c => (c.email || '').toLowerCase() === emailLower);
       const record = {
-        id: existingIdx !== -1 ? customers[existingIdx].id : `CUST-${Math.floor(1000 + Math.random() * 9000)}`,
-        firstName: payload.firstName || existingIdx !== -1 && customers[existingIdx].firstName || '',
-        lastName: payload.lastName || existingIdx !== -1 && customers[existingIdx].lastName || '',
-        name: `${payload.firstName || ''} ${payload.lastName || ''}`.trim() || payload.name || '',
+        id: existing ? existing.id : `CUST-${Math.floor(1000 + Math.random() * 9000)}`,
+        firstName: payload.firstName || existing?.firstName || '',
+        lastName: payload.lastName || existing?.lastName || '',
+        name: `${payload.firstName || ''} ${payload.lastName || ''}`.trim() || payload.name || existing?.name || '',
         email: payload.email.trim(),
-        phone: payload.phone || existingIdx !== -1 && customers[existingIdx].phone || '',
-        addressLine1: payload.addressLine1 || existingIdx !== -1 && customers[existingIdx].addressLine1 || '',
-        addressLine2: payload.addressLine2 || existingIdx !== -1 && customers[existingIdx].addressLine2 || '',
-        postalCode: payload.postalCode || existingIdx !== -1 && customers[existingIdx].postalCode || '',
-        city: payload.city || existingIdx !== -1 && customers[existingIdx].city || '',
-        state: payload.state || existingIdx !== -1 && customers[existingIdx].state || '',
-        countryCode: payload.countryCode || existingIdx !== -1 && customers[existingIdx].countryCode || 'FR',
+        phone: payload.phone || existing?.phone || '',
+        addressLine1: payload.addressLine1 || existing?.addressLine1 || '',
+        addressLine2: payload.addressLine2 || existing?.addressLine2 || '',
+        postalCode: payload.postalCode || existing?.postalCode || '',
+        city: payload.city || existing?.city || '',
+        state: payload.state || existing?.state || '',
+        countryCode: payload.countryCode || existing?.countryCode || 'FR',
         updatedAt: new Date().toISOString()
       };
-      if (existingIdx !== -1) {
-        customers[existingIdx] = record;
-      } else {
-        customers.unshift(record);
-      }
-      writeJson(CUSTOMERS_FILE, customers);
+      await storageUpsertCustomer(record);
       const customerOrders = orders.filter(o => (o.customer?.email || '').toLowerCase() === emailLower);
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       return res.end(JSON.stringify({ success: true, customer: record, orders: customerOrders }));
@@ -461,17 +672,17 @@ const requestHandler = async (req, res) => {
     }
   }
 
-  // API 4: Lire & Enregistrer vos Clés API (Stripe, CJdropshipping, Supliful, SKUs, IBAN)
+  // API 4: Lire & Enregistrer vos Clés API + URL Neon Postgres
   if (pathname === '/api/settings' && req.method === 'GET') {
-    const settings = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
+    const settings = await storageGetSettings();
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    return res.end(JSON.stringify(settings));
+    return res.end(JSON.stringify({ ...settings, storageMode: getSql() ? 'NEON_POSTGRES_PERMANENT' : 'LOCAL_FALLBACK' }));
   }
 
   if (pathname === '/api/settings' && req.method === 'POST') {
     try {
       const incoming = await readRequestBody(req);
-      const current = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
+      const current = await storageGetSettings();
       const merged = {
         ...current,
         ...incoming,
@@ -490,9 +701,9 @@ const requestHandler = async (req, res) => {
       } else {
         merged.stripe.mode = 'SANDBOX_SIMULATION';
       }
-      writeJson(SETTINGS_FILE, merged);
+      await storageSaveSettings(merged);
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-      return res.end(JSON.stringify({ success: true, settings: merged }));
+      return res.end(JSON.stringify({ success: true, settings: merged, storageMode: getSql() ? 'NEON_POSTGRES_PERMANENT' : 'LOCAL_FALLBACK' }));
     } catch (e) {
       res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
       return res.end(JSON.stringify({ error: e.message }));
