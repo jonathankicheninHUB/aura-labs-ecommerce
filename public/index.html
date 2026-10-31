@@ -84,17 +84,26 @@
           <option value="de">DE</option>
         </select>
 
-        <button class="btn-card-detail" style="padding:9px 14px; border-radius:6px; display:flex; align-items:center; gap:6px;" onclick="openAccountModal()">
+        <button class="btn-card-detail header-account-btn" style="padding:9px 14px; border-radius:6px; display:flex; align-items:center; gap:6px;" onclick="openAccountModal()">
           <span>👤</span>
-          <span id="accountBtnLabel">Mon Compte</span>
+          <span id="accountBtnLabel" class="account-btn-text">Mon Compte</span>
         </button>
 
         <button class="bag-button" onclick="toggleBag(true)">
-          <span id="bagBtnLabel">Panier</span>
+          <span id="bagBtnLabel" class="bag-btn-text">Panier</span>
           <span id="bagCount" class="bag-count">0</span>
         </button>
       </div>
     </div>
+
+    <!-- BARRE DE NAVIGATION TACTILE MOBILE (VISIBLE UNIQUEMENT SUR MOBILE & TABLETTE <= 1024px) -->
+    <nav class="mobile-quick-nav" aria-label="Navigation mobile">
+      <a href="#collectionSection" onclick="switchView('storefront'); filterCategory('all')">✨ Collection</a>
+      <a href="#collectionSection" class="mobile-nav-highlight" onclick="switchView('storefront'); filterCategory('bundles')">🎄 Coffrets (-25%)</a>
+      <a href="#scienceSection" onclick="switchView('storefront')">🔬 Technologie</a>
+      <a href="#" onclick="openTrackingModal(); return false;">📦 Suivi Colis</a>
+      <a href="#" onclick="openAccountModal(); return false;">👤 Mon Compte</a>
+    </nav>
   </header>
 
   <!-- ==================== VUE 1 : BOUTIQUE SPÉCIALISÉE DU SOUS-DOMAINE ACTIF ==================== -->
@@ -178,21 +187,21 @@
       </div>
 
       <!-- BARRE DE RECHERCHE INSTANTANÉE, TRI & COMPTEUR HAUTE CAPACITÉ (POUR DES MILLIERS DE PRODUITS) -->
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:26px; padding:14px 18px; background:var(--bg-white); border:1px solid var(--border-subtle); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.03);">
-        <div style="flex:1; min-width:260px; position:relative;">
+      <div class="catalog-toolbar">
+        <div class="catalog-search-wrap">
           <input
             type="search"
             id="catalogSearchInput"
             oninput="onCatalogSearch(this.value)"
-            placeholder="🔍 Rechercher par produit, besoin, édition ou référence SKU (ex: Oreiller, LED, Lombaire, CJ-...)..."
-            style="width:100%; padding:11px 16px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans); font-size:0.86rem; background:var(--bg-alabaster);"
+            placeholder="🔍 Rechercher par produit, besoin, édition ou SKU..."
+            class="catalog-search-input"
           />
         </div>
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-          <span id="catalogCountBadge" style="font-size:0.8rem; font-weight:700; color:var(--obsidian); background:var(--bg-stone); padding:8px 14px; border-radius:6px;">
+        <div class="catalog-toolbar-right">
+          <span id="catalogCountBadge" class="catalog-count-badge">
             210 références disponibles
           </span>
-          <select id="catalogSortSelect" class="minimal-select" onchange="onCatalogSort(this.value)" style="padding:10px 14px; font-weight:600;">
+          <select id="catalogSortSelect" class="minimal-select catalog-sort-select" onchange="onCatalogSort(this.value)">
             <option value="featured">Trier : Best-Sellers & Phares</option>
             <option value="price-asc">Prix : Croissant (↑)</option>
             <option value="price-desc">Prix : Décroissant (↓)</option>
@@ -459,7 +468,7 @@
 
       <!-- SOUS-ONGLET 3 : CRÉATEUR DE SOUS-DOMAINES ILLIMITÉS & IMPORTATEUR DE MILLIERS DE PRODUITS -->
       <div id="boPanel-catalog" class="hidden">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(380px, 1fr)); gap:24px; margin-bottom:24px;">
+        <div class="responsive-grid-2" style="gap:24px; margin-bottom:24px;">
           <!-- 1. Créer un nouveau sous-domaine -->
           <div class="bo-card" style="border-color:#10B981;">
             <span style="color:#10B981; font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">USINE MULTI-BOUTIQUES OREVA®</span>
@@ -468,7 +477,7 @@
               Créez autant de boutiques indépendantes que vous le souhaitez sous la marque <strong>OREVA®</strong> (ex: <code>yoga</code>, <code>fitness</code>, <code>kitchen</code>, <code>audio</code>, <code>auto</code>). Chaque sous-domaine est 100% isolé et sauvegarde son catalogue dans votre base Neon Postgres :
             </p>
             <form onsubmit="submitNewSubdomain(event)">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+              <div class="responsive-grid-2" style="gap:10px; margin-bottom:12px;">
                 <div>
                   <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Préfixe du Sous-Domaine *</label>
                   <input type="text" id="newSubSlug" required placeholder="Ex: yoga, kitchen, audio..." style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
@@ -501,7 +510,7 @@
               Injectez des centaines de nouvelles références (synchronisées avec CJdropshipping API V2 ou générées par gamme/édition) directement dans le sous-domaine de votre choix, sans jamais mélanger les niches :
             </p>
             <form onsubmit="submitBulkProductImport(event)">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+              <div class="responsive-grid-2" style="gap:10px; margin-bottom:12px;">
                 <div>
                   <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Sous-Domaine Cible *</label>
                   <select id="importTargetUniverse" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;"></select>
@@ -519,7 +528,7 @@
                 <label style="display:block; font-size:0.76rem; color:#D4D4D8; margin-bottom:4px;">Famille de Produits / Mot-Clé CJdropshipping *</label>
                 <input type="text" id="importKeyword" required placeholder="Ex: Anneau Pilates & Tapis Acupression / Appareil Anti-Cellulite..." style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
               </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px;">
+              <div class="responsive-grid-3" style="gap:10px; margin-bottom:14px;">
                 <div>
                   <label style="display:block; font-size:0.74rem; color:#D4D4D8; margin-bottom:4px;">Coût Fournisseur (€)</label>
                   <input type="number" step="0.1" id="importCostEur" value="11.50" style="width:100%; background:#18181B; border:1px solid #3F3F46; color:#fff; padding:10px; border-radius:6px;" />
@@ -548,7 +557,7 @@
       <!-- SOUS-ONGLET 2 : CONFIGURATION SANS CODE DES CLÉS API & SKUs -->
       <div id="boPanel-keys" class="hidden">
         <form onsubmit="saveBackofficeSettings(event)">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+          <div class="responsive-grid-2" style="gap:24px; margin-bottom:24px;">
             <!-- Colonne Stripe & Banque -->
             <div class="bo-card">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -712,14 +721,14 @@
 
   <!-- ==================== MODAL SUIVI DE COMMANDE EN DIRECT (CLIENT) ==================== -->
   <div id="trackingModal" class="pdp-backdrop" onclick="if(event.target===this) closeTrackingModal()">
-    <div style="background:var(--bg-white); max-width:560px; width:100%; border-radius:10px; padding:34px; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.3);">
+    <div class="modal-card-responsive" style="max-width:560px;">
       <button class="pdp-close" onclick="closeTrackingModal()">✕</button>
       <span class="section-eyebrow">LOGISTIQUE INTERNATIONALE SUIVIE</span>
       <h3 style="font-family:var(--font-serif); font-size:2rem; font-weight:600; margin-bottom:8px;">Suivre mon colis en direct</h3>
       <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
         Entrez votre numéro de commande (ex: <code>ORD-8942-CH</code> ou <code>ORD-8941-US</code>) ou votre adresse email :
       </p>
-      <form onsubmit="lookupOrderTracking(event)" style="display:flex; gap:10px; margin-bottom:20px;">
+      <form onsubmit="lookupOrderTracking(event)" class="responsive-flex-form" style="margin-bottom:20px;">
         <input type="text" id="trackingQueryInput" value="ORD-8942-CH" required placeholder="Ex: ORD-8942-CH ou votre email" style="flex:1; padding:12px 14px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
         <button type="submit" class="btn-luxury-dark" style="padding:12px 22px;">Rechercher</button>
       </form>
@@ -729,7 +738,7 @@
 
   <!-- ==================== MODAL PAGES LÉGALES (CGV, GARANTIE 30 NUITS, RGPD, MENTIONS) ==================== -->
   <div id="legalModal" class="pdp-backdrop" onclick="if(event.target===this) closeLegalModal()">
-    <div style="background:var(--bg-white); max-width:740px; width:100%; max-height:86vh; overflow-y:auto; border-radius:10px; padding:38px; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.3);">
+    <div class="modal-card-responsive" style="max-width:740px; max-height:86vh; overflow-y:auto;">
       <button class="pdp-close" onclick="closeLegalModal()">✕</button>
       <div id="legalModalContent" style="font-size:0.88rem; line-height:1.75; color:var(--text-secondary);"></div>
     </div>
@@ -775,7 +784,7 @@
 
   <!-- ==================== MODAL ESPACE COMPTE CLIENT (INSCRIPTION / ADRESSE / COMMANDES) ==================== -->
   <div id="accountModal" class="pdp-backdrop" onclick="if(event.target===this) closeAccountModal()">
-    <div style="background:var(--bg-white); max-width:640px; width:100%; border-radius:10px; padding:34px; box-shadow:0 30px 60px rgba(0,0,0,0.3); position:relative; max-height:92vh; overflow-y:auto;">
+    <div class="modal-card-responsive" style="max-width:640px; max-height:92vh; overflow-y:auto;">
       <button class="pdp-close" onclick="closeAccountModal()">✕</button>
       <span class="section-eyebrow">ESPACE MEMBRE OREVA LAB™</span>
       <h3 style="font-family:var(--font-serif); font-size:2rem; font-weight:600; margin-bottom:6px;">Mon Compte & Carnet d'Adresse</h3>
@@ -783,12 +792,12 @@
         Créez votre compte ou connectez-vous pour enregistrer votre adresse de livraison et suivre vos commandes en temps réel.
       </p>
 
-      <form onsubmit="saveCustomerAccount(event)" style="background:var(--bg-stone); padding:20px; border-radius:8px; margin-bottom:20px;">
+      <form onsubmit="saveCustomerAccount(event)" style="background:var(--bg-stone); padding:18px; border-radius:8px; margin-bottom:20px;">
         <div style="font-size:0.74rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--bronze); margin-bottom:12px;">
           1. MES INFORMATIONS PERSONNELLES & ADRESSE DE LIVRAISON PAR DÉFAUT
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div class="responsive-grid-2" style="gap:10px; margin-bottom:10px;">
           <div>
             <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Prénom *</label>
             <input type="text" id="accFirstName" required placeholder="Ex: Sophie" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
@@ -799,7 +808,7 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div class="responsive-grid-2" style="gap:10px; margin-bottom:10px;">
           <div>
             <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Email du compte *</label>
             <input type="email" id="accEmail" required placeholder="sophie.laurent@email.com" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
@@ -820,7 +829,7 @@
           <input type="text" id="accAddress2" placeholder="Ex: Bâtiment B, 3ème étage, Porte droite" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
         </div>
 
-        <div style="display:grid; grid-template-columns:0.8fr 1.2fr 1fr; gap:10px; margin-bottom:12px;">
+        <div class="responsive-grid-3" style="gap:10px; margin-bottom:12px;">
           <div>
             <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Code Postal *</label>
             <input type="text" id="accZip" required placeholder="75008 / 1204" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px;" />
@@ -842,7 +851,7 @@
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div class="responsive-flex-form" style="align-items:center; justify-content:space-between;">
           <button type="submit" class="btn-luxury-dark" style="padding:12px 24px;">
             ✓ Enregistrer mon Compte & mon Adresse
           </button>
@@ -861,12 +870,12 @@
 
   <!-- ==================== MODAL TUNNEL DE LIVRAISON & PAIEMENT COMPLET ==================== -->
   <div id="checkoutModal" class="pdp-backdrop" onclick="if(event.target===this) closeCheckoutModal()">
-    <div style="background:var(--bg-white); max-width:650px; width:100%; border-radius:10px; padding:32px; box-shadow:0 30px 60px rgba(0,0,0,0.3); position:relative; max-height:94vh; overflow-y:auto;">
+    <div class="modal-card-responsive" style="max-width:650px; max-height:94vh; overflow-y:auto;">
       <button class="pdp-close" onclick="closeCheckoutModal()">✕</button>
 
       <div id="checkoutFormWrap">
         <!-- Barre de progression du Checkout en 3 étapes -->
-        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:18px; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; text-align:center;">
+        <div class="checkout-steps-bar">
           <div style="background:var(--obsidian); color:#fff; padding:7px; border-radius:4px;">1. Compte & Contact</div>
           <div style="background:var(--obsidian); color:#fff; padding:7px; border-radius:4px;">2. Adresse de Livraison</div>
           <div style="background:var(--bronze-light); color:var(--obsidian); border:1px solid var(--bronze); padding:7px; border-radius:4px;">3. Paiement Sécurisé</div>
@@ -884,7 +893,7 @@
           <div style="font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--bronze); margin-bottom:8px;">
             ÉTAPE 1 • COORDONNÉES DU CLIENT (POUR LE SUIVI COLIS & SMS LIVREUR)
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div class="responsive-grid-2" style="gap:10px; margin-bottom:10px;">
             <div>
               <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Adresse Email *</label>
               <input type="email" id="custEmail" required placeholder="votre.email@exemple.com" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
@@ -904,7 +913,7 @@
           <div style="font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--bronze); margin-bottom:8px;">
             ÉTAPE 2 • ADRESSE EXACTE DE LIVRAISON DU COLIS
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div class="responsive-grid-2" style="gap:10px; margin-bottom:10px;">
             <div>
               <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Prénom du destinataire *</label>
               <input type="text" id="custFirstName" required placeholder="Prénom" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
@@ -925,7 +934,7 @@
             <input type="text" id="custAddress2" placeholder="Ex: Bâtiment A, Appartement 14, Digicode 4820" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />
           </div>
 
-          <div style="display:grid; grid-template-columns:0.8fr 1.2fr 1fr; gap:10px; margin-bottom:16px;">
+          <div class="responsive-grid-3" style="gap:10px; margin-bottom:16px;">
             <div>
               <label style="display:block; font-size:0.75rem; font-weight:600; margin-bottom:3px;">Code Postal *</label>
               <input type="text" id="custPostalCode" required placeholder="75002 / 1204" style="width:100%; padding:10px; border:1px solid var(--border-subtle); border-radius:6px; font-family:var(--font-sans);" />

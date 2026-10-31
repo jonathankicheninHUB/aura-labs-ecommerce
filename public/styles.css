@@ -556,13 +556,14 @@ body {
 /* Luxury Product Grid */
 .luxury-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 36px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .luxury-grid {
     grid-template-columns: 1fr;
+    gap: 22px;
   }
 }
 
@@ -1185,9 +1186,523 @@ body {
 @media (max-width: 860px) {
   .footer-inner {
     grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .luxury-footer {
+    padding: 44px 18px 36px;
+  }
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
 }
 
 .hidden {
   display: none !important;
+}
+
+/* ============================================================================
+   SYSTÈME RESPONSIVE MOBILE-FIRST COMPLET (320px -> 1024px)
+   ============================================================================ */
+
+/* Navigation tactile rapide sous le header sur Mobile/Tablette */
+.mobile-quick-nav {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .mobile-quick-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 8px 16px 10px;
+    border-top: 1px solid var(--border-subtle);
+    background: rgba(250, 248, 245, 0.96);
+  }
+  .mobile-quick-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-quick-nav a {
+    flex-shrink: 0;
+    text-decoration: none;
+    color: var(--obsidian);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 99px;
+    background: var(--bg-stone);
+    border: 1px solid var(--border-subtle);
+    white-space: nowrap;
+  }
+  .mobile-quick-nav a.mobile-nav-highlight {
+    background: #FEF2F2;
+    color: #B91C1C;
+    border-color: #FECACA;
+    font-weight: 700;
+  }
+}
+
+/* Barre d'outils Catalogue (Recherche + Compteur + Tri) */
+.catalog-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 26px;
+  padding: 14px 18px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+
+.catalog-search-wrap {
+  flex: 1;
+  min-width: 240px;
+  position: relative;
+}
+
+.catalog-search-input {
+  width: 100%;
+  padding: 11px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  background: var(--bg-alabaster);
+}
+
+.catalog-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.catalog-count-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--obsidian);
+  background: var(--bg-stone);
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.catalog-sort-select {
+  padding: 10px 28px 10px 14px;
+  font-weight: 600;
+}
+
+/* Grilles de formulaires & Modales Responsives */
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.responsive-grid-3 {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr 1fr;
+}
+
+.responsive-flex-form {
+  display: flex;
+  gap: 10px;
+}
+
+.checkout-steps-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.modal-card-responsive {
+  background: var(--bg-white);
+  width: 100%;
+  border-radius: 10px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+
+/* Modale Admin Login */
+.pdp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 12, 14, 0.76);
+  backdrop-filter: blur(8px);
+  z-index: 1650;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.pdp-modal-backdrop.open {
+  display: flex;
+}
+
+.checkout-modal-card {
+  background: var(--bg-white);
+  width: 100%;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  position: relative;
+}
+
+/* Hauteur dynamique (dvh) pour le tiroir panier sur iOS Safari & Chrome Mobile */
+.bag-drawer {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ==================== BREAKPOINT SMARTPHONE & PETITE TABLETTE (<= 768px) ==================== */
+@media (max-width: 768px) {
+  .announcement-bar {
+    padding: 8px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+  }
+
+  /* Header compact sans aucun débordement horizontal */
+  .header-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .brand-wordmark.oreva-couture-lockup {
+    gap: 10px;
+    padding: 2px 0;
+  }
+
+  .oreva-crest-wrap,
+  .oreva-crest-svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  #activeCrownOrigin,
+  .oreva-crown-dot {
+    display: none;
+  }
+
+  .oreva-division-pill {
+    font-size: 0.48rem;
+    padding: 1px 5px;
+    letter-spacing: 0.14em;
+  }
+
+  .brand-wordmark .title {
+    font-size: 1.5rem;
+    letter-spacing: 0.16em;
+  }
+
+  .brand-wordmark .subtitle {
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+
+  .header-actions {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  /* Masquer le texte "Mon Compte" pour garder l'icône 👤 compacte sur mobile */
+  .account-btn-text {
+    display: none;
+  }
+
+  .header-account-btn {
+    padding: 7px 10px !important;
+  }
+
+  #langSelect {
+    display: none;
+  }
+
+  #marketSelect {
+    max-width: 112px;
+    padding: 6px 20px 6px 8px;
+    font-size: 0.72rem;
+    text-overflow: ellipsis;
+  }
+
+  .bag-button {
+    padding: 8px 12px;
+    font-size: 0.72rem;
+    gap: 6px;
+  }
+
+  /* Hero Section Mobile */
+  .editorial-hero {
+    padding: 20px 16px 36px;
+    gap: 24px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .hero-headline {
+    font-size: 2.05rem;
+    line-height: 1.12;
+    margin-bottom: 16px;
+  }
+
+  .hero-lead {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .hero-cta-group button {
+    width: 100%;
+    text-align: center;
+    padding: 14px 18px;
+  }
+
+  .hero-metrics {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding-top: 20px;
+  }
+
+  .metric-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .metric-item strong {
+    font-size: 1.35rem;
+    white-space: nowrap;
+  }
+
+  .floating-clinical-card {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    padding: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .floating-clinical-card h4 {
+    font-size: 1.05rem;
+  }
+
+  .floating-clinical-card button {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Bandeau Presse */
+  .press-strip {
+    padding: 18px 16px;
+  }
+
+  .press-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .press-logos {
+    gap: 18px 24px;
+  }
+
+  .press-logo-item {
+    font-size: 1.15rem;
+  }
+
+  /* Onglets de sous-catégories défilables au doigt sur mobile */
+  .section-header-row {
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .category-tabs {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cat-tab {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 9px 15px;
+    font-size: 0.76rem;
+  }
+
+  /* Barre de recherche & tri */
+  .catalog-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .catalog-search-wrap {
+    min-width: 100%;
+  }
+
+  .catalog-search-input {
+    font-size: 16px; /* Empêche le zoom auto iOS Safari */
+  }
+
+  .catalog-toolbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .catalog-sort-select {
+    flex: 1;
+  }
+
+  /* Cartes produits */
+  .card-content {
+    padding: 18px 16px;
+  }
+
+  .card-bottom {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .card-cta-group {
+    width: 100%;
+  }
+
+  .card-cta-group button {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Section Science Clinique */
+  .science-banner {
+    padding: 52px 16px;
+  }
+
+  .clinical-pillars {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Modales & Fiche Produit (PDP) sur Mobile */
+  .pdp-backdrop {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .pdp-sheet {
+    max-height: 92dvh;
+    border-radius: 12px 12px 8px 8px;
+  }
+
+  .pdp-gallery {
+    padding: 16px;
+  }
+
+  .pdp-info {
+    padding: 20px 16px 26px;
+  }
+
+  .modal-card-responsive {
+    padding: 20px 16px;
+    max-height: 92dvh;
+  }
+
+  .responsive-grid-2,
+  .responsive-grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .responsive-flex-form {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  .responsive-flex-form button {
+    width: 100%;
+  }
+
+  .checkout-steps-bar {
+    font-size: 0.62rem;
+    gap: 4px;
+  }
+
+  /* Empêcher le zoom auto iOS sur tous les champs de formulaire */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="number"],
+  input[type="url"],
+  input[type="search"],
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Tiroir Panier Mobile */
+  .bag-header,
+  .bag-items,
+  .bag-footer {
+    padding: 16px;
+  }
+
+  .bag-upsell {
+    margin: 0 16px 12px;
+  }
+
+  /* Backoffice Propriétaire sur Mobile */
+  .backoffice-view {
+    padding: 24px 14px 80px;
+  }
+
+  .bo-card {
+    padding: 16px;
+  }
+
+  .partner-floating-dock {
+    left: 10px;
+    right: 10px;
+    bottom: 12px;
+    justify-content: space-between;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+  }
 }
