@@ -252,12 +252,27 @@ let _sqlClient = null;
 let _schemaInitialized = false;
 
 function getDatabaseUrl() {
+  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
+  if (process.env.POSTGRES_URL) return process.env.POSTGRES_URL;
+
+  try {
+    const envLocalPath = path.join(__dirname, '.env.local');
+    if (fs.existsSync(envLocalPath)) {
+      const envContent = fs.readFileSync(envLocalPath, 'utf8');
+      const match = envContent.match(/^DATABASE_URL=["']?([^"'\r\n]+)["']?/m);
+      if (match && match[1]) {
+        process.env.DATABASE_URL = match[1];
+        return match[1];
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+
   const localSettings = readJson(SETTINGS_FILE, INITIAL_SETTINGS);
-  return (
-    process.env.DATABASE_URL ||
-    process.env.POSTGRES_URL ||
-    (localSettings?.databaseUrl && localSettings.databaseUrl.startsWith('postgres') ? localSettings.databaseUrl : '')
-  );
+  return localSettings?.databaseUrl && localSettings.databaseUrl.startsWith('postgres')
+    ? localSettings.databaseUrl
+    : '';
 }
 
 function getSql() {
