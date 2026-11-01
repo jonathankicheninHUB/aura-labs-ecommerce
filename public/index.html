@@ -93,6 +93,11 @@
           <option value="de">DE</option>
         </select>
 
+        <button id="themeToggleBtn" class="theme-glass-toggle-btn" onclick="toggleOrevaTheme()" title="Passer en mode Obsidienne Nuit">
+          <span style="font-size:0.95rem;">🌙</span>
+          <span class="theme-btn-text">Mode Nuit</span>
+        </button>
+
         <button class="btn-card-detail header-account-btn" style="padding:9px 14px; border-radius:6px; display:flex; align-items:center; gap:6px;" onclick="openAccountModal()">
           <span>👤</span>
           <span id="accountBtnLabel" class="account-btn-text">Mon Compte</span>
@@ -186,6 +191,10 @@
           <button type="button" class="glassy-action-row" onclick="toggleGlassySidebar(false); openAccountModal();">
             <span>👤 Mon Compte & Adresse de livraison</span>
             <span>→</span>
+          </button>
+          <button type="button" id="glassDrawerThemeBtn" class="glassy-action-row" onclick="toggleOrevaTheme()">
+            <span>🌙 Thème : <strong>Alabaster Day (Clair)</strong></span>
+            <span>Changer →</span>
           </button>
         </div>
 
@@ -393,6 +402,54 @@
               <span>Expédition locale suivie sans frais de douane</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- COMPARATEUR INTERACTIF AVANT / APRÈS (SLIDER TACTILE CLINIQUE) -->
+      <div class="before-after-section-wrap">
+        <div style="text-align:center; max-width:680px; margin:0 auto 24px;">
+          <span class="eyebrow" style="color:#D4B98C; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700;">SIMULATEUR CLINIQUE INTERACTIF • GLISSEZ LE CURSEUR</span>
+          <h3 style="font-family:var(--font-serif); font-size:clamp(1.6rem, 2.5vw, 2.35rem); color:#FAF8F5; font-weight:500; margin-top:6px;">
+            Comparez l'impact biomécanique Avant vs Après OREVA®
+          </h3>
+        </div>
+
+        <div id="clinicalBeforeAfterWidget" class="ba-comparator-stage">
+          <!-- Couche APRÈS (Avec OREVA — Fond) -->
+          <div class="ba-layer ba-after-layer">
+            <img id="baAfterImg" src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=1400&q=85" alt="Avec Protocole Oreva Lab" />
+            <div class="ba-glass-caption ba-caption-right">
+              <span id="baAfterBadge" class="ba-badge-emerald">AVEC OREVA SLEEP LAB™ • SOMMEIL PROFOND</span>
+              <h4 id="baAfterTitle">Alignement lordose 15° & obscurité totale 0 Lux</h4>
+              <p id="baAfterMetric">+62% de sommeil paradoxal REM dès 7 nuits</p>
+            </div>
+          </div>
+
+          <!-- Couche AVANT (Sans OREVA — Découpée par clip-path) -->
+          <div id="baBeforeLayer" class="ba-layer ba-before-layer" style="clip-path: inset(0 50% 0 0);">
+            <img id="baBeforeImg" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85" alt="Sans Protocole Oreva Lab" />
+            <div class="ba-glass-caption ba-caption-left">
+              <span id="baBeforeBadge" class="ba-badge-warn">SANS PROTOCOLE • NUIT FRAGMENTÉE</span>
+              <h4 id="baBeforeTitle">Cervicales désalignées & pollution lumineuse</h4>
+              <p id="baBeforeMetric">4 à 6 micro-réveils / nuit • Raideur matinale</p>
+            </div>
+          </div>
+
+          <!-- Ligne & Poignée Or Champagne 18k -->
+          <div id="baDividerHandle" class="ba-divider-line" style="left:50%;">
+            <div class="ba-handle-orb">↔</div>
+          </div>
+
+          <!-- Input Range Transparent couvrant 100% pour le glisser-déposer souris et tactile -->
+          <input
+            type="range"
+            min="5"
+            max="95"
+            value="50"
+            aria-label="Curseur de comparaison Avant et Après"
+            class="ba-range-input"
+            oninput="updateBeforeAfterSlider(this.value)"
+          />
         </div>
       </div>
     </section>
@@ -902,6 +959,21 @@
       ✓ LIVRAISON EXPRESS PRIORITAIRE + ESSAI 30 NUITS OFFERTS
     </div>
 
+    <!-- JAUGE LUMINEUSE DE CADEAUX DÉBLOQUÉS (GAMIFICATION PANIER) -->
+    <div id="bagRewardsProgressWrap" class="bag-rewards-progress-wrap">
+      <div id="bagRewardStatusText" class="bag-reward-status-text">
+        🎁 <strong>Guide PDF 15p Offert</strong> dès le 1er article + <strong>Pochette Satin Noël</strong> dès 50 €
+      </div>
+      <div class="bag-reward-track">
+        <div id="bagRewardProgressFill" class="bag-reward-fill" style="width:15%;"></div>
+      </div>
+      <div class="bag-reward-steps">
+        <span id="bagStepPdf" class="bag-step-pill">1. Guide PDF (19€)</span>
+        <span id="bagStepSatin" class="bag-step-pill">2. Pochette Satin (50€+)</span>
+        <span id="bagStepDuo" class="bag-step-pill">3. Duo Noël (-50%)</span>
+      </div>
+    </div>
+
     <div id="bagItemsContainer" class="bag-items"></div>
 
     <div class="bag-upsell">
@@ -1197,8 +1269,63 @@
     </button>
   </div>
 
+  <!-- ==================== 9. BARRE D'ACHAT FLOTTANTE "STICKY QUICK-BUY" EN VERRE DÉPOLI ==================== -->
+  <div id="stickyQuickBuyBar" class="sticky-quickbuy-glass-bar" aria-label="Achat rapide produit phare">
+    <div class="sticky-qb-left">
+      <img id="stickyQbImg" src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=300&q=80" alt="Produit Phare" class="sticky-qb-thumb" />
+      <div class="sticky-qb-meta">
+        <span class="sticky-qb-tag">★ N°1 DU LABORATOIRE • EN STOCK LOCAL</span>
+        <strong id="stickyQbTitle" class="sticky-qb-title">Coffret Sanctuaire du Sommeil (-25%)</strong>
+      </div>
+    </div>
+    <div class="sticky-qb-right">
+      <span id="stickyQbPrice" class="sticky-qb-price">119.00 €</span>
+      <button type="button" id="stickyQbAddBtn" class="btn-luxury-dark sticky-qb-btn">
+        + Ajouter au Panier
+      </button>
+      <button type="button" class="sticky-qb-close" onclick="dismissStickyQuickBuy()" aria-label="Masquer">✕</button>
+    </div>
+  </div>
+
+  <!-- ==================== 10. SOCIAL PROOF GLASS TOAST (100% ISOLÉ AU SOUS-DOMAINE) ==================== -->
+  <div id="socialProofGlassToast" class="social-proof-glass-toast" onclick="openSocialProofProduct()">
+    <img id="spToastImg" src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=200&q=80" alt="Produit commandé" class="sp-toast-img" />
+    <div class="sp-toast-body">
+      <div id="spToastBuyer" class="sp-toast-buyer">Camille L. (Genève 🇨🇭)</div>
+      <div id="spToastProduct" class="sp-toast-product">Coffret Sanctuaire du Sommeil</div>
+      <div id="spToastTime" class="sp-toast-time">✓ Achat vérifié • il y a 3 min</div>
+    </div>
+    <button type="button" class="sp-toast-close" onclick="closeSocialProofToast(event)" aria-label="Fermer">✕</button>
+  </div>
+
+  <!-- ==================== 2. LIQUID GLASS BOTTOM APP DOCK (MOBILE UNIQUEMENT) ==================== -->
+  <nav id="mobileGlassBottomDock" class="mobile-glass-bottom-dock" aria-label="Navigation rapide application mobile">
+    <button type="button" class="m-dock-item" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      <span class="m-dock-icon">🏠</span>
+      <span class="m-dock-label">Accueil</span>
+    </button>
+    <button type="button" class="m-dock-item" onclick="toggleGlassySidebar(true)">
+      <span class="m-dock-icon">📂</span>
+      <span class="m-dock-label">Rayons</span>
+    </button>
+    <button type="button" class="m-dock-item m-dock-center-gold" onclick="filterCategory('bundles'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'})">
+      <span class="m-dock-icon">🎄</span>
+      <span class="m-dock-label">Coffrets</span>
+    </button>
+    <button type="button" class="m-dock-item" onclick="openTrackingModal()">
+      <span class="m-dock-icon">📦</span>
+      <span class="m-dock-label">Suivi</span>
+    </button>
+    <button type="button" class="m-dock-item" onclick="toggleBag(true)" style="position:relative;">
+      <span class="m-dock-icon">🛍️</span>
+      <span class="m-dock-label">Panier</span>
+      <span id="mobileDockBagCount" class="m-dock-badge">0</span>
+    </button>
+  </nav>
+
   <script src="/products-data.js"></script>
   <script src="/mega-catalog-engine.js"></script>
   <script src="/app.js"></script>
+  <script src="/luxury-effects-engine.js"></script>
 </body>
 </html>

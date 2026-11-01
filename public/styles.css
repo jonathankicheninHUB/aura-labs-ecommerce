@@ -2109,3 +2109,705 @@ body {
     padding: 8px 11px;
   }
 }
+
+/* ============================================================================
+   PACK COMPLET 12 EFFETS HAUTE-HORLOGERIE, LIQUID GLASS, 3D & CONVERSION
+   ============================================================================ */
+
+/* 1. Spotlight Cursor Glow + 5. 3D Perspective Tilt sur les Cartes Produits */
+.luxury-card {
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.luxury-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(
+    420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(230, 201, 148, 0.22),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.luxury-card:hover::before {
+  opacity: 1;
+}
+
+/* 3. Frosted Prismatic Glass & Reflet Shimmer Or 18k */
+@keyframes orevaShimmerSweep {
+  0% { transform: translateX(-140%) skewX(-22deg); }
+  35%, 100% { transform: translateX(240%) skewX(-22deg); }
+}
+
+.badge-editorial,
+.btn-luxury-dark,
+.btn-card-add {
+  position: relative;
+  overflow: hidden;
+}
+
+.badge-editorial::after,
+.btn-luxury-dark::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(230, 201, 148, 0.32),
+    transparent
+  );
+  transform: translateX(-140%) skewX(-22deg);
+  animation: orevaShimmerSweep 6.5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* 4. Tiroir Panier & Fiche Produit "Full Liquid Glass" */
+.bag-drawer {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.84) 0%,
+    rgba(250, 248, 245, 0.74) 55%,
+    rgba(245, 239, 230, 0.82) 100%
+  ) !important;
+  backdrop-filter: blur(34px) saturate(195%) !important;
+  -webkit-backdrop-filter: blur(34px) saturate(195%) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: -24px 0 65px rgba(11, 12, 14, 0.24), inset 1px 0 0 rgba(176, 141, 87, 0.28);
+}
+
+.pdp-sheet {
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(250, 248, 245, 0.84) 100%
+  );
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* 7. Scroll Reveal Cinématique */
+.oreva-reveal-item {
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(4px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.oreva-reveal-item.oreva-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* 8. Comparateur Clinique Avant / Après Interactif */
+.before-after-section-wrap {
+  max-width: 1120px;
+  margin: 56px auto 0;
+  padding-top: 44px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.ba-comparator-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 8.2;
+  min-height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 180, 131, 0.38);
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.45);
+  user-select: none;
+}
+
+.ba-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ba-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ba-before-layer img {
+  filter: grayscale(65%) contrast(1.08) brightness(0.76);
+}
+
+.ba-glass-caption {
+  position: absolute;
+  bottom: 20px;
+  max-width: 340px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(11, 12, 14, 0.76);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  pointer-events: none;
+}
+
+.ba-caption-left {
+  left: 20px;
+}
+
+.ba-caption-right {
+  right: 20px;
+  text-align: right;
+  border-color: rgba(212, 180, 131, 0.45);
+}
+
+.ba-badge-warn {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(239, 68, 68, 0.25);
+  color: #FCA5A5;
+  margin-bottom: 4px;
+}
+
+.ba-badge-emerald {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(16, 185, 129, 0.25);
+  color: #6EE7B7;
+  margin-bottom: 4px;
+}
+
+.ba-glass-caption h4 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+.ba-glass-caption p {
+  font-size: 0.76rem;
+  color: #D4D4D8;
+  margin: 0;
+}
+
+.ba-divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5px;
+  background: linear-gradient(180deg, #E6C994 0%, #B08D57 50%, #E6C994 100%);
+  box-shadow: 0 0 18px rgba(230, 201, 148, 0.8);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.ba-handle-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #11131A 0%, #232838 100%);
+  border: 2px solid #E6C994;
+  color: #E6C994;
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.ba-range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  z-index: 10;
+}
+
+/* 9. Barre d'Achat Flottante "Sticky Quick-Buy Glass Bar" */
+.sticky-quickbuy-glass-bar {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translate(-50%, 140%);
+  width: calc(100% - 36px);
+  max-width: 780px;
+  z-index: 1280;
+  padding: 10px 16px;
+  border-radius: 99px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.84) 0%,
+    rgba(245, 239, 230, 0.78) 100%
+  );
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(176, 141, 87, 0.42);
+  box-shadow: 0 20px 50px rgba(11, 12, 14, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.sticky-quickbuy-glass-bar.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sticky-qb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.sticky-qb-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--bronze);
+  flex-shrink: 0;
+}
+
+.sticky-qb-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sticky-qb-tag {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #8C6D3F;
+  text-transform: uppercase;
+}
+
+.sticky-qb-title {
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
+  color: var(--obsidian);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sticky-qb-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sticky-qb-price {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--obsidian);
+}
+
+.sticky-qb-btn {
+  padding: 10px 18px !important;
+  border-radius: 99px !important;
+  font-size: 0.74rem !important;
+  white-space: nowrap;
+}
+
+.sticky-qb-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+/* 10. Social Proof Glass Toast (Bas Gauche) */
+.social-proof-glass-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1290;
+  max-width: 340px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(250, 248, 245, 0.75) 100%
+  );
+  backdrop-filter: blur(26px) saturate(190%);
+  -webkit-backdrop-filter: blur(26px) saturate(190%);
+  border: 1px solid rgba(176, 141, 87, 0.38);
+  box-shadow: 0 18px 42px rgba(11, 12, 14, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transform: translateY(130%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.social-proof-glass-toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sp-toast-img {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(176, 141, 87, 0.3);
+}
+
+.sp-toast-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-toast-buyer {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--obsidian);
+}
+
+.sp-toast-product {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #7D5B28;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sp-toast-time {
+  font-size: 0.66rem;
+  color: var(--emerald);
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.sp-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* 11. Jauge Lumineuse de Cadeaux Débloqués dans le Panier */
+.bag-rewards-progress-wrap {
+  padding: 12px 20px;
+  background: rgba(245, 239, 230, 0.65);
+  border-bottom: 1px solid rgba(176, 141, 87, 0.24);
+}
+
+.bag-reward-status-text {
+  font-size: 0.75rem;
+  color: var(--obsidian);
+  margin-bottom: 7px;
+  text-align: center;
+}
+
+.bag-reward-track {
+  width: 100%;
+  height: 7px;
+  border-radius: 99px;
+  background: rgba(17, 18, 21, 0.1);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.bag-reward-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #B08D57 0%, #E6C994 50%, #10B981 100%);
+  box-shadow: 0 0 12px rgba(176, 141, 87, 0.6);
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bag-reward-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.bag-step-pill {
+  font-size: 0.63rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--text-muted);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.bag-step-pill.unlocked {
+  background: #064E3B;
+  color: #A7F3D0;
+  border-color: #10B981;
+}
+
+/* 2. Liquid Glass Bottom App Dock (Mobile iOS VisionOS Style) */
+.mobile-glass-bottom-dock {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 78px;
+  }
+
+  .mobile-glass-bottom-dock {
+    position: fixed;
+    bottom: 10px;
+    left: 12px;
+    right: 12px;
+    z-index: 1320;
+    height: 60px;
+    border-radius: 99px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.84) 0%,
+      rgba(245, 239, 230, 0.78) 100%
+    );
+    backdrop-filter: blur(28px) saturate(195%);
+    -webkit-backdrop-filter: blur(28px) saturate(195%);
+    border: 1px solid rgba(176, 141, 87, 0.38);
+    box-shadow: 0 16px 40px rgba(11, 12, 14, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+    padding: 0 6px;
+  }
+
+  .m-dock-item {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--obsidian);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .m-dock-icon {
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+
+  .m-dock-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .m-dock-center-gold {
+    background: linear-gradient(135deg, #11131A 0%, #232838 100%);
+    color: #E6C994;
+    border-radius: 99px;
+    padding: 6px 4px;
+    border: 1px solid rgba(212, 180, 131, 0.45);
+  }
+
+  .m-dock-badge {
+    position: absolute;
+    top: 0;
+    right: 16%;
+    background: var(--obsidian);
+    color: #E6C994;
+    font-size: 0.58rem;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 99px;
+  }
+
+  /* Sur mobile, remonter la Sticky Quick-Buy Bar et le Toast au-dessus du Dock iOS */
+  .sticky-quickbuy-glass-bar {
+    bottom: 76px;
+    width: calc(100% - 24px);
+    padding: 8px 12px;
+  }
+
+  .sticky-qb-price {
+    display: none;
+  }
+
+  .social-proof-glass-toast {
+    bottom: 78px;
+    left: 12px;
+    right: 12px;
+    max-width: none;
+  }
+
+  .ba-comparator-stage {
+    aspect-ratio: 4 / 3.4;
+  }
+
+  .ba-glass-caption {
+    max-width: 44%;
+    padding: 8px 10px;
+    bottom: 10px;
+  }
+
+  .ba-glass-caption h4 {
+    font-size: 0.85rem;
+  }
+
+  .ba-glass-caption p {
+    display: none;
+  }
+}
+
+/* 12. Mode Sombre / Clair "Obsidian Night & Alabaster Day" */
+.theme-glass-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(176, 141, 87, 0.35);
+  color: var(--obsidian);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s;
+}
+
+.theme-glass-toggle-btn:hover {
+  border-color: var(--bronze);
+  background: #fff;
+}
+
+@media (max-width: 768px) {
+  .theme-btn-text {
+    display: none;
+  }
+  .theme-glass-toggle-btn {
+    padding: 7px 10px;
+  }
+}
+
+body.theme-obsidian-night {
+  --bg-alabaster: #0B0D13;
+  --bg-stone: #12151E;
+  --bg-white: #151924;
+  --obsidian: #F5F2EB;
+  --text-primary: #F4F4F6;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+  --border-subtle: rgba(212, 180, 131, 0.18);
+  background-color: #0B0D13;
+  color: #F4F4F6;
+}
+
+body.theme-obsidian-night .luxury-header {
+  background: rgba(11, 13, 19, 0.84);
+  border-bottom-color: rgba(212, 180, 131, 0.2);
+}
+
+body.theme-obsidian-night .mobile-quick-nav {
+  background: rgba(11, 13, 19, 0.92);
+}
+
+body.theme-obsidian-night .glass-sidebar-trigger-btn,
+body.theme-obsidian-night .theme-glass-toggle-btn {
+  background: rgba(21, 25, 36, 0.82);
+  color: #E6C994;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+body.theme-obsidian-night .glassy-sidebar-drawer,
+body.theme-obsidian-night .sticky-glass-card,
+body.theme-obsidian-night .bag-drawer,
+body.theme-obsidian-night .pdp-sheet,
+body.theme-obsidian-night .sticky-quickbuy-glass-bar,
+body.theme-obsidian-night .social-proof-glass-toast,
+body.theme-obsidian-night .mobile-glass-bottom-dock {
+  background: linear-gradient(
+    155deg,
+    rgba(21, 25, 36, 0.86) 0%,
+    rgba(12, 14, 22, 0.82) 100%
+  ) !important;
+  border-color: rgba(212, 180, 131, 0.32) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55) !important;
+  color: #F4F4F6;
+}
+
+body.theme-obsidian-night .glassy-nav-item,
+body.theme-obsidian-night .glassy-filter-pill,
+body.theme-obsidian-night .glassy-sort-pill,
+body.theme-obsidian-night .glassy-action-row,
+body.theme-obsidian-night .glassy-search-input,
+body.theme-obsidian-night .glassy-select {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(212, 180, 131, 0.22);
+  color: #F4F4F6;
+}
+
+body.theme-obsidian-night .glassy-nav-item.active,
+body.theme-obsidian-night .glassy-filter-pill.active,
+body.theme-obsidian-night .glassy-sort-pill.active {
+  background: linear-gradient(135deg, #E6C994 0%, #B08D57 100%);
+  color: #0B0D13;
+}
+
+body.theme-obsidian-night .btn-luxury-dark,
+body.theme-obsidian-night .btn-card-add,
+body.theme-obsidian-night .bag-button {
+  background: linear-gradient(135deg, #E6C994 0%, #B89254 100%);
+  color: #0B0D13;
+  border-color: #E6C994;
+}
