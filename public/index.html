@@ -20,12 +20,21 @@
   <!-- HEADER ÉDITORIAL LUXE 100% DÉDIÉ AU SOUS-DOMAINE ACTIF (AUCUN MÉLANGE ENTRE LES SITES) -->
   <header class="luxury-header">
     <div class="header-inner">
-      <ul class="nav-links">
-        <li><a href="#collectionSection" id="navShop" onclick="switchView('storefront'); filterCategory('all')">Collection</a></li>
-        <li><a href="#scienceSection" id="navScience" onclick="switchView('storefront')">Technologie Clinique</a></li>
-        <li><a href="#collectionSection" id="navBundles" style="color:#B91C1C; font-weight:700;" onclick="switchView('storefront'); filterCategory('bundles')">🎄 Coffrets Cadeaux (-25%)</a></li>
-        <li><a href="#" onclick="openTrackingModal(); return false;">📦 Suivre mon colis</a></li>
-      </ul>
+      <div style="display:flex; align-items:center; gap:18px;">
+        <button class="glass-sidebar-trigger-btn" onclick="toggleGlassySidebar(true)" aria-label="Ouvrir le menu et les filtres">
+          <span class="glass-hamburger-icon">
+            <span></span><span></span><span></span>
+          </span>
+          <span class="glass-trigger-label">Rayons & Filtres</span>
+        </button>
+
+        <ul class="nav-links">
+          <li><a href="#collectionSection" id="navShop" onclick="switchView('storefront'); filterCategory('all')">Collection</a></li>
+          <li><a href="#scienceSection" id="navScience" onclick="switchView('storefront')">Technologie Clinique</a></li>
+          <li><a href="#collectionSection" id="navBundles" style="color:#B91C1C; font-weight:700;" onclick="switchView('storefront'); filterCategory('bundles')">🎄 Coffrets Cadeaux (-25%)</a></li>
+          <li><a href="#" onclick="openTrackingModal(); return false;">📦 Suivre mon colis</a></li>
+        </ul>
+      </div>
 
       <a href="#" class="brand-wordmark oreva-couture-lockup" onclick="switchView('storefront'); filterCategory('all'); return false;">
         <!-- Emblème Vectoriel Haute Précision (Zéro pixelisation, fond transparent, géométrie sacrée Or Champagne) -->
@@ -98,6 +107,7 @@
 
     <!-- BARRE DE NAVIGATION TACTILE MOBILE (VISIBLE UNIQUEMENT SUR MOBILE & TABLETTE <= 1024px) -->
     <nav class="mobile-quick-nav" aria-label="Navigation mobile">
+      <a href="#" class="mobile-glass-menu-pill" onclick="toggleGlassySidebar(true); return false;">☰ Menu Glass & Filtres</a>
       <a href="#collectionSection" onclick="switchView('storefront'); filterCategory('all')">✨ Collection</a>
       <a href="#collectionSection" class="mobile-nav-highlight" onclick="switchView('storefront'); filterCategory('bundles')">🎄 Coffrets (-25%)</a>
       <a href="#scienceSection" onclick="switchView('storefront')">🔬 Technologie</a>
@@ -105,6 +115,103 @@
       <a href="#" onclick="openAccountModal(); return false;">👤 Mon Compte</a>
     </nav>
   </header>
+
+  <!-- ==================== TIROIR GLASSY SIDEBAR (LIQUID GLASS NAVIGATION & FILTRES — DESKTOP & MOBILE) ==================== -->
+  <div id="glassySidebarBackdrop" class="glassy-sidebar-backdrop" onclick="toggleGlassySidebar(false)"></div>
+  <aside id="glassySidebarDrawer" class="glassy-sidebar-drawer" aria-label="Navigation & Filtres Laboratoire">
+    <div class="glassy-sidebar-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="/oreva-logo.svg" alt="OREVA" style="width:36px; height:36px; border-radius:50%; box-shadow:0 4px 12px rgba(0,0,0,0.18);" />
+        <div>
+          <div id="glassDrawerDivisionBadge" class="glassy-division-tag">SLEEP LAB™</div>
+          <div style="font-family:var(--font-serif); font-size:1.35rem; font-weight:700; letter-spacing:0.16em; color:var(--obsidian); line-height:1;">OREVA®</div>
+        </div>
+      </div>
+      <button class="glassy-close-btn" onclick="toggleGlassySidebar(false)" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="glassy-sidebar-body">
+      <!-- Recherche rapide dans la Glassy Sidebar -->
+      <div class="glassy-section">
+        <label class="glassy-section-title" for="glassDrawerSearchInput">🔍 RECHERCHE INSTANTANÉE</label>
+        <input
+          type="search"
+          id="glassDrawerSearchInput"
+          class="glassy-search-input"
+          placeholder="Produit, symptôme, SKU..."
+          oninput="onCatalogSearch(this.value)"
+        />
+      </div>
+
+      <!-- Rayons / Sous-Catégories avec compteur temps réel -->
+      <div class="glassy-section">
+        <div class="glassy-section-title">📂 RAYONS DU LABORATOIRE</div>
+        <div id="glassDrawerCategoriesList" class="glassy-nav-list"></div>
+      </div>
+
+      <!-- Filtre par Tranche de Prix -->
+      <div class="glassy-section">
+        <div class="glassy-section-title">💎 BUDGET & GAMME DE PRIX</div>
+        <div class="glassy-pills-grid">
+          <button type="button" class="glassy-filter-pill active" data-price="all" onclick="onCatalogPriceFilter('all')">Tous les prix</button>
+          <button type="button" class="glassy-filter-pill" data-price="under50" onclick="onCatalogPriceFilter('under50')">Moins de 50 €</button>
+          <button type="button" class="glassy-filter-pill" data-price="50to90" onclick="onCatalogPriceFilter('50to90')">50 € – 90 €</button>
+          <button type="button" class="glassy-filter-pill" data-price="over90" onclick="onCatalogPriceFilter('over90')">Prestige & Coffrets (90 €+)</button>
+        </div>
+      </div>
+
+      <!-- Tri Rapide -->
+      <div class="glassy-section">
+        <div class="glassy-section-title">⚡ TRIER L'AFFICHAGE</div>
+        <div class="glassy-pills-grid">
+          <button type="button" class="glassy-sort-pill active" data-sort="featured" onclick="onCatalogSort('featured')">★ Best-Sellers</button>
+          <button type="button" class="glassy-sort-pill" data-sort="price-asc" onclick="onCatalogSort('price-asc')">↑ Prix Croissant</button>
+          <button type="button" class="glassy-sort-pill" data-sort="price-desc" onclick="onCatalogSort('price-desc')">↓ Prix Décroissant</button>
+          <button type="button" class="glassy-sort-pill" data-sort="rating" onclick="onCatalogSort('rating')">★ Notes 4.9/5</button>
+        </div>
+      </div>
+
+      <!-- Accès Rapide Client & Préférences Pays/Langue -->
+      <div class="glassy-section">
+        <div class="glassy-section-title">🌍 CONCIERGERIE & ESPACE CLIENT</div>
+        <div class="glassy-quick-links">
+          <button type="button" class="glassy-action-row" onclick="toggleGlassySidebar(false); filterCategory('bundles'); document.getElementById('collectionSection').scrollIntoView({behavior:'smooth'});">
+            <span>🎄 Coffrets Cadeaux de Noël (-25%)</span>
+            <span>→</span>
+          </button>
+          <button type="button" class="glassy-action-row" onclick="toggleGlassySidebar(false); openTrackingModal();">
+            <span>📦 Suivre mon colis en direct</span>
+            <span>→</span>
+          </button>
+          <button type="button" class="glassy-action-row" onclick="toggleGlassySidebar(false); openAccountModal();">
+            <span>👤 Mon Compte & Adresse de livraison</span>
+            <span>→</span>
+          </button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.4fr 0.6fr; gap:8px; margin-top:12px;">
+          <select id="glassMarketSelect" class="glassy-select" aria-label="Pays et devise" onchange="onMarketChange(this.value)">
+            <option value="FR">🇫🇷 FR / BE (EUR €)</option>
+            <option value="CH">🇨🇭 Suisse (CHF)</option>
+            <option value="DE">🇩🇪 DE / AT (EUR €)</option>
+            <option value="US">🇺🇸 US / CA (USD $)</option>
+            <option value="GB">🇬🇧 UK (GBP £)</option>
+            <option value="AU">🇦🇺 AU / NZ (AUD $)</option>
+          </select>
+          <select id="glassLangSelect" class="glassy-select" aria-label="Langue" onchange="onLanguageChange(this.value)">
+            <option value="fr">FR</option>
+            <option value="en">EN</option>
+            <option value="de">DE</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="glassy-sidebar-footer">
+      <div style="font-size:0.72rem; color:var(--emerald); font-weight:700;">✓ Expédition Locale 48–72h • Zéro Douane</div>
+      <div style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">Essai 30 Jours • Retours Noël jusqu'au 15 Janvier</div>
+    </div>
+  </aside>
 
   <!-- ==================== VUE 1 : BOUTIQUE SPÉCIALISÉE DU SOUS-DOMAINE ACTIF ==================== -->
   <main id="storefrontView">
@@ -210,10 +317,50 @@
         </div>
       </div>
 
-      <div id="productsGrid" class="luxury-grid"></div>
+      <div class="collection-layout-with-glass">
+        <!-- STICKY GLASSY SIDEBAR (PANNEAU LATÉRAL EN VERRE DÉPOLI SUR DESKTOP) -->
+        <aside id="catalogStickyGlassSidebar" class="catalog-sticky-glass-sidebar" aria-label="Filtres et Rayons">
+          <div class="sticky-glass-card">
+            <div class="sticky-glass-head">
+              <span class="sticky-glass-badge" id="stickyGlassLabBadge">SLEEP LAB™</span>
+              <h3 class="sticky-glass-title">Rayons & Filtres</h3>
+            </div>
 
-      <!-- PAGINATION HAUTE CAPACITÉ (24 PRODUITS PAR PAGE) -->
-      <div id="catalogPaginationBar" style="display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin-top:40px; padding-top:24px; border-top:1px solid var(--border-subtle);"></div>
+            <div class="glassy-section">
+              <div class="glassy-section-title">📂 SOUS-CATÉGORIES</div>
+              <div id="stickyGlassCategoriesList" class="glassy-nav-list"></div>
+            </div>
+
+            <div class="glassy-section">
+              <div class="glassy-section-title">💎 FILTRER PAR BUDGET</div>
+              <div class="glassy-pills-grid">
+                <button type="button" class="glassy-filter-pill active" data-price="all" onclick="onCatalogPriceFilter('all')">Tous les prix</button>
+                <button type="button" class="glassy-filter-pill" data-price="under50" onclick="onCatalogPriceFilter('under50')">Moins de 50 €</button>
+                <button type="button" class="glassy-filter-pill" data-price="50to90" onclick="onCatalogPriceFilter('50to90')">50 € – 90 €</button>
+                <button type="button" class="glassy-filter-pill" data-price="over90" onclick="onCatalogPriceFilter('over90')">Prestige (90 €+)</button>
+              </div>
+            </div>
+
+            <div class="sticky-glass-promo">
+              <div style="font-size:0.68rem; font-weight:800; letter-spacing:0.12em; color:#8C6D3F; text-transform:uppercase; margin-bottom:4px;">🎄 OFFRE DUO NOËL</div>
+              <div style="font-size:0.8rem; font-weight:700; color:var(--obsidian); line-height:1.35; margin-bottom:8px;">
+                1 acheté = le 2ème à -50% + Guide PDF 15p Offert
+              </div>
+              <button type="button" class="btn-card-add" style="width:100%; font-size:0.72rem; padding:9px 12px;" onclick="filterCategory('bundles')">
+                Voir les Coffrets (-25%) →
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- COLONNE PRINCIPALE : GRILLE DE PRODUITS + PAGINATION -->
+        <div class="collection-main-column">
+          <div id="productsGrid" class="luxury-grid"></div>
+
+          <!-- PAGINATION HAUTE CAPACITÉ (24 PRODUITS PAR PAGE) -->
+          <div id="catalogPaginationBar" style="display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin-top:40px; padding-top:24px; border-top:1px solid var(--border-subtle);"></div>
+        </div>
+      </div>
     </section>
 
     <!-- SECTION ÉDITORIALE : TECHNOLOGIE CLINIQUE DU SOUS-DOMAINE -->

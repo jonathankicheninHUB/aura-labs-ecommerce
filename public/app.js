@@ -31,20 +31,45 @@ function onMarketChange(marketCode) {
   currentMarketCode = marketCode;
   const market = window.MARKETS_CONFIG[marketCode];
   currentLang = market.lang;
-  document.getElementById('langSelect').value = currentLang;
+  const hdrMarket = document.getElementById('marketSelect');
+  if (hdrMarket) hdrMarket.value = marketCode;
+  const glassMarket = document.getElementById('glassMarketSelect');
+  if (glassMarket) glassMarket.value = marketCode;
+  const hdrLang = document.getElementById('langSelect');
+  if (hdrLang) hdrLang.value = currentLang;
+  const glassLang = document.getElementById('glassLangSelect');
+  if (glassLang) glassLang.value = currentLang;
   applyLocalization();
 }
 
 function onLanguageChange(lang) {
   currentLang = lang;
+  const hdrLang = document.getElementById('langSelect');
+  if (hdrLang) hdrLang.value = lang;
+  const glassLang = document.getElementById('glassLangSelect');
+  if (glassLang) glassLang.value = lang;
   applyLocalization();
 }
 
 let currentUniverse = 'sleep';
 let currentSearchQuery = '';
 let currentSortMode = 'featured';
+let currentPriceFilter = 'all';
 let currentCatalogPage = 1;
 const CATALOG_PAGE_SIZE = 24;
+
+function toggleGlassySidebar(open) {
+  const drawer = document.getElementById('glassySidebarDrawer');
+  const backdrop = document.getElementById('glassySidebarBackdrop');
+  if (!drawer || !backdrop) return;
+  if (open) {
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+  } else {
+    drawer.classList.remove('open');
+    backdrop.classList.remove('open');
+  }
+}
 
 // Règles d'isolation stricte par sous-domaine : AUCUN produit d'une autre niche n'apparaît sur un sous-domaine !
 const STOREFRONT_PRODUCT_RULES = {
@@ -184,6 +209,11 @@ function switchUniverse(universeId) {
     if (secTitle) secTitle.textContent = uniConfig.sectionTitle;
 
     const totalUniProds = getProductsForUniverse(currentUniverse).length;
+    const divLabel = `${(uniConfig.divisionName || currentUniverse).toUpperCase()} LAB™`;
+    const glassDrawerBadge = document.getElementById('glassDrawerDivisionBadge');
+    if (glassDrawerBadge) glassDrawerBadge.textContent = divLabel;
+    const stickyGlassBadge = document.getElementById('stickyGlassLabBadge');
+    if (stickyGlassBadge) stickyGlassBadge.textContent = divLabel;
 
     // Onglets de sous-catégories strictement limités au sous-domaine actif avec compteur dynamique
     const tabsWrap = document.getElementById('categoryTabsContainer');
@@ -195,6 +225,8 @@ function switchUniverse(universeId) {
         return `<button id="catTab-${sc.id}" class="cat-tab ${idx === 0 ? 'active' : ''}" onclick="filterCategory('${sc.id}')">${labelText}</button>`;
       }).join('');
     }
+
+    renderGlassySidebarCategories(uniConfig);
 
     // Section Science Clinique dédiée au sous-domaine
     const sciImg = document.getElementById('scienceMainImg');
@@ -272,24 +304,91 @@ function applyLocalization() {
   renderBag();
 }
 
-function filterCategory(cat) {
+function renderGlassySidebarCategories(uniConfig) {
+  if (!uniConfig || !Array.isArray(uniConfig.subCategories)) return;
+  const uniProducts = getProductsForUniverse(currentUniverse);
+  const html = uniConfig.subCategories.map(sc => {
+    let count = 0;
+    if (sc.id === 'all') {
+      count = uniProducts.length;
+    } else if (sc.id === 'bundles') {
+      count = uniProducts.filter(p => {
+        const sub = getSubCategoryForProduct(p, currentUniverse);
+        return sub === 'bundles' || sub === 'teens' || sub === 'kids' || p.category === 'bundles';
+      }).length;
+    } else {
+      count = uniProducts.filter(p => getSubCategoryForProduct(p, currentUniverse) === sc.id).length;
+    }
+    const cleanLabel = sc.label.replace(/\s*\(\d+\)/, '');
+    const isActive = currentCategory === sc.id;
+    return `
+      <button
+        type="button"
+        class="glassy-nav-item ${isActive ? 'active' : ''}"
+        data-cat="${sc.id}"
+        onclick="filterCategory('${sc.id}', true)"
+      >
+        <span class="glassy-nav-label">${cleanLabel}</span>
+        <span class="glassy-nav-count">${count}</span>
+      </button>
+    `;
+  }).join('');
+
+  const drawerList = document.getElementById('glassDrawerCategoriesList');
+  if (drawerList) drawerList.innerHTML = html;
+  const stickyList = document.getElementById('stickyGlassCategoriesList');
+  if (stickyList) stickyList.innerHTML = html;
+}
+
+function filterCategory(cat, fromGlassSidebar = false) {
   currentCategory = cat || 'all';
   currentCatalogPage = 1;
   document.querySelectorAll('#collectionSection .cat-tab').forEach(btn => btn.classList.remove('active'));
   const active = document.getElementById(`catTab-${currentCategory}`);
   if (active) active.classList.add('active');
+
+  document.querySelectorAll('.glassy-nav-item').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-cat') === currentCategory);
+  });
+
+  if (fromGlassSidebar) {
+    toggleGlassySidebar(false);
+    document.getElementById('collectionSection')?.scrollIntoView({ behavior: 'smooth' });
+  }
+  renderCatalog();
+}
+
+function onCatalogPriceFilter(priceTier) {
+  currentPriceFilter = priceTier || 'all';
+  currentCatalogPage = 1;
+  document.querySelectorAll('.glassy-filter-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-price') === currentPriceFilter);
+  });
   renderCatalog();
 }
 
 function onCatalogSearch(query) {
   currentSearchQuery = (query || '').trim().toLowerCase();
   currentCatalogPage = 1;
+  const mainInput = document.getElementById('catalogSearchInput');
+  if (mainInput && mainInput.value.toLowerCase() !== currentSearchQuery) {
+    mainInput.value = query;
+  }
+  const glassInput = document.getElementById('glassDrawerSearchInput');
+  if (glassInput && glassInput.value.toLowerCase() !== currentSearchQuery) {
+    glassInput.value = query;
+  }
   renderCatalog();
 }
 
 function onCatalogSort(sortMode) {
   currentSortMode = sortMode || 'featured';
   currentCatalogPage = 1;
+  const sel = document.getElementById('catalogSortSelect');
+  if (sel && sel.value !== currentSortMode) sel.value = currentSortMode;
+  document.querySelectorAll('.glassy-sort-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-sort') === currentSortMode);
+  });
   renderCatalog();
 }
 
@@ -315,6 +414,11 @@ function renderCatalog() {
       } else if (subCat !== currentCategory) {
         return false;
       }
+    }
+    if (currentPriceFilter !== 'all') {
+      if (currentPriceFilter === 'under50' && p.basePriceEur >= 50) return false;
+      if (currentPriceFilter === '50to90' && (p.basePriceEur < 50 || p.basePriceEur > 90)) return false;
+      if (currentPriceFilter === 'over90' && p.basePriceEur <= 90) return false;
     }
     if (currentSearchQuery) {
       const hay = `${p.title?.fr || ''} ${p.title?.en || ''} ${p.subtitle?.fr || ''} ${p.shortDesc?.fr || ''} ${p.sku || ''}`.toLowerCase();
